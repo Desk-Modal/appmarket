@@ -116,11 +116,9 @@ jobs:
           import json, sys
           doc = json.load(open("index.json"))
           errors = []
-          for k in ("schema_version", "generated_at", "generator", "publisher_keys", "categories", "catalog"):
+          for k in ("generated_at", "generator", "publisher_keys", "categories", "catalog"):
               if k not in doc:
                   errors.append(f"top-level missing '{k}'")
-          if doc.get("schema_version") != 2:
-              errors.append(f"schema_version must be 2, got {doc.get('schema_version')!r}")
           seen_ids = set()
           for e in doc.get("catalog", []):
               for k in ("id", "owner", "repo", "name", "content_type", "latest_version", "platforms", "publisher", "signature"):

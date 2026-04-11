@@ -52,7 +52,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Optional
 
-SCHEMA_VERSION = 2
 AGGREGATOR_NAME = "appmarket-aggregator"
 AGGREGATOR_VERSION = "1.1.0"
 
@@ -801,7 +800,6 @@ def aggregate(sources_path: str, out_path: str, token: Optional[str], mirror: bo
     catalog.sort(key=lambda e: e["id"])
 
     doc = {
-        "schema_version": SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "generator": {
             "name": AGGREGATOR_NAME,

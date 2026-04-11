@@ -1,8 +1,14 @@
-# AppMarket Schema — v2
+# AppMarket Schema
 
 The canonical machine-readable catalog that every DeskModal session
 queries on startup (or marketplace refresh) to learn about every
 published plugin, service, script, and app.
+
+This file has no version field. We evolve the schema in place — the
+aggregator and every client are always built from the same tree, so
+there is nothing for a version marker to protect. If the shape
+changes in a way a client can't cope with, that's a bug to fix in
+lockstep across both sides, not a field to branch on.
 
 ## Served from
 
@@ -24,7 +30,6 @@ Ed25519 publisher key and the detached signature is served at
 
 ```jsonc
 {
-  "schema_version": 2,
   "generated_at": "2026-04-11T02:00:00Z",
   "generator": {
     "name": "appmarket-aggregator",

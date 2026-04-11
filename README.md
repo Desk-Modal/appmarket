@@ -47,7 +47,7 @@ Ed25519 key. The detached signature is served alongside as
 `index.json.sig` so the runtime can verify the catalog before
 trusting anything inside it.
 
-Full schema and client consumption example: [`schema/v2.md`](schema/v2.md).
+Full schema and client consumption example: [`schema/schema.md`](schema/schema.md).
 
 ## Layout
 
@@ -57,7 +57,7 @@ Full schema and client consumption example: [`schema/v2.md`](schema/v2.md).
 ├── index.json            # generated catalog (do not hand-edit)
 ├── index.json.sig        # detached Ed25519 signature of index.json
 ├── schema/
-│   └── v2.md             # the canonical schema spec
+│   └── schema.md         # the canonical schema spec
 ├── scripts/
 │   └── aggregate.py      # the aggregator — reads sources.json, emits index.json
 ├── icons/                # per-entry SVG icons served via raw CDN
