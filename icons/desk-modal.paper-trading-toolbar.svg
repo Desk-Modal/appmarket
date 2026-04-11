@@ -1,9 +1,11 @@
 <!-- desk-modal.paper-trading — toolbar (glass) -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <!-- dominant: dashed ledger outline with two ruled lines -->
-  <rect x="24" y="24" width="80" height="80" rx="8" fill="none" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="6" stroke-dasharray="8 6" stroke-linecap="round"/>
-  <line x1="38" y1="54" x2="90" y2="54" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="6" stroke-linecap="round"/>
-  <line x1="38" y1="78" x2="82" y2="78" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="6" stroke-linecap="round"/>
+  <!-- REAL candle — solid monochrome wick + body -->
+  <line x1="54" y1="20" x2="54" y2="108" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+  <rect x="36" y="40" width="36" height="52" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+
+  <!-- PRACTICE candle — outlined ghost body, offset right and up (no wick, reduces to 1 element) -->
+  <rect x="66" y="32" width="36" height="52" rx="4" fill="none" stroke="#60a5fa" stroke-opacity="0.55" stroke-width="6"/>
 
   <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.22)"/>
 </svg>

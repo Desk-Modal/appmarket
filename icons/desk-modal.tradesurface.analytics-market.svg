@@ -13,23 +13,15 @@
   <rect width="128" height="128" rx="28" fill="url(#base)"/>
   <rect width="128" height="128" rx="28" fill="url(#glow)" opacity="0.35"/>
 
-  <!-- 3x3 matrix, cell size 24, gap 6, origin (24,24) -->
-  <!-- diagonal always strong (self-correlation = 1) -->
-  <rect x="24" y="24" width="24" height="24" rx="4" fill="#3b82f6"/>
-  <rect x="54" y="54" width="24" height="24" rx="4" fill="#3b82f6"/>
-  <rect x="84" y="84" width="24" height="24" rx="4" fill="#3b82f6"/>
+  <!-- regression line — ascending (dominant) -->
+  <line x1="22" y1="96" x2="106" y2="36" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
 
-  <!-- strong off-diagonals -->
-  <rect x="54" y="24" width="24" height="24" rx="4" fill="#3b82f6" opacity="0.75"/>
-  <rect x="24" y="54" width="24" height="24" rx="4" fill="#3b82f6" opacity="0.75"/>
-
-  <!-- medium -->
-  <rect x="84" y="54" width="24" height="24" rx="4" fill="#2563eb" opacity="0.65"/>
-  <rect x="54" y="84" width="24" height="24" rx="4" fill="#2563eb" opacity="0.65"/>
-
-  <!-- weak outlined -->
-  <rect x="84" y="24" width="24" height="24" rx="4" fill="none" stroke="#3b82f6" stroke-width="4" opacity="0.55"/>
-  <rect x="24" y="84" width="24" height="24" rx="4" fill="none" stroke="#3b82f6" stroke-width="4" opacity="0.55"/>
+  <!-- scatter points around the line, accent-deep secondary -->
+  <circle cx="30" cy="88" r="5" fill="#2563eb"/>
+  <circle cx="50" cy="82" r="5" fill="#2563eb"/>
+  <circle cx="68" cy="58" r="5" fill="#3b82f6"/>
+  <circle cx="86" cy="56" r="5" fill="#2563eb"/>
+  <circle cx="100" cy="40" r="5" fill="#3b82f6"/>
 
   <!-- family marker -->
   <rect x="113" y="12" width="3" height="3" fill="#3b82f6"/>

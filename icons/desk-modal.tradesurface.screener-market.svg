@@ -5,7 +5,7 @@
       <stop offset="0" stop-color="#0b1120"/>
       <stop offset="1" stop-color="#1e293b"/>
     </linearGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.65">
+    <radialGradient id="glow" cx="0.75" cy="0.25" r="0.75">
       <stop offset="0" stop-color="#3b82f6" stop-opacity="0.55"/>
       <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
     </radialGradient>
@@ -13,21 +13,17 @@
   <rect width="128" height="128" rx="28" fill="url(#base)"/>
   <rect width="128" height="128" rx="28" fill="url(#glow)" opacity="0.35"/>
 
-  <!-- funnel outline: top wide (20,32)→(108,32), narrowing to (56,80)→(72,80), then straight down to (56,104)→(72,104) -->
-  <path d="M 20 32 L 108 32 L 72 80 L 72 104 L 56 104 L 56 80 Z"
-        fill="none" stroke="#3b82f6" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- radar origin at top-right corner of safe area -->
+  <circle cx="104" cy="24" r="6" fill="#3b82f6"/>
 
-  <!-- filter striation lines across the funnel opening -->
-  <line x1="30" y1="46" x2="98" y2="46" stroke="#2563eb" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
-  <line x1="42" y1="58" x2="86" y2="58" stroke="#2563eb" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+  <!-- outer sweep arc, r=78, quarter sweep -->
+  <path d="M 26 24 A 78 78 0 0 0 104 102" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
 
-  <!-- particles above the filter (candidates entering) -->
-  <circle cx="38" cy="24" r="3" fill="#3b82f6"/>
-  <circle cx="64" cy="22" r="3" fill="#3b82f6"/>
-  <circle cx="90" cy="24" r="3" fill="#3b82f6"/>
+  <!-- inner sweep arc, r=48, accent-deep secondary -->
+  <path d="M 56 24 A 48 48 0 0 0 104 72" fill="none" stroke="#2563eb" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
 
-  <!-- particle passing through (match) -->
-  <circle cx="64" cy="96" r="4" fill="#22c55e"/>
+  <!-- target match — the found ticker (lower-left) -->
+  <circle cx="36" cy="92" r="7" fill="#3b82f6"/>
 
   <!-- family marker -->
   <rect x="113" y="12" width="3" height="3" fill="#3b82f6"/>

@@ -237,21 +237,22 @@ A single failed item blocks the icon. Fix and re-review.
 
 | ID                                      | Market metaphor                         | Directional (market)? | Family marker (market) | Glass silhouette (toolbar)                                  |
 |-----------------------------------------|-----------------------------------------|-----------------------|------------------------|-------------------------------------------------------------|
-| `desk-modal.paper-trading`              | Paper ledger over real-book stubs       | No                    | No                     | Dashed ledger outline + 2 ruled lines (1 dominant, 3 marks) |
-| `desk-modal.price-feed-service`         | Source core with directional arcs       | No                    | No                     | Dot + outer arc + sink bar (3 marks)                        |
+| `desk-modal.paper-trading`              | Solid real candle + ghost practice candle overlaid | Yes (green)  | No                     | Solid real candle + outlined ghost body (3 marks, monochrome) |
+| `desk-modal.price-feed-service`         | Ticker-tape baseline + varying-height tick stream + left-flow arrow | No | No        | Baseline + 4 varying ticks + left-flow arrow (ticker-tape motif) |
 | `desk-modal.tradesurface.feeds`         | Multi-source fan converging to channel  | No                    | Yes                    | 2 circles + 2 converging paths + channel bar (1 fan motif)  |
-| `desk-modal.tradesurface.chart`         | Single bullish candlestick              | Yes (green)           | Yes                    | Wick + body monochrome (2 marks)                            |
-| `desk-modal.tradesurface.watchlist`     | Stacked list rows                       | No                    | Yes                    | 2 pill rows (2 marks)                                       |
-| `desk-modal.tradesurface.depth`         | Stratified bid/ask pressure profile     | Yes (green/red)       | Yes                    | Upper slab (0.92) + centerline + lower slab (0.60) (3 marks, monochrome) |
-| `desk-modal.tradesurface.analytics`     | 2×2 correlation matrix                  | No                    | Yes                    | 4 cells: diagonal strong (0.92) / off-diagonal weak (0.55)  |
-| `desk-modal.tradesurface.screener`      | Filter funnel                           | No                    | Yes                    | Funnel outline only (1 closed path)                         |
+| `desk-modal.tradesurface.chart`         | Single bullish candlestick              | Yes (green)           | Yes                    | Wick + body + diagonal trendline (3 marks, monochrome)      |
+| `desk-modal.tradesurface.watchlist`     | Stacked list rows                       | No                    | Yes                    | 2 dot+bar row-head pairs (watched-items motif)              |
+| `desk-modal.tradesurface.depth`         | Stratified ask-above / bid-below pressure profile (DOM convention) | Yes (green/red) | Yes          | Upper slab asks (0.92) + centerline + lower slab bids (0.60) (3 marks, monochrome) |
+| `desk-modal.tradesurface.analytics`     | Scatterplot with ascending regression line | No                | Yes                    | Regression line + 5-dot scatter cluster (scatter motif)     |
+| `desk-modal.tradesurface.screener`      | Radar sweep from top-right origin to lower-left target | No     | Yes                    | Origin dot + quarter-arc sweep + target dot (3 marks)       |
 | `desk-modal.tradesurface.alerts`        | Spike crossing threshold line           | Yes (red spike)       | Yes                    | Threshold line + spike (2 marks, monochrome)                |
-| `desk-modal.tradesurface.trading`       | Buy slab + price line + sell slab       | Yes (green/red)       | Yes                    | 2 slabs + price line (3 marks, monochrome — direction by position) |
+| `desk-modal.tradesurface.trading`       | Buy slab + price line + sell slab       | Yes (green/red)       | Yes                    | 2 slabs + up/down chevrons + price line (direction by shape, monochrome) |
 
 Notes:
 - Glass variants never carry the family marker (sub-pixel at 16 px).
-- Glass variants never use directional green/red — when the concept is directional, the meaning is carried by geometry and position.
-- The `feeds` glass variant is the one composition with four marks; it is permitted because the two circles + two converging paths read as a single fan silhouette.
+- Glass variants never use directional green/red — when the concept is directional, the meaning is carried by geometry, position, and shape (e.g., chevrons for buy/sell direction).
+- Depth follows real DOM convention: **asks above centerline, bids below**, matching Bloomberg / Eikon / TradingView / exchange UIs.
+- The `feeds` glass variant and the `price-feed-service` glass variant are the two compositions that exceed the 3-mark budget; both are permitted because their marks compose as a single fan / ticker-tape silhouette.
 
 ---
 

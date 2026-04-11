@@ -1,5 +1,7 @@
 <!-- desk-modal.tradesurface.chart — toolbar (glass) -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- trendline — diagonal across the lower third, breaks the vertical pill read -->
+  <line x1="18" y1="98" x2="110" y2="70" stroke="#60a5fa" stroke-opacity="0.55" stroke-width="6" stroke-linecap="round"/>
   <!-- wick -->
   <line x1="64" y1="20" x2="64" y2="108" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
   <!-- body (monochrome, no bullish/bearish color) -->

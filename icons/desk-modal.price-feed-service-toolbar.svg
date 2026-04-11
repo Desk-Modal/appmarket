@@ -1,13 +1,14 @@
 <!-- desk-modal.price-feed-service — toolbar (glass) -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <!-- source core -->
-  <circle cx="32" cy="64" r="12" fill="#60a5fa" fill-opacity="0.85"/>
-
-  <!-- one radiating arc (outer only, most readable) -->
-  <path d="M 32 22 A 42 42 0 0 1 32 106" fill="none" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
-
-  <!-- sink bar -->
-  <line x1="100" y1="44" x2="100" y2="84" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+  <!-- ticker-tape baseline (the wire) + tick marks of varying height + left-pointing flow arrow -->
+  <!-- all marks below compose a single "scrolling tape" motif -->
+  <line x1="26" y1="80" x2="108" y2="80" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+  <line x1="42" y1="80" x2="42" y2="52" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+  <line x1="60" y1="80" x2="60" y2="38" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+  <line x1="78" y1="80" x2="78" y2="58" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+  <line x1="96" y1="80" x2="96" y2="44" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+  <!-- flow-direction arrowhead at the left end of the tape -->
+  <path d="M 26 80 L 18 74 M 26 80 L 18 86" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
 
   <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.22)"/>
 </svg>

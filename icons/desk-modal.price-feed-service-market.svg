@@ -5,7 +5,7 @@
       <stop offset="0" stop-color="#0b1120"/>
       <stop offset="1" stop-color="#1e293b"/>
     </linearGradient>
-    <radialGradient id="glow" cx="0.35" cy="0.5" r="0.65">
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.65">
       <stop offset="0" stop-color="#3b82f6" stop-opacity="0.55"/>
       <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
     </radialGradient>
@@ -13,16 +13,23 @@
   <rect width="128" height="128" rx="28" fill="url(#base)"/>
   <rect width="128" height="128" rx="28" fill="url(#glow)" opacity="0.35"/>
 
-  <!-- source core (solid) -->
-  <circle cx="40" cy="64" r="10" fill="#3b82f6"/>
+  <!-- ticker-tape baseline (the wire) -->
+  <line x1="26" y1="80" x2="108" y2="80" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
 
-  <!-- directional broadcast arcs, three concentric, increasing opacity gap outward -->
-  <path d="M 40 40 A 24 24 0 0 1 40 88" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
-  <path d="M 40 28 A 36 36 0 0 1 40 100" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
-  <path d="M 40 16 A 48 48 0 0 1 40 112" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" opacity="0.4"/>
+  <!-- tick marks of varying height — the stream of updating values -->
+  <line x1="42" y1="80" x2="42" y2="54" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+  <line x1="60" y1="80" x2="60" y2="38" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+  <line x1="78" y1="80" x2="78" y2="60" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+  <line x1="96" y1="80" x2="96" y2="46" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
 
-  <!-- destination indicator - a small vertical line at x=108 showing the sink -->
-  <line x1="108" y1="48" x2="108" y2="80" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
+  <!-- accent-deep secondary ticks (softer, fills the rhythm) -->
+  <line x1="34" y1="80" x2="34" y2="68" stroke="#2563eb" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+  <line x1="104" y1="80" x2="104" y2="66" stroke="#2563eb" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+
+  <!-- flow-direction arrowhead at the left end of the tape -->
+  <path d="M 26 80 L 18 74 M 26 80 L 18 86" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- family marker? NO — price-feed-service is not in tradesurface.* family -->
 
   <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.18)"/>
 </svg>
