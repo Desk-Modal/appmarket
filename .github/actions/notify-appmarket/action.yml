@@ -1,0 +1,72 @@
+name: Notify appmarket
+description: >
+  Fires a repository_dispatch at Desk-Modal/appmarket so it mirrors
+  the latest release from the calling repo and rebuilds index.json.
+  Add this as the final step of a source repo's release workflow,
+  right after the GitHub Release has been created + assets uploaded.
+  Within ~30 seconds the catalog will reflect the new version and
+  every DeskModal session polling the CDN will see it.
+
+inputs:
+  token:
+    description: >
+      A PAT or GitHub App installation token with `contents: write`
+      on Desk-Modal/appmarket. Typically `secrets.DESKMODAL_REPO_TOKEN`
+      in the calling repo. The built-in GITHUB_TOKEN is NOT sufficient
+      because repository_dispatch is a cross-repo API call.
+    required: true
+  source-repo:
+    description: >
+      Short repo name of the source (e.g. `paper-trading`). Used as
+      the mirror tag prefix on appmarket. Defaults to the calling
+      repository's short name so most callers can omit it.
+    required: false
+    default: ${{ github.event.repository.name }}
+  tag:
+    description: >
+      The git tag whose release should be mirrored (e.g. `v1.2.3`).
+      Defaults to the current ref name so most callers can omit it.
+    required: false
+    default: ${{ github.ref_name }}
+  event-type:
+    description: >
+      The repository_dispatch event type that appmarket's aggregator
+      workflow listens for. Leave as the default unless you know you
+      need to route to a different handler.
+    required: false
+    default: release-published
+
+runs:
+  using: composite
+  steps:
+    - name: POST repository_dispatch to Desk-Modal/appmarket
+      shell: bash
+      env:
+        TOKEN: ${{ inputs.token }}
+        SOURCE_REPO: ${{ inputs.source-repo }}
+        TAG: ${{ inputs.tag }}
+        EVENT_TYPE: ${{ inputs.event-type }}
+      run: |
+        set -e
+        if [ -z "$TOKEN" ]; then
+          echo "::error::notify-appmarket: 'token' input is empty. Pass secrets.DESKMODAL_REPO_TOKEN."
+          exit 1
+        fi
+        echo "Firing repository_dispatch at Desk-Modal/appmarket"
+        echo "  event_type=$EVENT_TYPE"
+        echo "  source_repo=$SOURCE_REPO"
+        echo "  tag=$TAG"
+        HTTP=$(curl -sS -o /tmp/notify-out -w "%{http_code}" -X POST \
+          -H "Authorization: Bearer $TOKEN" \
+          -H "Accept: application/vnd.github+json" \
+          -H "Content-Type: application/json" \
+          -H "User-Agent: notify-appmarket-action" \
+          https://api.github.com/repos/Desk-Modal/appmarket/dispatches \
+          -d "{\"event_type\":\"$EVENT_TYPE\",\"client_payload\":{\"source_repo\":\"$SOURCE_REPO\",\"tag\":\"$TAG\",\"fired_by\":\"${GITHUB_REPOSITORY}\",\"run_id\":\"${GITHUB_RUN_ID}\"}}")
+        if [ "$HTTP" != "204" ]; then
+          echo "::error::notify-appmarket: repository_dispatch returned HTTP $HTTP"
+          cat /tmp/notify-out
+          exit 1
+        fi
+        echo "OK: appmarket notified (HTTP 204)"
+        echo "  -> check https://github.com/Desk-Modal/appmarket/actions/workflows/aggregate.yml"

@@ -1,0 +1,53 @@
+name: Sync release to appmarket
+
+# Reusable workflow — a source repo's release.yml can end with:
+#
+#   jobs:
+#     notify-appmarket:
+#       needs: [publish-release]
+#       uses: Desk-Modal/appmarket/.github/workflows/sync-release.yml@main
+#       secrets:
+#         token: ${{ secrets.DESKMODAL_REPO_TOKEN }}
+#
+# That calls this workflow, which fires a repository_dispatch at
+# appmarket's aggregate.yml — the real mirror + catalog rebuild. The
+# indirection exists so source repos can adopt "sync me into the
+# catalog" with a single `uses:` line, and so we can evolve the
+# trigger mechanism (e.g. switch from repository_dispatch to a
+# direct API call to a hypothetical aggregator service) without
+# touching every downstream release.yml.
+
+on:
+  workflow_call:
+    inputs:
+      source-repo:
+        description: Short name of the source repo to sync (defaults to the caller's repo)
+        required: false
+        type: string
+      tag:
+        description: Tag whose release should be mirrored (defaults to the caller's ref_name)
+        required: false
+        type: string
+    secrets:
+      token:
+        description: PAT with `contents:write` on Desk-Modal/appmarket. Typically DESKMODAL_REPO_TOKEN.
+        required: true
+
+jobs:
+  dispatch:
+    name: Fire appmarket rebuild
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        # Shallow checkout — we don't need history, we just want the
+        # composite action from THIS repo (appmarket) to be on disk.
+        with:
+          repository: Desk-Modal/appmarket
+          ref: main
+          fetch-depth: 1
+
+      - uses: ./.github/actions/notify-appmarket
+        with:
+          token: ${{ secrets.token }}
+          source-repo: ${{ inputs.source-repo || github.event.repository.name }}
+          tag: ${{ inputs.tag || github.ref_name }}
