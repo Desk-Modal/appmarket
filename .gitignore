@@ -1,0 +1,9 @@
+# Aggregator scratch files
+/tmp/
+*.pyc
+__pycache__/
+
+# Signing keys must NEVER be committed — they live in GitHub Actions secrets
+*.pem
+*.key
+DESKMODAL_SIGNING_KEY

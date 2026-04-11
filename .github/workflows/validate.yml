@@ -1,0 +1,177 @@
+name: Validate
+
+# Validates sources.json + index.json on every push/PR touching the
+# catalog. Becomes the required status check for branch protection so
+# nobody can merge a broken catalog to main.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    name: "Detect changes"
+    runs-on: ubuntu-latest
+    outputs:
+      catalog: ${{ steps.filter.outputs.catalog }}
+      scripts: ${{ steps.filter.outputs.scripts }}
+      workflows: ${{ steps.filter.outputs.workflows }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            catalog:
+              - sources.json
+              - index.json
+            scripts:
+              - scripts/**
+            workflows:
+              - .github/workflows/**
+
+  validate-json:
+    name: "Validate sources.json + index.json"
+    needs: [changes]
+    if: needs.changes.outputs.catalog == 'true' || needs.changes.outputs.scripts == 'true' || needs.changes.outputs.workflows == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON is well-formed
+        run: |
+          python3 -c "import json; json.load(open('sources.json'))"
+          if [ -f index.json ]; then
+            python3 -c "import json; json.load(open('index.json'))"
+          fi
+
+      - name: Validate sources.json schema
+        run: |
+          python3 <<'PY'
+          import json, sys
+          doc = json.load(open("sources.json"))
+          errors = []
+          required_top = ["publisher_keys", "categories", "sources"]
+          for k in required_top:
+              if k not in doc:
+                  errors.append(f"top-level missing '{k}'")
+          cat_ids = {c["id"] for c in doc.get("categories", [])}
+          seen_ids = set()
+          for i, s in enumerate(doc.get("sources", [])):
+              for k in ("owner", "repo", "mode", "content_type", "asset_name_template"):
+                  if k not in s:
+                      errors.append(f"source[{i}] missing '{k}'")
+              mode = s.get("mode")
+              if mode == "single_release":
+                  if "id" not in s:
+                      errors.append(f"source[{i}] single_release missing 'id'")
+                  else:
+                      if s["id"] in seen_ids:
+                          errors.append(f"source[{i}] duplicate id '{s['id']}'")
+                      seen_ids.add(s["id"])
+                  for cat in s.get("categories", []):
+                      if cat not in cat_ids:
+                          errors.append(f"source[{i}] references unknown category '{cat}'")
+              elif mode == "multi_plugin_release":
+                  if "plugins" not in s or not isinstance(s["plugins"], list):
+                      errors.append(f"source[{i}] multi_plugin_release missing 'plugins' array")
+                  for j, p in enumerate(s.get("plugins", [])):
+                      if "id" not in p:
+                          errors.append(f"source[{i}].plugins[{j}] missing 'id'")
+                      else:
+                          if p["id"] in seen_ids:
+                              errors.append(f"source[{i}].plugins[{j}] duplicate id '{p['id']}'")
+                          seen_ids.add(p["id"])
+                      for cat in p.get("categories", []):
+                          if cat not in cat_ids:
+                              errors.append(f"source[{i}].plugins[{j}] references unknown category '{cat}'")
+              else:
+                  errors.append(f"source[{i}] unknown mode '{mode}'")
+          if errors:
+              for e in errors:
+                  print(f"ERROR: {e}")
+              sys.exit(1)
+          print(f"OK: sources.json validated ({len(doc['sources'])} source repos, {len(seen_ids)} catalog ids)")
+          PY
+
+      - name: Validate index.json schema
+        run: |
+          if [ ! -f index.json ]; then
+            echo "[skip] no index.json yet — first aggregator run will create it"
+            exit 0
+          fi
+          python3 <<'PY'
+          import json, sys
+          doc = json.load(open("index.json"))
+          errors = []
+          for k in ("schema_version", "generated_at", "generator", "publisher_keys", "categories", "catalog"):
+              if k not in doc:
+                  errors.append(f"top-level missing '{k}'")
+          if doc.get("schema_version") != 2:
+              errors.append(f"schema_version must be 2, got {doc.get('schema_version')!r}")
+          seen_ids = set()
+          for e in doc.get("catalog", []):
+              for k in ("id", "owner", "repo", "name", "content_type", "latest_version", "platforms", "publisher", "signature"):
+                  if k not in e:
+                      errors.append(f"entry '{e.get('id','?')}' missing '{k}'")
+              if e.get("id") in seen_ids:
+                  errors.append(f"duplicate catalog id '{e['id']}'")
+              seen_ids.add(e.get("id"))
+              platforms = e.get("platforms", {})
+              if not any(platforms.values()):
+                  errors.append(f"entry '{e.get('id','?')}' has no installable platform asset")
+          if errors:
+              for e in errors:
+                  print(f"ERROR: {e}")
+              sys.exit(1)
+          print(f"OK: index.json validated ({len(doc['catalog'])} entries)")
+          PY
+
+      - name: Dry-run aggregator (no write)
+        run: |
+          # Runs the aggregator against the public GitHub API without
+          # a token — catches URL drift, malformed source entries, and
+          # missing assets. The anonymous 60 req/hr limit is enough
+          # because we only have ~5 sources today.
+          python3 scripts/aggregate.py --sources sources.json --out /tmp/index-dryrun.json
+          echo "dry-run output:"
+          python3 -c "import json; d=json.load(open('/tmp/index-dryrun.json')); print(f'{len(d[\"catalog\"])} entries'); [print(f'  {e[\"id\"]} @ {e[\"latest_version\"]} platforms={sorted([p for p,v in e[\"platforms\"].items() if v])}') for e in d['catalog']]"
+
+  ci-all-green:
+    name: "CI: all green"
+    needs: [changes, validate-json]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all gate jobs succeeded or were skipped
+        shell: bash
+        run: |
+          fail=0
+          check() {
+            case "$2" in
+              success|skipped) echo "  OK $1 ($2)" ;;
+              *) echo "  FAIL $1 ($2)"; fail=1 ;;
+            esac
+          }
+          echo "Gate job results for commit ${GITHUB_SHA:0:7}:"
+          check "changes"       "${{ needs.changes.result }}"
+          check "validate-json" "${{ needs.validate-json.result }}"
+          if [ "$fail" -ne 0 ]; then
+            echo ""
+            echo "One or more required CI jobs failed."
+            exit 1
+          fi
+          echo ""
+          echo "All required CI jobs succeeded or were correctly skipped."

@@ -1,0 +1,68 @@
+{
+  "comment": "Declarative list of GitHub Releases to aggregate into plugin-index.json. Each entry names the source repo, how to discover entries within it, and how to tag them in the catalog. The aggregator treats this file as the single source of truth for 'what is available on the DeskModal platform'.",
+  "publisher_keys": {
+    "deskmodal-primary": {
+      "algorithm": "ed25519",
+      "public_key_hex": "REPLACE_WITH_PUBLIC_KEY_HEX_FROM_DESKMODAL_SIGNING_KEY",
+      "valid_from": "2026-04-01T00:00:00Z",
+      "owner": "Desk-Modal",
+      "notes": "Fill this in before the first signed aggregation. Derive the public key from DESKMODAL_SIGNING_KEY (the Ed25519 private key secret used by every plugin repo's release workflow) via: python3 -c 'from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey; import os; k=Ed25519PrivateKey.from_private_bytes(bytes.fromhex(os.environ[\"DESKMODAL_SIGNING_KEY\"])); print(k.public_key().public_bytes_raw().hex())'"
+    }
+  },
+  "categories": [
+    { "id": "trading",    "name": "Trading",    "description": "Order entry, blotter, positions, portfolio" },
+    { "id": "charting",   "name": "Charting",   "description": "Price charts, indicators, drawing tools" },
+    { "id": "data",       "name": "Data",       "description": "Market data feeds and streaming" },
+    { "id": "analytics",  "name": "Analytics",  "description": "Cross-instrument analysis and metrics" },
+    { "id": "simulation", "name": "Simulation", "description": "Paper trading, backtesting, replay" },
+    { "id": "tooling",    "name": "Tooling",    "description": "Developer tools, SDKs, CLIs" }
+  ],
+  "sources": [
+    {
+      "owner": "Desk-Modal",
+      "repo": "paper-trading",
+      "mode": "single_release",
+      "content_type": "service",
+      "id": "desk-modal.paper-trading",
+      "display_name": "Paper Trading Service",
+      "tagline": "Risk-free order simulation with realistic fills",
+      "categories": ["trading", "simulation"],
+      "tags": ["paper", "simulator", "ems"],
+      "featured": true,
+      "asset_name_template": "deskmodal.paper-trading-{version}-{platform}.dmpkg.tar.gz"
+    },
+    {
+      "owner": "Desk-Modal",
+      "repo": "price-feed-service",
+      "mode": "single_release",
+      "content_type": "service",
+      "id": "desk-modal.price-feed-service",
+      "display_name": "Price Feed Service",
+      "tagline": "Multi-exchange real-time price streaming",
+      "categories": ["data"],
+      "tags": ["prices", "streaming", "websocket", "exchanges"],
+      "featured": true,
+      "asset_name_template": "deskmodal-price-feed-{platform}.tar.gz"
+    },
+    {
+      "owner": "Desk-Modal",
+      "repo": "tradesurface",
+      "mode": "multi_plugin_release",
+      "content_type": "app",
+      "plugins": [
+        { "slug": "feeds",     "id": "desk-modal.tradesurface.feeds",     "display_name": "TradeSurface Feeds",     "tagline": "Real-time multi-exchange price feeds",                    "categories": ["data"],      "tags": ["feeds","streaming"],         "featured": true  },
+        { "slug": "chart",     "id": "desk-modal.tradesurface.chart",     "display_name": "TradeSurface Chart",     "tagline": "Advanced charting with 50+ indicators",                   "categories": ["charting"],  "tags": ["chart","indicators"],        "featured": true  },
+        { "slug": "watchlist", "id": "desk-modal.tradesurface.watchlist", "display_name": "TradeSurface Watchlist", "tagline": "Multi-exchange watchlist with streaming quotes",          "categories": ["trading"],   "tags": ["watchlist"],                 "featured": true  },
+        { "slug": "depth",     "id": "desk-modal.tradesurface.depth",     "display_name": "TradeSurface Depth",     "tagline": "Cross-exchange order book depth visualization",           "categories": ["trading"],   "tags": ["depth","orderbook"],         "featured": false },
+        { "slug": "analytics", "id": "desk-modal.tradesurface.analytics", "display_name": "TradeSurface Analytics", "tagline": "Market analytics and cross-exchange metrics",             "categories": ["analytics"], "tags": ["analytics","correlation"],   "featured": false },
+        { "slug": "screener",  "id": "desk-modal.tradesurface.screener",  "display_name": "TradeSurface Screener",  "tagline": "Real-time market screener with custom filters",           "categories": ["trading"],   "tags": ["screener"],                  "featured": false },
+        { "slug": "alerts",    "id": "desk-modal.tradesurface.alerts",    "display_name": "TradeSurface Alerts",    "tagline": "Price alerts and condition monitoring",                   "categories": ["trading"],   "tags": ["alerts","notifications"],    "featured": false },
+        { "slug": "trading",   "id": "desk-modal.tradesurface.trading",   "display_name": "TradeSurface Trading",   "tagline": "Order ticket, blotter, and positions management",         "categories": ["trading"],   "tags": ["order","blotter","ems"],     "featured": true  }
+      ],
+      "asset_name_template": "tradesurface-{slug}-{version}-{platform}.tar.gz",
+      "per_plugin_manifest_template": "{slug}-plugin.toml",
+      "per_plugin_checksums_template": "{slug}-checksums.txt",
+      "per_plugin_signature_template": "{slug}-SIGNATURE"
+    }
+  ]
+}
