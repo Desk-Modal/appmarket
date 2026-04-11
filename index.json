@@ -1,10 +1,10 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-04-11T02:57:01Z",
+  "generated_at": "2026-04-11T02:59:07Z",
   "generator": {
     "name": "appmarket-aggregator",
     "version": "1.1.0",
-    "source_commit": "5b0d48a"
+    "source_commit": "unknown"
   },
   "publisher_keys": {
     "deskmodal-primary": {
@@ -47,5 +47,619 @@
       "description": "Developer tools, SDKs, CLIs"
     }
   ],
-  "catalog": []
+  "catalog": [
+    {
+      "id": "desk-modal.paper-trading",
+      "owner": "Desk-Modal",
+      "repo": "paper-trading",
+      "name": "Paper Trading Service",
+      "tagline": "Risk-free order simulation with realistic fills",
+      "description": "",
+      "content_type": "service",
+      "categories": [
+        "trading",
+        "simulation"
+      ],
+      "tags": [
+        "paper",
+        "simulator",
+        "ems"
+      ],
+      "featured": true,
+      "publisher": {
+        "display_name": "Desk-Modal",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "latest_version": "0.1.2",
+      "min_deskmodal_version": "0.0.0",
+      "published_at": "2026-04-11T02:56:55Z",
+      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/paper-trading-v0.1.2",
+      "changelog_url": "https://github.com/Desk-Modal/paper-trading/releases",
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.paper-trading.svg",
+      "screenshots": [],
+      "homepage": "https://github.com/Desk-Modal/paper-trading",
+      "license": "Proprietary",
+      "dependencies": [],
+      "capabilities": {},
+      "platforms": {
+        "win32-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/paper-trading-v0.1.2/deskmodal.paper-trading-0.1.2-win32-x64.dmpkg.tar.gz",
+          "asset_name": "deskmodal.paper-trading-0.1.2-win32-x64.dmpkg.tar.gz",
+          "sha256": "7cab16eb39c3448d26626e052c288420bf6260b272d71ae471fd6f38bd896d02",
+          "size_bytes": 3270096
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/paper-trading-v0.1.2/deskmodal.paper-trading-0.1.2-darwin-arm64.dmpkg.tar.gz",
+          "asset_name": "deskmodal.paper-trading-0.1.2-darwin-arm64.dmpkg.tar.gz",
+          "sha256": "ddf04ab702dde5ef89e5b59771959292ec4f8e673475be891594d7fba0b191b8",
+          "size_bytes": 2819076
+        },
+        "darwin-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/paper-trading-v0.1.2/deskmodal.paper-trading-0.1.2-darwin-x64.dmpkg.tar.gz",
+          "asset_name": "deskmodal.paper-trading-0.1.2-darwin-x64.dmpkg.tar.gz",
+          "sha256": "bba4d2308228c874553567aafa15d7af5bad2abbb388b4a7a1f8555a41f204af",
+          "size_bytes": 3115003
+        },
+        "linux-x64": null,
+        "wasm": null
+      },
+      "manifest": {
+        "url": null,
+        "sha256": null
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "deskmodal-primary",
+        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/paper-trading-v0.1.2/checksums.txt",
+        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/paper-trading-v0.1.2/SIGNATURE"
+      }
+    },
+    {
+      "id": "desk-modal.price-feed-service",
+      "owner": "Desk-Modal",
+      "repo": "price-feed-service",
+      "name": "Price Feed Service",
+      "tagline": "Multi-exchange real-time price streaming",
+      "description": "",
+      "content_type": "service",
+      "categories": [
+        "data"
+      ],
+      "tags": [
+        "prices",
+        "streaming",
+        "websocket",
+        "exchanges"
+      ],
+      "featured": true,
+      "publisher": {
+        "display_name": "Desk-Modal",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "latest_version": "0.1.2",
+      "min_deskmodal_version": "0.0.0",
+      "published_at": "2026-04-11T02:57:02Z",
+      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/price-feed-service-v0.1.2",
+      "changelog_url": "https://github.com/Desk-Modal/price-feed-service/releases",
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.price-feed-service.svg",
+      "screenshots": [],
+      "homepage": "https://github.com/Desk-Modal/price-feed-service",
+      "license": "Proprietary",
+      "dependencies": [],
+      "capabilities": {},
+      "platforms": {
+        "win32-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/deskmodal-price-feed-win32-x64.tar.gz",
+          "asset_name": "deskmodal-price-feed-win32-x64.tar.gz",
+          "sha256": "8d531bbfa6f8a15dd867ebb866f1bc96cf5f0c34a817ddbc376b143a3c726c8e",
+          "size_bytes": 2579116
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/deskmodal-price-feed-darwin-arm64.tar.gz",
+          "asset_name": "deskmodal-price-feed-darwin-arm64.tar.gz",
+          "sha256": "0b7640212c67bce7549bca362b9073558a6f93fd9afe6504fcb5aa88765a0cdb",
+          "size_bytes": 2402641
+        },
+        "darwin-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/deskmodal-price-feed-darwin-x64.tar.gz",
+          "asset_name": "deskmodal-price-feed-darwin-x64.tar.gz",
+          "sha256": "de4f194f52096e03a4330e8e1f94eb80bd2a5df6a2c78077a2f2edbbcbb51233",
+          "size_bytes": 2567969
+        },
+        "linux-x64": null,
+        "wasm": null
+      },
+      "manifest": {
+        "url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/plugin.toml",
+        "sha256": null
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "deskmodal-primary",
+        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/checksums.txt",
+        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/SIGNATURE"
+      }
+    },
+    {
+      "id": "desk-modal.tradesurface.alerts",
+      "owner": "Desk-Modal",
+      "repo": "tradesurface",
+      "name": "TradeSurface Alerts",
+      "tagline": "Price alerts and condition monitoring",
+      "description": "",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "tags": [
+        "alerts",
+        "notifications"
+      ],
+      "featured": false,
+      "publisher": {
+        "display_name": "Desk-Modal",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "latest_version": "1.0.0",
+      "min_deskmodal_version": "0.0.0",
+      "published_at": "2026-04-11T02:57:10Z",
+      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
+      "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.alerts.svg",
+      "screenshots": [],
+      "homepage": "https://github.com/Desk-Modal/tradesurface",
+      "license": "Proprietary",
+      "dependencies": [],
+      "capabilities": {},
+      "platforms": {
+        "win32-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-alerts-1.0.0-win32-x64.tar.gz",
+          "asset_name": "tradesurface-alerts-1.0.0-win32-x64.tar.gz",
+          "sha256": "025ceeb06c37fe7c2b2c8448b898de9ea4ee579f1d3827ab8309684b8b899847",
+          "size_bytes": 1130206
+        },
+        "darwin-arm64": null,
+        "darwin-x64": null,
+        "linux-x64": null,
+        "wasm": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-alerts-1.0.0-wasm.tar.gz",
+          "asset_name": "tradesurface-alerts-1.0.0-wasm.tar.gz",
+          "sha256": null,
+          "size_bytes": 1130188
+        }
+      },
+      "manifest": {
+        "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/alerts-plugin.toml",
+        "sha256": null
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "deskmodal-primary",
+        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/alerts-checksums.txt",
+        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/alerts-SIGNATURE"
+      }
+    },
+    {
+      "id": "desk-modal.tradesurface.analytics",
+      "owner": "Desk-Modal",
+      "repo": "tradesurface",
+      "name": "TradeSurface Analytics",
+      "tagline": "Market analytics and cross-exchange metrics",
+      "description": "",
+      "content_type": "app",
+      "categories": [
+        "analytics"
+      ],
+      "tags": [
+        "analytics",
+        "correlation"
+      ],
+      "featured": false,
+      "publisher": {
+        "display_name": "Desk-Modal",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "latest_version": "1.0.0",
+      "min_deskmodal_version": "0.0.0",
+      "published_at": "2026-04-11T02:57:10Z",
+      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
+      "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.analytics.svg",
+      "screenshots": [],
+      "homepage": "https://github.com/Desk-Modal/tradesurface",
+      "license": "Proprietary",
+      "dependencies": [],
+      "capabilities": {},
+      "platforms": {
+        "win32-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-analytics-1.0.0-win32-x64.tar.gz",
+          "asset_name": "tradesurface-analytics-1.0.0-win32-x64.tar.gz",
+          "sha256": "bd15ae959e17b46f00052884939b38b15992dbdae343b5c60463695ccf385fc4",
+          "size_bytes": 1037243
+        },
+        "darwin-arm64": null,
+        "darwin-x64": null,
+        "linux-x64": null,
+        "wasm": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-analytics-1.0.0-wasm.tar.gz",
+          "asset_name": "tradesurface-analytics-1.0.0-wasm.tar.gz",
+          "sha256": null,
+          "size_bytes": 1037224
+        }
+      },
+      "manifest": {
+        "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/analytics-plugin.toml",
+        "sha256": null
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "deskmodal-primary",
+        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/analytics-checksums.txt",
+        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/analytics-SIGNATURE"
+      }
+    },
+    {
+      "id": "desk-modal.tradesurface.chart",
+      "owner": "Desk-Modal",
+      "repo": "tradesurface",
+      "name": "TradeSurface Chart",
+      "tagline": "Advanced charting with 50+ indicators",
+      "description": "",
+      "content_type": "app",
+      "categories": [
+        "charting"
+      ],
+      "tags": [
+        "chart",
+        "indicators"
+      ],
+      "featured": true,
+      "publisher": {
+        "display_name": "Desk-Modal",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "latest_version": "1.0.0",
+      "min_deskmodal_version": "0.0.0",
+      "published_at": "2026-04-11T02:57:10Z",
+      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
+      "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.chart.svg",
+      "screenshots": [],
+      "homepage": "https://github.com/Desk-Modal/tradesurface",
+      "license": "Proprietary",
+      "dependencies": [],
+      "capabilities": {},
+      "platforms": {
+        "win32-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-chart-1.0.0-win32-x64.tar.gz",
+          "asset_name": "tradesurface-chart-1.0.0-win32-x64.tar.gz",
+          "sha256": "89d4a2372a6324bd3d114b7bd9825683aef1455eb07aad85020ea51d4ae30633",
+          "size_bytes": 1881084
+        },
+        "darwin-arm64": null,
+        "darwin-x64": null,
+        "linux-x64": null,
+        "wasm": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-chart-1.0.0-wasm.tar.gz",
+          "asset_name": "tradesurface-chart-1.0.0-wasm.tar.gz",
+          "sha256": null,
+          "size_bytes": 1881017
+        }
+      },
+      "manifest": {
+        "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/chart-plugin.toml",
+        "sha256": null
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "deskmodal-primary",
+        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/chart-checksums.txt",
+        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/chart-SIGNATURE"
+      }
+    },
+    {
+      "id": "desk-modal.tradesurface.depth",
+      "owner": "Desk-Modal",
+      "repo": "tradesurface",
+      "name": "TradeSurface Depth",
+      "tagline": "Cross-exchange order book depth visualization",
+      "description": "",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "tags": [
+        "depth",
+        "orderbook"
+      ],
+      "featured": false,
+      "publisher": {
+        "display_name": "Desk-Modal",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "latest_version": "1.0.0",
+      "min_deskmodal_version": "0.0.0",
+      "published_at": "2026-04-11T02:57:10Z",
+      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
+      "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.depth.svg",
+      "screenshots": [],
+      "homepage": "https://github.com/Desk-Modal/tradesurface",
+      "license": "Proprietary",
+      "dependencies": [],
+      "capabilities": {},
+      "platforms": {
+        "win32-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-depth-1.0.0-win32-x64.tar.gz",
+          "asset_name": "tradesurface-depth-1.0.0-win32-x64.tar.gz",
+          "sha256": "6cb6efd514b9643ab9cb0bace72b69469c21bb74760af45a9732fbafcbef5d45",
+          "size_bytes": 1063890
+        },
+        "darwin-arm64": null,
+        "darwin-x64": null,
+        "linux-x64": null,
+        "wasm": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-depth-1.0.0-wasm.tar.gz",
+          "asset_name": "tradesurface-depth-1.0.0-wasm.tar.gz",
+          "sha256": null,
+          "size_bytes": 1063870
+        }
+      },
+      "manifest": {
+        "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/depth-plugin.toml",
+        "sha256": null
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "deskmodal-primary",
+        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/depth-checksums.txt",
+        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/depth-SIGNATURE"
+      }
+    },
+    {
+      "id": "desk-modal.tradesurface.feeds",
+      "owner": "Desk-Modal",
+      "repo": "tradesurface",
+      "name": "TradeSurface Feeds",
+      "tagline": "Real-time multi-exchange price feeds",
+      "description": "",
+      "content_type": "app",
+      "categories": [
+        "data"
+      ],
+      "tags": [
+        "feeds",
+        "streaming"
+      ],
+      "featured": true,
+      "publisher": {
+        "display_name": "Desk-Modal",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "latest_version": "1.0.0",
+      "min_deskmodal_version": "0.0.0",
+      "published_at": "2026-04-11T02:57:10Z",
+      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
+      "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.feeds.svg",
+      "screenshots": [],
+      "homepage": "https://github.com/Desk-Modal/tradesurface",
+      "license": "Proprietary",
+      "dependencies": [],
+      "capabilities": {},
+      "platforms": {
+        "win32-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-feeds-1.0.0-win32-x64.tar.gz",
+          "asset_name": "tradesurface-feeds-1.0.0-win32-x64.tar.gz",
+          "sha256": "218ad4c9eef6f9267a7f430383f28f3980a9688338caaaedbd6d9994dcc649bc",
+          "size_bytes": 1104557
+        },
+        "darwin-arm64": null,
+        "darwin-x64": null,
+        "linux-x64": null,
+        "wasm": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-feeds-1.0.0-wasm.tar.gz",
+          "asset_name": "tradesurface-feeds-1.0.0-wasm.tar.gz",
+          "sha256": null,
+          "size_bytes": 1104536
+        }
+      },
+      "manifest": {
+        "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/feeds-plugin.toml",
+        "sha256": null
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "deskmodal-primary",
+        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/feeds-checksums.txt",
+        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/feeds-SIGNATURE"
+      }
+    },
+    {
+      "id": "desk-modal.tradesurface.screener",
+      "owner": "Desk-Modal",
+      "repo": "tradesurface",
+      "name": "TradeSurface Screener",
+      "tagline": "Real-time market screener with custom filters",
+      "description": "",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "tags": [
+        "screener"
+      ],
+      "featured": false,
+      "publisher": {
+        "display_name": "Desk-Modal",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "latest_version": "1.0.0",
+      "min_deskmodal_version": "0.0.0",
+      "published_at": "2026-04-11T02:57:10Z",
+      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
+      "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.screener.svg",
+      "screenshots": [],
+      "homepage": "https://github.com/Desk-Modal/tradesurface",
+      "license": "Proprietary",
+      "dependencies": [],
+      "capabilities": {},
+      "platforms": {
+        "win32-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-screener-1.0.0-win32-x64.tar.gz",
+          "asset_name": "tradesurface-screener-1.0.0-win32-x64.tar.gz",
+          "sha256": "c57cb8d254d2b5b9bcaca7a9617227228a8b9556314430970d17b4552da1348a",
+          "size_bytes": 1046510
+        },
+        "darwin-arm64": null,
+        "darwin-x64": null,
+        "linux-x64": null,
+        "wasm": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-screener-1.0.0-wasm.tar.gz",
+          "asset_name": "tradesurface-screener-1.0.0-wasm.tar.gz",
+          "sha256": null,
+          "size_bytes": 1046488
+        }
+      },
+      "manifest": {
+        "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/screener-plugin.toml",
+        "sha256": null
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "deskmodal-primary",
+        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/screener-checksums.txt",
+        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/screener-SIGNATURE"
+      }
+    },
+    {
+      "id": "desk-modal.tradesurface.trading",
+      "owner": "Desk-Modal",
+      "repo": "tradesurface",
+      "name": "TradeSurface Trading",
+      "tagline": "Order ticket, blotter, and positions management",
+      "description": "",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "tags": [
+        "order",
+        "blotter",
+        "ems"
+      ],
+      "featured": true,
+      "publisher": {
+        "display_name": "Desk-Modal",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "latest_version": "1.0.0",
+      "min_deskmodal_version": "0.0.0",
+      "published_at": "2026-04-11T02:57:10Z",
+      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
+      "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.trading.svg",
+      "screenshots": [],
+      "homepage": "https://github.com/Desk-Modal/tradesurface",
+      "license": "Proprietary",
+      "dependencies": [],
+      "capabilities": {},
+      "platforms": {
+        "win32-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-trading-1.0.0-win32-x64.tar.gz",
+          "asset_name": "tradesurface-trading-1.0.0-win32-x64.tar.gz",
+          "sha256": "1847470cd9f43d43c728a6cefc7051f4b56610ddf5f2343999f9263dd6be621e",
+          "size_bytes": 1064804
+        },
+        "darwin-arm64": null,
+        "darwin-x64": null,
+        "linux-x64": null,
+        "wasm": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-trading-1.0.0-wasm.tar.gz",
+          "asset_name": "tradesurface-trading-1.0.0-wasm.tar.gz",
+          "sha256": null,
+          "size_bytes": 1064759
+        }
+      },
+      "manifest": {
+        "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/trading-plugin.toml",
+        "sha256": null
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "deskmodal-primary",
+        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/trading-checksums.txt",
+        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/trading-SIGNATURE"
+      }
+    },
+    {
+      "id": "desk-modal.tradesurface.watchlist",
+      "owner": "Desk-Modal",
+      "repo": "tradesurface",
+      "name": "TradeSurface Watchlist",
+      "tagline": "Multi-exchange watchlist with streaming quotes",
+      "description": "",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "tags": [
+        "watchlist"
+      ],
+      "featured": true,
+      "publisher": {
+        "display_name": "Desk-Modal",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "latest_version": "1.0.0",
+      "min_deskmodal_version": "0.0.0",
+      "published_at": "2026-04-11T02:57:10Z",
+      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
+      "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.watchlist.svg",
+      "screenshots": [],
+      "homepage": "https://github.com/Desk-Modal/tradesurface",
+      "license": "Proprietary",
+      "dependencies": [],
+      "capabilities": {},
+      "platforms": {
+        "win32-x64": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-watchlist-1.0.0-win32-x64.tar.gz",
+          "asset_name": "tradesurface-watchlist-1.0.0-win32-x64.tar.gz",
+          "sha256": "09b566f89f8184a2ea7d38d13fa1e7f9e891080bbb1ae26836e592dd6b608efd",
+          "size_bytes": 1046904
+        },
+        "darwin-arm64": null,
+        "darwin-x64": null,
+        "linux-x64": null,
+        "wasm": {
+          "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/tradesurface-watchlist-1.0.0-wasm.tar.gz",
+          "asset_name": "tradesurface-watchlist-1.0.0-wasm.tar.gz",
+          "sha256": null,
+          "size_bytes": 1046881
+        }
+      },
+      "manifest": {
+        "url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/watchlist-plugin.toml",
+        "sha256": null
+      },
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "deskmodal-primary",
+        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/watchlist-checksums.txt",
+        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/tradesurface-v1.0.0/watchlist-SIGNATURE"
+      }
+    }
+  ]
 }
