@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Publishing contract
+    url: https://github.com/Desk-Modal/appmarket/blob/main/PUBLISHING.md
+    about: The end-to-end publisher onboarding contract. Read this before opening a signup issue.
+  - name: Security disclosure
+    url: mailto:security@deskmodal.com
+    about: Report a vulnerability in DeskModal, the app market catalog, or a published plugin. Do not file a public issue.

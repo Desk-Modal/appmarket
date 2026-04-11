@@ -1,0 +1,167 @@
+name: Publisher signup
+description: Apply to become a DeskModal app market publisher. Required before you can add any plugin, service, or script to the catalog.
+title: "[publisher-signup] <your org or product name>"
+labels:
+  - publisher-signup
+  - needs-review
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Before you start
+
+        Publishing to the DeskModal app market is gated. Opening this
+        issue starts a review by Desk-Modal. You cannot add entries to
+        `sources.json` by direct PR — every catalog entry must be
+        backed by an approved publisher record.
+
+        Please read [PUBLISHING.md](../blob/main/PUBLISHING.md) first
+        and make sure you can meet every item in the "publisher
+        requirements" checklist before filling this in.
+
+  - type: input
+    id: publisher-display-name
+    attributes:
+      label: Publisher display name
+      description: The name that will appear on every catalog entry you publish. Usually a company, product, or individual developer name.
+      placeholder: Acme Analytics
+    validations:
+      required: true
+
+  - type: input
+    id: publisher-id
+    attributes:
+      label: Publisher id (kebab-case)
+      description: A short lowercase identifier used as the prefix for every plugin id you publish (e.g. `acme-analytics` → plugin ids `acme-analytics.chart`, `acme-analytics.screener`). Must be globally unique across the catalog.
+      placeholder: acme-analytics
+    validations:
+      required: true
+
+  - type: input
+    id: contact-email
+    attributes:
+      label: Contact email
+      description: Must be from the same domain as your homepage. Used for verification, incident reports, and key rotation.
+      placeholder: publisher@acme.example
+    validations:
+      required: true
+
+  - type: input
+    id: homepage
+    attributes:
+      label: Homepage URL
+      description: Your company or product website. Must match the domain of your contact email.
+      placeholder: https://acme.example
+    validations:
+      required: true
+
+  - type: input
+    id: github-identity
+    attributes:
+      label: GitHub org or username
+      description: The GitHub identity that owns the release repo(s) you will be publishing from. Can be an org or a personal account.
+      placeholder: acme-analytics
+    validations:
+      required: true
+
+  - type: textarea
+    id: release-repos
+    attributes:
+      label: Release repos
+      description: One GitHub repo per line, in `owner/repo` form. Each must contain a release workflow that emits per-platform tarballs, `plugin.toml`, `checksums.txt`, and a `SIGNATURE` file signed with the key below. Can be public OR private — we support both via the `mirror` flag on your sources.json entry.
+      placeholder: |
+        acme-analytics/chart
+        acme-analytics/screener
+    validations:
+      required: true
+
+  - type: textarea
+    id: plugins
+    attributes:
+      label: Plugins to list in the catalog
+      description: |
+        For every plugin you want listed, give:
+        - id (e.g. `acme-analytics.chart`)
+        - display name
+        - tagline (≤80 chars)
+        - content_type (`app` / `service` / `script` / `bundle`)
+        - categories (from the canonical category list in sources.json)
+        - whether it's a featured candidate
+      placeholder: |
+        - id: acme-analytics.chart
+          name: Acme Advanced Chart
+          tagline: WebGPU chart with 100+ indicators
+          content_type: app
+          categories: [charting]
+          featured: true
+    validations:
+      required: true
+
+  - type: textarea
+    id: ed25519-key
+    attributes:
+      label: Ed25519 public key (hex)
+      description: |
+        The hex-encoded Ed25519 public key you will use to sign every `checksums.txt` file in your releases. This key becomes the trust root for everything you publish — every DeskModal client verifies your signatures against this key before installing your plugin.
+
+        Generate one with:
+        ```
+        python3 -c "
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+        k = Ed25519PrivateKey.generate()
+        priv = k.private_bytes_raw().hex()
+        pub  = k.public_key().public_bytes_raw().hex()
+        print('PRIVATE (KEEP SECRET, add to your repo as MYPLUGIN_SIGNING_KEY):')
+        print(priv)
+        print()
+        print('PUBLIC (paste here):')
+        print(pub)
+        "
+        ```
+
+        **Paste ONLY the public key.** Never share the private key.
+      placeholder: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+      render: text
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mirror-mode
+    attributes:
+      label: Asset delivery model
+      description: |
+        - **Mirror (recommended for private repos)** — Desk-Modal's aggregator copies your release assets into the public `appmarket` repo every time you publish. Your repo can stay private. Requires granting read access to Desk-Modal's signing bot (instructions sent after approval).
+        - **Direct (recommended for public repos)** — the catalog points directly at your GitHub Release URLs. Zero handoff, but your repo must be public.
+      options:
+        - direct (I have a public repo)
+        - mirror (my repo is private, copy my assets to appmarket)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: requirements
+    attributes:
+      label: Publisher requirements
+      description: Every box is mandatory. Uncheck anything you cannot meet and we'll help you get there before approval.
+      options:
+        - label: "I control the homepage domain and contact email (verification step will confirm this)."
+          required: true
+        - label: "I have generated a fresh Ed25519 key specifically for DeskModal publishing. I will not reuse it for any other purpose."
+          required: true
+        - label: "Every release of every plugin I publish will sign `checksums.txt` with that key."
+          required: true
+        - label: "I understand that a broken signature drops the entry from the catalog with no grace period."
+          required: true
+        - label: "I will use a fine-grained PAT with `contents` write scoped ONLY to `Desk-Modal/appmarket` for the `notify-appmarket` step (or install the `deskmodal-bot` GitHub App when available). I will not reuse an unscoped PAT."
+          required: true
+        - label: "I accept that my entries may be hidden, demoted, or removed from the catalog at Desk-Modal's discretion for terms-of-service violations, malware, impersonation, or broken signatures."
+          required: true
+        - label: "I have read [PUBLISHING.md](../blob/main/PUBLISHING.md) end to end."
+          required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else we should know
+      description: Optional. Previous marketplace publisher history, open-source track record, enterprise customers, timelines, specific categories you want to reach.
+      placeholder: "We already ship on <other marketplace> and have 2k+ installs..."

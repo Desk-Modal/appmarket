@@ -1,13 +1,17 @@
 # Publishing to the DeskModal app market
 
-DeskModal's app market is an **open ecosystem**. Anyone — individual
-developers, independent studios, financial data vendors, quant firms,
-enterprise IT teams — can publish apps, services, and scripts that
-any DeskModal user on any OS can discover, install, and run.
+DeskModal's app market is an **open but gated ecosystem**. Anyone —
+individual developers, independent studios, financial data vendors,
+quant firms, enterprise IT teams — can apply to become a publisher
+and have their apps, services, and scripts reach every DeskModal
+user on every OS. But publishing is not self-serve: every publisher
+goes through a signup + review step before any of their releases
+can land in the catalog.
 
-This document is the end-to-end contract for publishers. If you
-follow it, your release shows up in every DeskModal session's
-marketplace within ~30 seconds of `git push --tags`.
+This document is the end-to-end contract for publishers. If your
+signup is approved, follow the steps here and your release will
+show up in every DeskModal session's marketplace within ~30 seconds
+of `git push --tags`.
 
 ## What you can publish
 
@@ -23,25 +27,67 @@ packaged as `.tar.gz` archives containing a `plugin.toml` manifest and
 the runtime files. The `content_type` field in `plugin.toml` tells the
 marketplace which bucket to file the entry under.
 
-## Publisher tiers
+## Publisher access model
 
-Every entry in the catalog has a `publisher` block with a `verified`
-boolean. Verification only affects how the marketplace surfaces your
-entry — it does **not** gate what you can publish. Unverified
-publishers are first-class citizens of the catalog.
+There are two layers of gating and they serve different purposes.
+
+### Layer 1 — the signup gate (access to publishing at all)
+
+Before anything else, every prospective publisher files a
+**publisher signup issue** against this repo using the
+["Publisher signup" issue template](../../issues/new?template=publisher-signup.yml).
+The issue collects:
+
+- Publisher display name + kebab-case publisher id (namespaces your plugin ids)
+- Contact email + homepage URL (must match domains)
+- GitHub org/username + the release repos you will publish from
+- Ed25519 public key (the trust root for every release you ever ship)
+- Asset delivery model: direct-link (public repo) or mirror (private repo)
+- Plugin list: ids, display names, taglines, categories, content types
+
+Desk-Modal reviews the signup issue. On approval we:
+
+1. Verify your homepage domain via DNS TXT record or email round-trip.
+2. Add your Ed25519 public key to `sources.json` under a new
+   `publisher_key_id` scoped to your publisher id.
+3. Add a `sources.json` entry for each of your approved repos +
+   plugins under your namespace.
+4. Provision a fine-grained PAT with `contents: write` scoped ONLY
+   to `Desk-Modal/appmarket` for the `repository_dispatch` call.
+   You store this as `APPMARKET_DISPATCH_TOKEN` in your release repo
+   secrets. (Future: install the `deskmodal-bot` GitHub App on your
+   repo instead; no PAT handoff needed.)
+5. Label your signup issue `approved` and close it with a comment
+   pointing at the merged sources.json PR.
+
+**Until your signup is approved, you cannot add entries to the
+catalog.** `sources.json` is gated by CODEOWNERS — any PR that
+touches it without a matching approved signup issue will be
+blocked by review.
+
+After approval you can publish as many releases as you want under
+your namespace without filing further issues. New plugins under
+your same publisher id go in via a follow-up sources.json PR
+referencing your approved signup issue.
+
+### Layer 2 — publisher tiers (how the catalog surfaces you)
+
+Once you're an approved publisher, every one of your catalog entries
+carries one of three tier badges. The tier controls **marketplace
+surfacing**, not **what you can publish**.
 
 | Tier | How you get there | What it gives you |
 |---|---|---|
-| **Unverified** | Default for everyone. Publish a valid release; get listed. | Appears in search, listable under Browse, installable. Displays an "unverified publisher" badge next to your name. |
-| **Verified** | Send a signed request to `publishers@deskmodal.com` from the domain listed in your `plugin.toml`. A Desk-Modal admin adds your Ed25519 public key to `sources.json`'s `publisher_keys` block and marks `publisher.verified = true` for your entries. | "Verified" badge, eligible for Featured surfacing, can be listed in curated category feeds. |
+| **Unverified** | Default on first approval. Your entries are listed as soon as they ship. | Appears in search, listable under Browse, installable. Displays an "unverified publisher" badge next to your name. |
+| **Verified** | Granted by Desk-Modal after domain verification, track-record review, and a clean signature history over N releases. | "Verified" badge, eligible for Featured surfacing, eligible for curated category feeds. |
 | **Featured** | Editorial decision by Desk-Modal. Usually applied to verified publishers whose content meets a quality bar. | Surfaces on the marketplace home screen. Carries no extra trust guarantee beyond verified. |
 
-**Important**: verification is a reputational signal, not a security
-gate. Every release — verified or not — must be signed with the
-publisher's Ed25519 key, and DeskModal clients always verify the
-signature against the key bound to that publisher in the catalog.
-An unverified publisher who signs correctly is trusted exactly as
-much as a verified publisher, for exactly the assets they sign for.
+**Important**: the tier badge is a reputational signal, not a
+security control. Every release from every publisher — unverified,
+verified, or featured — must be signed with the publisher's Ed25519
+key, and DeskModal clients always verify the signature against the
+key bound to that publisher in the catalog. A broken signature
+drops the entry from the catalog regardless of tier.
 
 ## The publishing pipeline
 
@@ -263,47 +309,61 @@ repo named `APPMARKET_DISPATCH_TOKEN`.
 
 Do not reuse this token for anything else. If it leaks, rotate it.
 
-## Step 4 — register with sources.json (one-time)
+## Step 4 — apply for publisher access (one-time)
 
-Once your release workflow is set up, open a pull request against
-this repo that adds your source to `sources.json`:
+This is the gate. Until it clears, nothing below actually goes live.
 
-```jsonc
-{
-  "sources": [
-    // ... existing entries ...
-    {
-      "owner": "your-github-org",
-      "repo": "your-plugin-repo",
-      "mode": "single_release",
-      "content_type": "app",
-      "id": "your-org.your-plugin",
-      "display_name": "Your Plugin",
-      "tagline": "One-sentence description, <80 chars",
-      "categories": ["trading"],
-      "tags": ["search", "hints"],
-      "featured": false,
-      "asset_name_template": "yourplugin-{version}-{platform}.tar.gz",
-      "publisher_key_id": "your-publisher-key-id",
-      "mirror": false  // true if you want Model B (private-repo mirroring)
-    }
-  ],
-  "publisher_keys": {
-    "your-publisher-key-id": {
-      "algorithm": "ed25519",
-      "public_key_hex": "the hex-encoded public key half of MYPLUGIN_SIGNING_KEY",
-      "owner": "your-github-org",
-      "valid_from": "2026-04-11T00:00:00Z"
-    }
-  }
-}
-```
+1. File a **Publisher signup** issue using
+   [this template](../../issues/new?template=publisher-signup.yml).
+   Fill in every field. The template collects your Ed25519 public
+   key, contact info, list of repos and plugins, and asset delivery
+   model.
 
-The PR is reviewed by CODEOWNERS and must pass the
-`validate sources.json + index.json` CI gate before merge. After
-merge, the next aggregator run picks up your entry (or the
-`repository_dispatch` your next release fires — whichever comes
-first).
+2. Desk-Modal reviews the issue. Expect a domain-ownership check
+   (either a DNS TXT record or an email round-trip from your
+   homepage domain) and a sanity review of your plugin list and
+   key. Turnaround is typically a few business days for the first
+   publisher onboarding; additions to an existing publisher are
+   faster.
+
+3. On approval, Desk-Modal merges a PR to this repo that adds:
+   - A new entry in `publisher_keys` keyed on a `publisher_key_id`
+     derived from your publisher id
+   - A new entry (or multiple) in `sources` for each of your
+     approved repos
+   - Your Ed25519 public key bound to your namespace
+
+   You do **not** open this PR yourself. CODEOWNERS blocks direct
+   third-party edits to `sources.json`. The approved signup issue
+   is the authorization artifact; the PR references it.
+
+4. Desk-Modal provisions a fine-grained GitHub PAT scoped ONLY to
+   `contents: write` on `Desk-Modal/appmarket`, sends it to your
+   contact email via a one-time-view link, and expects you to add
+   it to your release repo as the `APPMARKET_DISPATCH_TOKEN`
+   secret. Do not reuse this token for anything else; if it leaks,
+   file an incident issue immediately and we rotate.
+
+   (Future: once the `deskmodal-bot` GitHub App is live, you'll
+   install it on your release repo instead and the token handoff
+   disappears. The signup flow stays the same.)
+
+5. Once the sources.json PR merges, the next scheduled aggregator
+   run picks up your entry — or, if you've already wired the
+   `notify-appmarket` step in your release workflow with the
+   provisioned token, your next `git push --tags` triggers the
+   catalog rebuild immediately.
+
+### Adding more plugins to an existing publisher
+
+Already an approved publisher and want to list a new plugin? File
+a **new signup issue** titled `[publisher-extension] <publisher>
+<plugin>` referencing your original approved signup. It's a much
+shorter review — we're not re-verifying your identity or your key,
+just confirming the new plugin id fits under your existing
+namespace and that its asset-name template is sane. On approval,
+Desk-Modal commits the sources.json update; the catalog picks it
+up on the next aggregator run.
 
 ## Step 5 — publish
 

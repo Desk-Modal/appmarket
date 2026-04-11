@@ -4,14 +4,18 @@ The public catalog of every app, service, and script published for
 [DeskModal](https://github.com/Desk-Modal/deskmodal) — the Rust/Tauri
 FDC3 2.2 desktop agent.
 
-**This is an open ecosystem.** Anyone can publish here — first-party
-teams, independent developers, financial data vendors, quant firms,
-enterprise IT groups. The Desk-Modal-owned entries currently seeded in
+**This is an open but gated ecosystem.** Independent developers,
+financial data vendors, quant firms, and enterprise IT groups can
+all apply to become publishers on equal footing with the Desk-Modal
+first-party teams. But publishing is not self-serve: every publisher
+goes through a signup + review step before their releases can land
+in the catalog. The Desk-Modal-owned entries currently seeded in
 `sources.json` (`paper-trading`, `price-feed-service`, `tradesurface`)
-are first-party *examples* that happen to ship the core first-party
-services; they get exactly the same treatment from the aggregator as
-any third-party publisher. See [**PUBLISHING.md**](PUBLISHING.md) for
-the end-to-end publisher onboarding contract.
+are initial first-party entries that happen to ship the core
+first-party services; once approved, every third-party publisher
+gets exactly the same treatment from the aggregator. See
+[**PUBLISHING.md**](PUBLISHING.md) for the end-to-end publisher
+onboarding contract.
 
 ## What this repo is
 
@@ -87,15 +91,15 @@ A scheduled run every 6 h catches missed dispatches as a safety net.
 
 Full contract in [**PUBLISHING.md**](PUBLISHING.md). The short version:
 
-1. Your repo emits per-platform tarballs + `plugin.toml` + `checksums.txt` + `SIGNATURE` on every tag push. Use your own Ed25519 key — don't share the `DESKMODAL_SIGNING_KEY` secret with publishers.
-2. Open a PR against **this repo** adding your source to `sources.json` under the schema documented in PUBLISHING.md. CODEOWNERS routes the PR to Desk-Modal org owners for review.
-3. After the PR merges, add this one line to the very end of your release workflow:
+1. **Apply** — file a [Publisher signup issue](../../issues/new?template=publisher-signup.yml) with your Ed25519 public key, release repo list, and plugin list. Wait for Desk-Modal review. Approval gives you a namespaced publisher id, a sources.json entry committed on your behalf, and a scoped `APPMARKET_DISPATCH_TOKEN` PAT.
+2. **Build** — your release workflow emits per-platform tarballs + `plugin.toml` + `checksums.txt` + `SIGNATURE` on every tag push. Sign `checksums.txt` with your own Ed25519 key (the one whose public half is in your sources.json entry). **Do not reuse the `DESKMODAL_SIGNING_KEY` secret** — that's the first-party key, only for Desk-Modal's own releases.
+3. **Notify** — add this one line to the very end of your release workflow:
    ```yaml
    - uses: Desk-Modal/appmarket/.github/actions/notify-appmarket@main
      with:
        token: ${{ secrets.APPMARKET_DISPATCH_TOKEN }}
    ```
-4. Cut a tag. Within ~30 seconds your entry shows up in every DeskModal session's next marketplace refresh.
+4. **Publish** — `git push --tags`. Within ~30 seconds your entry shows up in every DeskModal session's next marketplace refresh.
 
 ## Triggering a catalog rebuild from a source repo
 
