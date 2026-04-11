@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-11T04:06:21Z",
+  "generated_at": "2026-04-11T06:35:13Z",
   "generator": {
     "name": "appmarket-aggregator",
     "version": "1.1.0",
-    "source_commit": "unknown"
+    "source_commit": "fa7a3f9"
   },
   "publisher_keys": {
     "deskmodal-primary": {
@@ -75,7 +75,11 @@
       "published_at": "2026-04-11T02:56:55Z",
       "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/paper-trading-v0.1.2",
       "changelog_url": "https://github.com/Desk-Modal/paper-trading/releases",
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.paper-trading.svg",
+      "icon": {
+        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.paper-trading-market.svg",
+        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.paper-trading-toolbar.svg"
+      },
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.paper-trading-market.svg",
       "screenshots": [],
       "homepage": "https://github.com/Desk-Modal/paper-trading",
       "license": "Proprietary",
@@ -142,7 +146,11 @@
       "published_at": "2026-04-11T02:57:02Z",
       "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/price-feed-service-v0.1.2",
       "changelog_url": "https://github.com/Desk-Modal/price-feed-service/releases",
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.price-feed-service.svg",
+      "icon": {
+        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.price-feed-service-market.svg",
+        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.price-feed-service-toolbar.svg"
+      },
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.price-feed-service-market.svg",
       "screenshots": [],
       "homepage": "https://github.com/Desk-Modal/price-feed-service",
       "license": "Proprietary",
@@ -207,7 +215,11 @@
       "published_at": "2026-04-11T02:57:10Z",
       "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
       "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.alerts.svg",
+      "icon": {
+        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.alerts-market.svg",
+        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.alerts-toolbar.svg"
+      },
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.alerts-market.svg",
       "screenshots": [],
       "homepage": "https://github.com/Desk-Modal/tradesurface",
       "license": "Proprietary",
@@ -267,7 +279,11 @@
       "published_at": "2026-04-11T02:57:10Z",
       "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
       "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.analytics.svg",
+      "icon": {
+        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.analytics-market.svg",
+        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.analytics-toolbar.svg"
+      },
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.analytics-market.svg",
       "screenshots": [],
       "homepage": "https://github.com/Desk-Modal/tradesurface",
       "license": "Proprietary",
@@ -327,7 +343,11 @@
       "published_at": "2026-04-11T02:57:10Z",
       "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
       "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.chart.svg",
+      "icon": {
+        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.chart-market.svg",
+        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.chart-toolbar.svg"
+      },
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.chart-market.svg",
       "screenshots": [],
       "homepage": "https://github.com/Desk-Modal/tradesurface",
       "license": "Proprietary",
@@ -387,7 +407,11 @@
       "published_at": "2026-04-11T02:57:10Z",
       "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
       "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.depth.svg",
+      "icon": {
+        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.depth-market.svg",
+        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.depth-toolbar.svg"
+      },
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.depth-market.svg",
       "screenshots": [],
       "homepage": "https://github.com/Desk-Modal/tradesurface",
       "license": "Proprietary",
@@ -447,7 +471,11 @@
       "published_at": "2026-04-11T02:57:10Z",
       "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
       "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.feeds.svg",
+      "icon": {
+        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.feeds-market.svg",
+        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.feeds-toolbar.svg"
+      },
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.feeds-market.svg",
       "screenshots": [],
       "homepage": "https://github.com/Desk-Modal/tradesurface",
       "license": "Proprietary",
@@ -506,7 +534,11 @@
       "published_at": "2026-04-11T02:57:10Z",
       "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
       "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.screener.svg",
+      "icon": {
+        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.screener-market.svg",
+        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.screener-toolbar.svg"
+      },
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.screener-market.svg",
       "screenshots": [],
       "homepage": "https://github.com/Desk-Modal/tradesurface",
       "license": "Proprietary",
@@ -567,7 +599,11 @@
       "published_at": "2026-04-11T02:57:10Z",
       "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
       "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.trading.svg",
+      "icon": {
+        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.trading-market.svg",
+        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.trading-toolbar.svg"
+      },
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.trading-market.svg",
       "screenshots": [],
       "homepage": "https://github.com/Desk-Modal/tradesurface",
       "license": "Proprietary",
@@ -626,7 +662,11 @@
       "published_at": "2026-04-11T02:57:10Z",
       "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/tradesurface-v1.0.0",
       "changelog_url": "https://github.com/Desk-Modal/tradesurface/releases",
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.watchlist.svg",
+      "icon": {
+        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.watchlist-market.svg",
+        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.watchlist-toolbar.svg"
+      },
+      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.tradesurface.watchlist-market.svg",
       "screenshots": [],
       "homepage": "https://github.com/Desk-Modal/tradesurface",
       "license": "Proprietary",
