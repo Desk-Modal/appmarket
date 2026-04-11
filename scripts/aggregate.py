@@ -834,6 +834,32 @@ def aggregate(sources_path: str, out_path: str, token: Optional[str], mirror: bo
 
     changed = normalize(new_bytes) != normalize(existing_bytes)
 
+    # Safety guard: refuse to overwrite a non-empty catalog with an
+    # empty one. An empty result almost always means the aggregator
+    # couldn't reach its sources (missing token, network hiccup, 404s
+    # on private repos) — NOT that every plugin was intentionally
+    # delisted. Emitting zero entries under those conditions would
+    # nuke the public catalog for every DeskModal session on the next
+    # CDN refresh. Fail loud instead.
+    existing_catalog_count = 0
+    try:
+        existing_catalog_count = len(json.loads(existing_bytes).get("catalog", []))
+    except Exception:
+        pass
+    if len(catalog) == 0 and existing_catalog_count > 0:
+        print(
+            f"\n[REFUSE] aggregator produced 0 entries but the existing index.json "
+            f"has {existing_catalog_count}. Not overwriting.",
+            file=sys.stderr,
+        )
+        print(
+            "[REFUSE] this almost always means the aggregator lost access to its "
+            "source repos (missing GITHUB_TOKEN, expired PAT, or source repos "
+            "flipped private). Fix the access and rerun.",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
+
     if changed:
         with open(out_path, "wb") as f:
             f.write(new_bytes)
