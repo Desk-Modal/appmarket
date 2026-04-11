@@ -1,0 +1,35 @@
+<!-- desk-modal.tradesurface.feeds — market -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.65">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#base)"/>
+  <rect width="128" height="128" rx="28" fill="url(#glow)" opacity="0.35"/>
+
+  <!-- four source dots on the left -->
+  <circle cx="28" cy="28" r="6" fill="#3b82f6"/>
+  <circle cx="28" cy="52" r="6" fill="#3b82f6"/>
+  <circle cx="28" cy="76" r="6" fill="#3b82f6"/>
+  <circle cx="28" cy="100" r="6" fill="#3b82f6"/>
+
+  <!-- fanning convergence paths to a single channel endpoint at (92,64) -->
+  <path d="M 34 28 Q 64 28 92 60" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+  <path d="M 34 52 Q 64 52 92 62" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+  <path d="M 34 76 Q 64 76 92 66" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+  <path d="M 34 100 Q 64 100 92 68" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+
+  <!-- unified channel bar (single output) -->
+  <rect x="92" y="56" width="14" height="16" rx="3" fill="#2563eb"/>
+
+  <!-- family marker -->
+  <rect x="113" y="12" width="3" height="3" fill="#3b82f6"/>
+
+  <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.18)"/>
+</svg>

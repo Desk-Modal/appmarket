@@ -1,0 +1,13 @@
+<!-- desk-modal.price-feed-service — toolbar (glass) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- source core -->
+  <circle cx="32" cy="64" r="12" fill="#60a5fa" fill-opacity="0.85"/>
+
+  <!-- one radiating arc (outer only, most readable) -->
+  <path d="M 32 22 A 42 42 0 0 1 32 106" fill="none" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+
+  <!-- sink bar -->
+  <line x1="100" y1="44" x2="100" y2="84" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+
+  <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.22)"/>
+</svg>

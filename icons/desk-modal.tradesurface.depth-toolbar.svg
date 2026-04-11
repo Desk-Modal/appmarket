@@ -1,0 +1,11 @@
+<!-- desk-modal.tradesurface.depth — toolbar (glass) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- bid slab (upper, stronger opacity) -->
+  <rect x="28" y="32" width="72" height="20" rx="4" fill="#60a5fa" fill-opacity="0.92"/>
+  <!-- centerline -->
+  <line x1="22" y1="64" x2="106" y2="64" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+  <!-- ask slab (lower, weaker opacity — stratified via opacity, not color) -->
+  <rect x="28" y="76" width="72" height="20" rx="4" fill="#60a5fa" fill-opacity="0.60"/>
+
+  <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.22)"/>
+</svg>

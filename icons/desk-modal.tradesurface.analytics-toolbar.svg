@@ -1,0 +1,10 @@
+<!-- desk-modal.tradesurface.analytics — toolbar (glass) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- 2x2 matrix: diagonal strong, off-diagonal weak (monochrome) -->
+  <rect x="24" y="24" width="36" height="36" rx="5" fill="#60a5fa" fill-opacity="0.92"/>
+  <rect x="68" y="24" width="36" height="36" rx="5" fill="#60a5fa" fill-opacity="0.55"/>
+  <rect x="24" y="68" width="36" height="36" rx="5" fill="#60a5fa" fill-opacity="0.55"/>
+  <rect x="68" y="68" width="36" height="36" rx="5" fill="#60a5fa" fill-opacity="0.92"/>
+
+  <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.22)"/>
+</svg>

@@ -1,0 +1,15 @@
+<!-- desk-modal.tradesurface.feeds — toolbar (glass) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- two source circles -->
+  <circle cx="26" cy="36" r="10" fill="#60a5fa" fill-opacity="0.85"/>
+  <circle cx="26" cy="92" r="10" fill="#60a5fa" fill-opacity="0.85"/>
+
+  <!-- two quadratic paths converging to channel -->
+  <path d="M 36 36 Q 72 36 96 60" fill="none" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+  <path d="M 36 92 Q 72 92 96 68" fill="none" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+
+  <!-- unified channel bar -->
+  <rect x="96" y="52" width="16" height="24" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+
+  <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.22)"/>
+</svg>

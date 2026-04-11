@@ -1,0 +1,8 @@
+<!-- desk-modal.tradesurface.screener — toolbar (glass) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- funnel outline only, no particles -->
+  <path d="M 20 26 L 108 26 L 72 78 L 72 106 L 56 106 L 56 78 Z"
+        fill="none" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.22)"/>
+</svg>

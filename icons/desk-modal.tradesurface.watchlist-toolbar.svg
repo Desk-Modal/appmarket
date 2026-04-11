@@ -1,0 +1,8 @@
+<!-- desk-modal.tradesurface.watchlist — toolbar (glass) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- two pill rows, no lamps -->
+  <rect x="22" y="44" width="84" height="14" rx="7" fill="#60a5fa" fill-opacity="0.85"/>
+  <rect x="22" y="70" width="84" height="14" rx="7" fill="#60a5fa" fill-opacity="0.85"/>
+
+  <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.22)"/>
+</svg>

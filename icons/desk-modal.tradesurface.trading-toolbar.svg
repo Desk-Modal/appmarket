@@ -1,0 +1,11 @@
+<!-- desk-modal.tradesurface.trading — toolbar (glass) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- buy slab (left, monochrome — direction carried by position) -->
+  <rect x="24" y="32" width="28" height="64" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+  <!-- sell slab (right) -->
+  <rect x="76" y="32" width="28" height="64" rx="4" fill="#60a5fa" fill-opacity="0.85"/>
+  <!-- price line -->
+  <line x1="18" y1="64" x2="110" y2="64" stroke="#60a5fa" stroke-opacity="0.92" stroke-width="7.5" stroke-linecap="round"/>
+
+  <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.22)"/>
+</svg>

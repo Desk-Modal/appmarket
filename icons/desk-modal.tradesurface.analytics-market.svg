@@ -1,0 +1,38 @@
+<!-- desk-modal.tradesurface.analytics — market -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.65">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#base)"/>
+  <rect width="128" height="128" rx="28" fill="url(#glow)" opacity="0.35"/>
+
+  <!-- 3x3 matrix, cell size 24, gap 6, origin (24,24) -->
+  <!-- diagonal always strong (self-correlation = 1) -->
+  <rect x="24" y="24" width="24" height="24" rx="4" fill="#3b82f6"/>
+  <rect x="54" y="54" width="24" height="24" rx="4" fill="#3b82f6"/>
+  <rect x="84" y="84" width="24" height="24" rx="4" fill="#3b82f6"/>
+
+  <!-- strong off-diagonals -->
+  <rect x="54" y="24" width="24" height="24" rx="4" fill="#3b82f6" opacity="0.75"/>
+  <rect x="24" y="54" width="24" height="24" rx="4" fill="#3b82f6" opacity="0.75"/>
+
+  <!-- medium -->
+  <rect x="84" y="54" width="24" height="24" rx="4" fill="#2563eb" opacity="0.65"/>
+  <rect x="54" y="84" width="24" height="24" rx="4" fill="#2563eb" opacity="0.65"/>
+
+  <!-- weak outlined -->
+  <rect x="84" y="24" width="24" height="24" rx="4" fill="none" stroke="#3b82f6" stroke-width="4" opacity="0.55"/>
+  <rect x="24" y="84" width="24" height="24" rx="4" fill="none" stroke="#3b82f6" stroke-width="4" opacity="0.55"/>
+
+  <!-- family marker -->
+  <rect x="113" y="12" width="3" height="3" fill="#3b82f6"/>
+
+  <rect x="0.5" y="0.5" width="127" height="127" rx="27.5" fill="none" stroke="rgba(120,150,255,0.18)"/>
+</svg>
