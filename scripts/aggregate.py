@@ -431,13 +431,15 @@ def mirror_source_release(
     existing = fetch_release_by_tag(APPMARKET_OWNER, APPMARKET_REPO, target_tag, token)
     existing_names: set[str] = set()
     if existing:
+        existing.version = source_release.version
         existing_names = {a.name for a in existing.assets}
         print(f"  [mirror] existing release found, {len(existing_names)} assets present")
     else:
         if dry_run:
             print(f"  [mirror] (dry-run) would create release {target_tag}")
-            # Construct a synthetic Release so the rest of the pipeline can
-            # still build entries with the right URLs.
+            # Synthetic Release so downstream URL construction still works
+            # with the (upstream) source assets while pretending they live
+            # on the appmarket side.
             return Release(
                 tag=target_tag,
                 version=source_release.version,
@@ -447,7 +449,9 @@ def mirror_source_release(
                     ReleaseAsset(
                         name=a.name,
                         url=f"https://github.com/{APPMARKET_OWNER}/{APPMARKET_REPO}/releases/download/{target_tag}/{a.name}",
-                        api_url="",
+                        # Pass the SOURCE api_url through so dry-run still
+                        # lets the entry builders fetch plugin.toml etc.
+                        api_url=a.api_url,
                         size=a.size,
                     )
                     for a in source_release.assets
@@ -455,6 +459,7 @@ def mirror_source_release(
             )
         created = create_appmarket_release(target_tag, source_release, source_repo, token)
         existing = _release_from_api(created)
+        existing.version = source_release.version
         print(f"  [mirror] created release {target_tag}")
 
     # Upload any assets that aren't already on the target
@@ -483,8 +488,18 @@ def mirror_source_release(
             f"https://api.github.com/repos/{APPMARKET_OWNER}/{APPMARKET_REPO}/releases/tags/{target_tag}",
             token,
         )
-        return _release_from_api(final_data)
-    return existing
+        mirrored = _release_from_api(final_data)
+    else:
+        mirrored = existing
+
+    # Preserve the ORIGINAL source version — the entry builders use it to
+    # substitute `{version}` into asset name templates, and that template
+    # must match the upstream asset filenames (we copy them byte-for-byte).
+    # `_release_from_api` sets version by stripping a leading 'v' from the
+    # tag, which on a tag like `paper-trading-v0.1.2` leaves the full tag
+    # intact and breaks downstream template substitution.
+    mirrored.version = source_release.version
+    return mirrored
 
 
 # -------------------------------------------------------------------- #
