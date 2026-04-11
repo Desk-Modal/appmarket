@@ -1,0 +1,51 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-04-11T02:57:01Z",
+  "generator": {
+    "name": "appmarket-aggregator",
+    "version": "1.1.0",
+    "source_commit": "5b0d48a"
+  },
+  "publisher_keys": {
+    "deskmodal-primary": {
+      "algorithm": "ed25519",
+      "public_key_hex": "REPLACE_WITH_PUBLIC_KEY_HEX_FROM_DESKMODAL_SIGNING_KEY",
+      "valid_from": "2026-04-01T00:00:00Z",
+      "owner": "Desk-Modal",
+      "notes": "Fill this in before the first signed aggregation. Derive the public key from DESKMODAL_SIGNING_KEY (the Ed25519 private key secret used by every plugin repo's release workflow) via: python3 -c 'from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey; import os; k=Ed25519PrivateKey.from_private_bytes(bytes.fromhex(os.environ[\"DESKMODAL_SIGNING_KEY\"])); print(k.public_key().public_bytes_raw().hex())'"
+    }
+  },
+  "categories": [
+    {
+      "id": "trading",
+      "name": "Trading",
+      "description": "Order entry, blotter, positions, portfolio"
+    },
+    {
+      "id": "charting",
+      "name": "Charting",
+      "description": "Price charts, indicators, drawing tools"
+    },
+    {
+      "id": "data",
+      "name": "Data",
+      "description": "Market data feeds and streaming"
+    },
+    {
+      "id": "analytics",
+      "name": "Analytics",
+      "description": "Cross-instrument analysis and metrics"
+    },
+    {
+      "id": "simulation",
+      "name": "Simulation",
+      "description": "Paper trading, backtesting, replay"
+    },
+    {
+      "id": "tooling",
+      "name": "Tooling",
+      "description": "Developer tools, SDKs, CLIs"
+    }
+  ],
+  "catalog": []
+}
