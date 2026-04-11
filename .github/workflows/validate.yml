@@ -27,7 +27,7 @@ jobs:
       scripts: ${{ steps.filter.outputs.scripts }}
       workflows: ${{ steps.filter.outputs.workflows }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 2
       - uses: dorny/paths-filter@v3
@@ -48,7 +48,7 @@ jobs:
     if: needs.changes.outputs.catalog == 'true' || needs.changes.outputs.scripts == 'true' || needs.changes.outputs.workflows == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Validate JSON is well-formed
         run: |

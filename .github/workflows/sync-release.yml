@@ -33,12 +33,15 @@ on:
         description: PAT with `contents:write` on Desk-Modal/appmarket. Typically DESKMODAL_REPO_TOKEN.
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   dispatch:
     name: Fire appmarket rebuild
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         # Shallow checkout — we don't need history, we just want the
         # composite action from THIS repo (appmarket) to be on disk.
         with:

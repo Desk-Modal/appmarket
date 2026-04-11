@@ -44,13 +44,13 @@ jobs:
       # bypass status checks). If DESKMODAL_REPO_TOKEN is absent, fall
       # back to GITHUB_TOKEN which won't be able to bypass protection
       # but at least won't break the checkout.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           token: ${{ secrets.DESKMODAL_REPO_TOKEN || secrets.GITHUB_TOKEN }}
           persist-credentials: true
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
