@@ -1,0 +1,25 @@
+# Every change to sources.json or the schema requires review from
+# Desk-Modal org owners before merge. This is the gate that keeps the
+# curated catalog from being tampered with by anyone who happens to
+# get write access to main.
+#
+# Direct edits to index.json are allowed without review only because
+# they're produced by the automated aggregator. Human edits to
+# index.json should never happen — if you need to fix the catalog,
+# fix sources.json or the aggregator script and let the aggregator
+# rewrite it.
+
+# Catalog definition — first line of defence against spam or forged entries
+/sources.json           @soarsa
+
+# Trust store + schema — anything that changes what gets signed or how
+/schema/                @soarsa
+
+# Aggregator code — changes here can silently redirect downloads or
+# bypass signature verification, so review is mandatory
+/scripts/               @soarsa
+
+# Workflow files — changes here can fire unauthorized dispatches or
+# leak secrets
+/.github/workflows/     @soarsa
+/.github/actions/       @soarsa

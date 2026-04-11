@@ -4,6 +4,15 @@ The public catalog of every app, service, and script published for
 [DeskModal](https://github.com/Desk-Modal/deskmodal) — the Rust/Tauri
 FDC3 2.2 desktop agent.
 
+**This is an open ecosystem.** Anyone can publish here — first-party
+teams, independent developers, financial data vendors, quant firms,
+enterprise IT groups. The Desk-Modal-owned entries currently seeded in
+`sources.json` (`paper-trading`, `price-feed-service`, `tradesurface`)
+are first-party *examples* that happen to ship the core first-party
+services; they get exactly the same treatment from the aggregator as
+any third-party publisher. See [**PUBLISHING.md**](PUBLISHING.md) for
+the end-to-end publisher onboarding contract.
+
 ## What this repo is
 
 A public, read-only, CDN-distributed source of truth. Every DeskModal
@@ -74,26 +83,19 @@ Full schema and client consumption example: [`schema/v2.md`](schema/v2.md).
 Idempotent — reruns against unchanged state produce no commit.
 A scheduled run every 6 h catches missed dispatches as a safety net.
 
-## How to add a new plugin to the catalog
+## How to publish a plugin (quick reference)
 
-1. Publish your plugin from its own GitHub repo with a release workflow
-   that emits these assets on every tag push:
-   - one tarball per platform matching the asset-name template, e.g.
-     `my-plugin-1.0.0-win32-x64.tar.gz`, `my-plugin-1.0.0-darwin-arm64.tar.gz`,
-     `my-plugin-1.0.0-darwin-x64.tar.gz`, optional
-     `my-plugin-1.0.0-wasm.tar.gz` portable fallback
-   - `plugin.toml` manifest
-   - `checksums.txt` (SHA-256 of every tarball, one per line)
-   - `SIGNATURE` (Ed25519 signature over `checksums.txt` by
-     `DESKMODAL_SIGNING_KEY`)
-2. Add a `sources.json` entry describing your repo, the asset-name
-   template, the categories, and the tagline, then open a PR against
-   this repo.
-3. CI validates the source entry and dry-runs the aggregator against
-   your public release.
-4. After merge, add ONE of the trigger patterns below to your release
-   workflow so appmarket rebuilds as soon as you cut a tag, instead
-   of waiting for the 6-hour safety-net cron.
+Full contract in [**PUBLISHING.md**](PUBLISHING.md). The short version:
+
+1. Your repo emits per-platform tarballs + `plugin.toml` + `checksums.txt` + `SIGNATURE` on every tag push. Use your own Ed25519 key — don't share the `DESKMODAL_SIGNING_KEY` secret with publishers.
+2. Open a PR against **this repo** adding your source to `sources.json` under the schema documented in PUBLISHING.md. CODEOWNERS routes the PR to Desk-Modal org owners for review.
+3. After the PR merges, add this one line to the very end of your release workflow:
+   ```yaml
+   - uses: Desk-Modal/appmarket/.github/actions/notify-appmarket@main
+     with:
+       token: ${{ secrets.APPMARKET_DISPATCH_TOKEN }}
+   ```
+4. Cut a tag. Within ~30 seconds your entry shows up in every DeskModal session's next marketplace refresh.
 
 ## Triggering a catalog rebuild from a source repo
 
