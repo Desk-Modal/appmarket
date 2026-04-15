@@ -1,0 +1,30 @@
+[plugin]
+name = "deskmodal.watchlist"
+version = "0.1.0"
+description = "Watchlist with sections, sorting, drag-reorder, and real-time price streaming."
+author = "Deskmodal"
+
+[apps]
+asset_root = "app"
+[[apps.entries]]
+appId = "deskmodal.watchlist"
+name = "TradeSurface Watchlist"
+type = "web"
+version = "0.1.0"
+title = "Watchlist"
+tooltip = "Symbol watchlist with real-time prices"
+description = "Watchlist with sections, sorting, drag-reorder, and real-time price streaming."
+path = "."
+
+[apps.entries.icons]
+src = "icons/watchlist.svg"
+[apps.entries.interop.userChannels]
+broadcasts = [ "fdc3.instrument",]
+listensFor = [ "deskmodal.quote",]
+[apps.entries.interop.intents.raises]
+"deskmodal.ViewDepth" = [ "fdc3.instrument",]
+"deskmodal.ViewFunding" = [ "fdc3.instrument",]
+"deskmodal.ViewOnChain" = [ "fdc3.instrument",]
+[apps.entries.interop.intents.listensFor.ViewQuote]
+displayName = "View Quote"
+contexts = [ "fdc3.instrument",]

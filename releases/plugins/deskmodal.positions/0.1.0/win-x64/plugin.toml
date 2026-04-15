@@ -1,0 +1,36 @@
+[plugin]
+name = "deskmodal.positions"
+version = "0.1.0"
+description = "Track positions across all exchanges with real-time P&L, risk metrics, and one-click position management."
+author = "Deskmodal"
+
+[apps]
+asset_root = "app"
+[[apps.entries]]
+appId = "deskmodal.positions"
+name = "TradeSurface Positions"
+type = "web"
+version = "0.1.0"
+title = "Positions"
+tooltip = "Cross-exchange position viewer with risk management"
+description = "Track positions across all exchanges with real-time P&L, risk metrics, and one-click position management."
+path = "."
+
+[apps.entries.icons]
+src = "icons/positions.svg"
+[apps.entries.interop]
+[[apps.entries.interop.appChannels]]
+name = "deskmodal.positions"
+description = "Position updates"
+listensFor = [ "deskmodal.position",]
+
+[apps.entries.interop.userChannels]
+broadcasts = [ "fdc3.instrument",]
+listensFor = [ "deskmodal.position", "deskmodal.quote",]
+[apps.entries.interop.intents.raises]
+"deskmodal.ViewOrders" = [ "fdc3.instrument",]
+"deskmodal.ClosePosition" = [ "deskmodal.position",]
+ViewChart = [ "fdc3.instrument",]
+[apps.entries.interop.intents.listensFor."deskmodal.ViewPositions"]
+displayName = "View Positions"
+contexts = [ "fdc3.instrument",]

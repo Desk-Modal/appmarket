@@ -1,0 +1,35 @@
+[plugin]
+name = "deskmodal.analytics"
+version = "0.1.0"
+description = "Crypto analytics dashboard with on-chain data, liquidation maps, and funding rate surfaces."
+author = "Deskmodal"
+
+[apps]
+asset_root = "app"
+[[apps.entries]]
+appId = "deskmodal.analytics"
+name = "TradeSurface Analytics"
+type = "web"
+version = "0.1.0"
+title = "Analytics"
+tooltip = "On-chain metrics, liquidation heatmaps, funding rates"
+description = "Crypto analytics dashboard with on-chain data, liquidation maps, and funding rate surfaces."
+path = "."
+
+[apps.entries.icons]
+src = "icons/analytics.svg"
+[apps.entries.interop.userChannels]
+broadcasts = []
+listensFor = [ "fdc3.instrument",]
+[apps.entries.interop.intents.listensFor.ViewAnalysis]
+displayName = "View Analysis"
+contexts = [ "fdc3.instrument",]
+[apps.entries.interop.intents.listensFor."deskmodal.ViewLiquidations"]
+displayName = "View Liquidations"
+contexts = [ "fdc3.instrument",]
+[apps.entries.interop.intents.listensFor."deskmodal.ViewFunding"]
+displayName = "View Funding Rates"
+contexts = [ "fdc3.instrument",]
+[apps.entries.interop.intents.listensFor."deskmodal.ViewOnChain"]
+displayName = "View On-Chain Metrics"
+contexts = [ "fdc3.instrument",]

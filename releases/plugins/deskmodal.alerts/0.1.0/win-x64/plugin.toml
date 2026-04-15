@@ -1,0 +1,32 @@
+[plugin]
+name = "deskmodal.alerts"
+version = "0.1.0"
+description = "Create, manage, and monitor price and indicator alerts with multiple notification channels."
+author = "Deskmodal"
+
+[apps]
+asset_root = "app"
+[[apps.entries]]
+appId = "deskmodal.alerts"
+name = "TradeSurface Alerts"
+type = "web"
+version = "0.1.0"
+title = "Alert Manager"
+tooltip = "Alert creation and management"
+description = "Create, manage, and monitor price and indicator alerts with multiple notification channels."
+path = "."
+
+[apps.entries.icons]
+src = "icons/alerts.svg"
+[apps.entries.interop]
+[[apps.entries.interop.appChannels]]
+name = "deskmodal.alerts"
+description = "Alert notifications"
+broadcasts = [ "deskmodal.alert",]
+
+[apps.entries.interop.userChannels]
+broadcasts = []
+listensFor = [ "fdc3.instrument",]
+[apps.entries.interop.intents.listensFor."deskmodal.CreateAlert"]
+displayName = "Create Alert"
+contexts = [ "deskmodal.alert",]

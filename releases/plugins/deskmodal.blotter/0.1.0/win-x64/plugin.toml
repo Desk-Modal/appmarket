@@ -1,0 +1,26 @@
+[plugin]
+name = "deskmodal.blotter"
+version = "0.1.0"
+description = "Order blotter showing working and filled orders with real-time status updates."
+author = "Deskmodal"
+
+[apps]
+asset_root = "app"
+[[apps.entries]]
+appId = "deskmodal.blotter"
+name = "TradeSurface Order Blotter"
+type = "web"
+version = "0.1.0"
+title = "Order Blotter"
+tooltip = "Working and filled orders"
+description = "Order blotter showing working and filled orders with real-time status updates."
+path = "."
+
+[apps.entries.icons]
+src = "icons/blotter.svg"
+[apps.entries.interop.userChannels]
+broadcasts = [ "fdc3.instrument",]
+listensFor = [ "deskmodal.order",]
+[apps.entries.interop.intents.listensFor."deskmodal.ViewOrders"]
+displayName = "View Orders"
+contexts = [ "fdc3.instrument",]

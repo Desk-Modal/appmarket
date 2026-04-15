@@ -1,0 +1,12 @@
+{
+  "id": "deskmodal.price-feed",
+  "version": "0.1.0",
+  "published_at": "2026-04-15T01:47:38Z",
+  "platforms": {
+    "win-x64": {
+      "has_app": false,
+      "has_services": false,
+      "checksums": "win-x64/checksums.txt"
+    }
+  }
+}

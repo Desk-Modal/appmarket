@@ -1,0 +1,62 @@
+[plugin]
+name = "deskmodal.feeds"
+version = "0.1.0"
+description = "Monitor and control exchange connections managed by the price-feed service. View live prices, set API credentials, and manage subscriptions."
+author = "Deskmodal"
+
+[apps]
+asset_root = "app"
+[[apps.entries]]
+appId = "deskmodal.feeds"
+name = "TradeSurface Feeds"
+type = "web"
+version = "0.1.0"
+title = "Feeds"
+tooltip = "Exchange connections, credentials, and live price monitoring"
+description = "Monitor and control exchange connections managed by the price-feed service. View live prices, set API credentials, and manage subscriptions."
+path = "."
+
+[apps.entries.icons]
+src = "icons/feeds.svg"
+[apps.entries.interop]
+[[apps.entries.interop.appChannels]]
+name = "deskmodal.prices"
+description = "Real-time price ticks"
+broadcasts = [ "deskmodal.quote",]
+
+[[apps.entries.interop.appChannels]]
+name = "deskmodal.orderbook"
+description = "Order book snapshots"
+broadcasts = [ "deskmodal.orderbook",]
+
+[[apps.entries.interop.appChannels]]
+name = "deskmodal.trades"
+description = "Recent trades"
+broadcasts = [ "deskmodal.tradeTick",]
+
+[apps.entries.security]
+context_broadcast = []
+context_receive = [ "deskmodal.quote", "deskmodal.feedStatus", "deskmodal.staleData",]
+channels_join = [ "deskmodal.*",]
+intents_raise = [ "deskmodal.*",]
+intents_handle = []
+[apps.entries.interop.userChannels]
+broadcasts = [ "deskmodal.quote",]
+listensFor = []
+[apps.entries.interop.intents.raises]
+"deskmodal.SubscribePrices" = [ "deskmodal.quote",]
+"deskmodal.UnsubscribePrices" = [ "deskmodal.command",]
+"deskmodal.ConnectExchange" = [ "deskmodal.command",]
+"deskmodal.DisconnectExchange" = [ "deskmodal.command",]
+"deskmodal.GetStatus" = [ "deskmodal.command",]
+"deskmodal.GetHistory" = [ "deskmodal.command",]
+"deskmodal.SetCredentials" = [ "deskmodal.command",]
+[apps.entries.interop.intents.listensFor."deskmodal.SubscribePrices"]
+displayName = "Subscribe to Prices"
+contexts = [ "deskmodal.quote",]
+[apps.entries.interop.intents.listensFor."deskmodal.GetHistory"]
+displayName = "Get Historical Data"
+contexts = [ "deskmodal.command",]
+[apps.entries.interop.intents.listensFor."deskmodal.GetOrderbook"]
+displayName = "Get Order Book"
+contexts = [ "deskmodal.quote",]

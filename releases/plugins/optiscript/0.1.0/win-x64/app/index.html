@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OptiScript Editor</title>
+    <script>
+    // OptiScript FDC3 bridge — routes all operations through the optiscript.engine
+    // service plugin via standard FDC3 intents and private channels.
+    // This is the plugin's own bridge, not part of the DeskModal core.
+    (function(){
+      var _dc=null,_dp=null;
+      function _ic(intent,ctx){return window.fdc3.raiseIntent(intent,ctx).then(function(r){return r.getResult();})}
+      function _cmd(t,x){
+        if(!_dc)return Promise.reject(new Error('No active debug session'));
+        var c={type:t};if(x)Object.keys(x).forEach(function(k){c[k]=x[k]});
+        return new Promise(function(rs,rj){_dp={resolve:rs,reject:rj};_dc.broadcast(c).catch(rj)})
+      }
+      window.__optiscript={
+        compile:function(s){return _ic('optiscript.Compile',{type:'optiscript.script',source:s})},
+        run:function(s,b){return _ic('optiscript.Run',{type:'optiscript.script',source:s,barsJson:b||null})},
+        backtest:function(s,b){return _ic('optiscript.Backtest',{type:'optiscript.script',source:s,barsJson:b||null})},
+        debugCompare:function(a,b,bars){return _ic('optiscript.Compare',{type:'optiscript.compare',sourceA:a,sourceB:b,barsJson:bars||null})},
+        debugCheckParity:function(s,csv,bars){return _ic('optiscript.CheckParity',{type:'optiscript.parity',source:s,expectedCsv:csv,barsJson:bars||null})},
+        debugStart:function(s,b){
+          return window.fdc3.raiseIntent('optiscript.Debug',{type:'optiscript.script',source:s,barsJson:b||null})
+            .then(function(r){return r.getResult()})
+            .then(function(ch){
+              _dc=ch;
+              var _responses={'optiscript.debug.state':1,'optiscript.debug.evalResult':1,'optiscript.debug.profilerData':1,'optiscript.debug.indicatorStates':1,'optiscript.debug.compareResult':1,'optiscript.debug.parityResult':1,'optiscript.debug.error':1,'optiscript.debug.terminated':1};
+              ch.addContextListener(null,function(ctx){if(_dp&&ctx.type&&_responses[ctx.type]){var p=_dp;_dp=null;p.resolve(ctx)}});
+              // Request initial state explicitly — the service may have broadcast
+              // before our listener was registered (race condition).
+              return new Promise(function(rs){_dp={resolve:rs,reject:function(){}};_dc.broadcast({type:'optiscript.debug.getState'}).catch(function(){})})
+            })
+        },
+        debugContinue:function(){return _cmd('optiscript.debug.continue')},
+        debugStepInto:function(){return _cmd('optiscript.debug.stepInto')},
+        debugStepOver:function(){return _cmd('optiscript.debug.stepOver')},
+        debugStepOut:function(){return _cmd('optiscript.debug.stepOut')},
+        debugStepNextBar:function(){return _cmd('optiscript.debug.stepNextBar')},
+        debugStepBackward:function(){return _cmd('optiscript.debug.stepBackward')},
+        debugRestart:function(){return _cmd('optiscript.debug.restart')},
+        debugGetState:function(){return _cmd('optiscript.debug.getState')},
+        debugGetProfilerData:function(){return _cmd('optiscript.debug.getProfilerData')},
+        debugGetIndicatorStates:function(){return _cmd('optiscript.debug.getIndicatorStates')},
+        debugSetBreakpoints:function(bp){return _cmd('optiscript.debug.setBreakpoints',{breakpoints:bp})},
+        debugEvalExpression:function(e){return _cmd('optiscript.debug.evalExpression',{expression:e})},
+        debugSetVariable:function(n,v){return _cmd('optiscript.debug.setVariable',{name:n,value:v})},
+        debugStop:function(){var c=_dc;_dc=null;_dp=null;if(c)return c.broadcast({type:'optiscript.debug.stop'}).then(function(){return c.disconnect()});return Promise.resolve()}
+      };
+    })();
+    </script>
+    <script type="module" src="./assets/index-7QeVsjxV.js"></script>
+    <link rel="modulepreload" href="./assets/monaco-editor-BIk6f8j5.js">
+    <link rel="stylesheet" href="./assets/monaco-editor-D4zjdeIP.css">
+    <link rel="stylesheet" href="./assets/index-BNiqofHj.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

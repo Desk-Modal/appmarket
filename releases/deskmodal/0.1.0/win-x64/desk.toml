@@ -1,0 +1,135 @@
+[agent]
+name = "Desk"
+version = "0.1.0"
+fdc3_version = "2.2"
+
+[storage]
+backend = "sqlite"
+path = "data/desk.db"
+wal_mode = true
+max_connections = 4
+
+[ipc]
+hot_tier = "channel"  # "channel" (tokio broadcast, default) or "iceoryx2" (shared memory, planned)
+warm_tier = "named_pipe"
+cold_tier = "grpc"
+grpc_port = 50051
+pipe_name = "deskmodal-ipc"
+shm_segment_size = 67108864  # 64MB
+
+[ipc.backpressure]
+hot_high_water_mark = 1000
+warm_high_water_mark = 500
+
+[channels]
+user_channel_count = 8
+
+[app_directory]
+local_cache = true
+sync_interval_secs = 300
+remote_url = ""
+
+[window_manager]
+snap_enabled = true
+snap_threshold_px = 20
+dock_enabled = true
+tab_groups_enabled = true
+
+[notifications]
+max_stored = 1000
+toast_position = "TopRight"
+toast_max_visible = 3
+toast_duration_normal_ms = 5000
+toast_duration_low_ms = 3000
+sound_critical = true
+sound_normal = false
+sound_low = false
+
+[bridge]
+dab_enabled = false
+dab_port = 4475
+dab_heartbeat_interval_ms = 5000
+dab_reconnect_base_ms = 1000
+dab_max_reconnect_attempts = 10
+wcp_enabled = false
+wcp_port = 4476
+
+[auth]
+enabled = false
+provider = "custom"
+client_id = ""
+redirect_uri = "http://localhost:19275/callback"
+scopes = ["openid", "profile", "email"]
+token_refresh_buffer_secs = 300
+
+[auth.entra]
+tenant_id = ""
+
+[auth.okta]
+domain = ""
+
+[auth.auth0]
+domain = ""
+
+[security]
+require_code_signing = false
+audit_enabled = true
+audit_hmac_chain = true
+
+[security.audit]
+retention_days = 1825  # 5 years; override per deployment policy
+export_format = "jsonl"
+
+[security.dlp]
+enabled = false
+clipboard_max_level = "Internal"
+
+[plugins]
+enabled = true
+directory = "~/.deskmodal/plugins"
+max_memory_bytes = 67108864  # 64MB per plugin
+max_cpu_fuel = 100000000
+max_execution_time_secs = 30
+
+[updates]
+enabled = false
+channel = "stable"
+check_interval_secs = 3600
+server_url = ""
+respect_maintenance_window = true
+blackout_start = "Sun 17:00"
+blackout_end = "Fri 17:00"
+
+[updates.rollout]
+strategy = "staged"
+canary_percent = 5.0
+stages = [5.0, 25.0, 50.0, 100.0]
+stage_delay_hours = [1, 2, 4]
+
+[config_server]
+enabled = false
+url = ""
+sync_interval_secs = 300
+merge_priority = "remote_wins"
+
+[logging]
+level = "info"
+format = "json"
+file = "~/.deskmodal/logs/desk.log"
+
+[skin]
+manifest_path = "manifests/celer-default.toml"
+manifests_dir = "manifests"
+
+[branding]
+product_name = "Desk"
+primary_color = "#0078D4"
+accent_color = "#00B4D8"
+theme = "dark"
+
+[optiscript]
+enabled = true
+editor_path = "OptiScript/apps/optiscript-editor/dist"
+service_binary = "optiscript-service"
+max_concurrent_scripts = 16
+script_timeout_secs = 30

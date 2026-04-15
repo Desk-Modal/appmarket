@@ -1,0 +1,32 @@
+[plugin]
+name = "deskmodal.depth"
+version = "0.1.0"
+description = "Order book display with aggregation controls, depth chart, and trade history."
+author = "Deskmodal"
+
+[apps]
+asset_root = "app"
+[[apps.entries]]
+appId = "deskmodal.depth"
+name = "TradeSurface Depth"
+type = "web"
+version = "0.1.0"
+title = "Depth / DOM"
+tooltip = "Aggregated order book and depth visualization"
+description = "Order book display with aggregation controls, depth chart, and trade history."
+path = "."
+
+[apps.entries.icons]
+src = "icons/depth.svg"
+[apps.entries.interop]
+[[apps.entries.interop.appChannels]]
+name = "deskmodal.orderbook"
+description = "Order book data"
+listensFor = [ "deskmodal.orderbook",]
+
+[apps.entries.interop.userChannels]
+broadcasts = []
+listensFor = [ "fdc3.instrument",]
+[apps.entries.interop.intents.listensFor."deskmodal.ViewDepth"]
+displayName = "View Depth"
+contexts = [ "fdc3.instrument",]

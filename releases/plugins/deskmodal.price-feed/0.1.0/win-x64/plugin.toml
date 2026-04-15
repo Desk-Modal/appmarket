@@ -1,0 +1,30 @@
+[[services]]
+id = "deskmodal.price-feed"
+name = "Price Feed Service"
+description = "Exchange connectivity, tick normalization, and FDC3 distribution"
+type = "native"
+entry_point = "deskmodal_price_feed"
+hosting = "inprocess"
+auto_start = true
+restart_policy = "permanent"
+
+[services.fdc3]
+broadcasts = [ "deskmodal.quote", "deskmodal.feedStatus", "deskmodal.staleData", "deskmodal.orderbook", "deskmodal.trade",]
+channels = [ "deskmodal.prices", "deskmodal.status", "deskmodal.quality", "deskmodal.orderbook", "deskmodal.trades",]
+intents = [ "deskmodal.ConnectExchange", "deskmodal.DisconnectExchange", "deskmodal.SubscribePrices", "deskmodal.UnsubscribePrices", "deskmodal.SubscribeOrderbook", "deskmodal.UnsubscribeOrderbook", "deskmodal.SubscribeTrades", "deskmodal.UnsubscribeTrades", "deskmodal.GetStatus", "deskmodal.SetCredentials", "deskmodal.GetHistory", "deskmodal.PrepareHistory", "deskmodal.SetDefaultSymbols", "deskmodal.GetLatestQuotes", "deskmodal.GetOrderbookSnapshot", "deskmodal.HealthCheck",]
+[services.security]
+context_broadcast = [ "deskmodal.quote", "deskmodal.feedStatus", "deskmodal.staleData", "deskmodal.orderbook", "deskmodal.trade",]
+context_receive = [ "deskmodal.*",]
+channels_join = [ "deskmodal.*",]
+intents_handle = [ "deskmodal.*",]
+intents_raise = []
+dlp_classification = "internal"
+[services.health]
+interval_ms = 15000
+timeout_ms = 5000
+
+[plugin]
+name = "deskmodal.price-feed"
+version = "0.1.0"
+description = "Exchange connectivity, tick normalization, and FDC3 distribution"
+author = "Deskmodal"

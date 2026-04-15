@@ -1,0 +1,25 @@
+[plugin]
+name = "deskmodal.screener"
+version = "0.1.0"
+description = "Crypto screener with filter builder, sortable table, and chart grid view."
+author = "Deskmodal"
+
+[apps]
+asset_root = "app"
+[[apps.entries]]
+appId = "deskmodal.screener"
+name = "TradeSurface Screener"
+type = "web"
+version = "0.1.0"
+title = "Screener"
+tooltip = "Crypto screener with filters"
+description = "Crypto screener with filter builder, sortable table, and chart grid view."
+path = "."
+
+[apps.entries.icons]
+src = "icons/screener.svg"
+[apps.entries.interop.userChannels]
+broadcasts = [ "fdc3.instrument", "fdc3.instrumentList",]
+listensFor = []
+[apps.entries.interop.intents.raises]
+ViewChart = [ "fdc3.instrument",]

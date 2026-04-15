@@ -1,0 +1,29 @@
+[plugin]
+name = "deskmodal.order-ticket"
+version = "0.1.0"
+description = "Order entry widget for placing limit, stop, OCO, and if-done orders linked to watchlist and chart instruments via FDC3."
+author = "Deskmodal"
+
+[apps]
+asset_root = "app"
+[[apps.entries]]
+appId = "deskmodal.order-ticket"
+name = "TradeSurface Order Ticket"
+type = "web"
+version = "0.1.0"
+title = "Order Ticket"
+tooltip = "Enter working orders — limits, stops, OCO, if-done"
+description = "Order entry widget for placing limit, stop, OCO, and if-done orders linked to watchlist and chart instruments via FDC3."
+path = "."
+
+[apps.entries.icons]
+src = "icons/order-ticket.svg"
+[apps.entries.interop.userChannels]
+broadcasts = [ "deskmodal.order",]
+listensFor = [ "fdc3.instrument",]
+[apps.entries.interop.intents.raises]
+ViewChart = [ "fdc3.instrument",]
+"deskmodal.PlaceOrder" = [ "deskmodal.orderRequest",]
+[apps.entries.interop.intents.listensFor.CreateOrder]
+displayName = "Create Order"
+contexts = [ "fdc3.instrument",]

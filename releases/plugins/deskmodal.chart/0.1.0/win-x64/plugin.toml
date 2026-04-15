@@ -1,0 +1,41 @@
+[plugin]
+name = "deskmodal.chart"
+version = "0.1.0"
+description = "Production-grade financial charting with Canvas 2D and WebGL rendering."
+author = "Deskmodal"
+
+[apps]
+asset_root = "app"
+[[apps.entries]]
+appId = "deskmodal.chart"
+name = "TradeSurface Chart"
+type = "web"
+version = "0.1.0"
+title = "Chart"
+tooltip = "Advanced crypto charting with 20+ chart types and 130+ indicators"
+description = "Production-grade financial charting with Canvas 2D and WebGL rendering."
+path = "."
+
+[apps.entries.icons]
+src = "icons/chart.svg"
+[apps.entries.interop]
+[[apps.entries.interop.appChannels]]
+name = "deskmodal.prices"
+description = "Price updates"
+listensFor = [ "deskmodal.quote",]
+
+[[apps.entries.interop.appChannels]]
+name = "deskmodal.indicators"
+description = "Custom indicator results"
+listensFor = [ "deskmodal.indicatorResult",]
+
+[apps.entries.interop.userChannels]
+broadcasts = [ "fdc3.instrument", "fdc3.chart", "deskmodal.chartState",]
+listensFor = [ "fdc3.instrument", "deskmodal.quote",]
+[apps.entries.interop.intents.raises]
+CreateOrder = [ "fdc3.instrument",]
+"deskmodal.ViewDepth" = [ "fdc3.instrument",]
+"deskmodal.CreateAlert" = [ "deskmodal.alert",]
+[apps.entries.interop.intents.listensFor.ViewChart]
+displayName = "View Chart"
+contexts = [ "fdc3.instrument",]

@@ -1,0 +1,16 @@
+d2618ad3f63458fc25a688fb76d404955b8264983dcb9be2095af60d067b38d8 *./app/assets/index-B39eI1Sv.js
+ccf5c8619d87154b7f396a5ced9d101503edeceef3a267adc218cfd9a7675f6c *./app/assets/index-B39eI1Sv.js.map
+a53e021bf9e7ebb2d2961520e7d4bc8d42a4035d798a2b9e250c04ee98af730b *./app/assets/index-B41EJzv7.css
+35458d636b7b6e79834af4d89f1a5ebbdfb2a6f058ccc6f5e08a8e732829b0d2 *./app/assets/index-BepgYcCB.js
+e4cbc6a73fd955cb9e28db9ffa4c1faa6ff19e681afd0ec05531ce7267902e74 *./app/assets/index-BepgYcCB.js.map
+fcb9fafe6de07658129a6b86c947bb3aa2a34944063e0f24d5a4a8cba3c2b72c *./app/assets/index-BuV3k8i2.css
+831489161befd80e74677b5331188bf6a3180b88b11d71067eececcb695fedef *./app/assets/index-CY9l5HfK.css
+cf2879f1502d92769a520c94100b01d253c7f08a3fdee98f1082de65f9f9467e *./app/assets/index-CYLXGsjH.js
+4760290ced675c0a5033fcec1e2cb527ebad7278d04b4784e2e5a7fdfbad46c0 *./app/assets/index-CYLXGsjH.js.map
+8456ce983c9e1fc7aa3b182e22f7e0fd03ef0a9f3da0fe0e24f7227e151b9ede *./app/assets/index-Cf0-h-M8.js
+91551acd3d6f85e4a449930e5baa76e06edce9c4b1452b66747916ab119402f6 *./app/assets/index-Cf0-h-M8.js.map
+066927f0f3481663dac963708f102cb4ff392b21ddaad3fc10b662fb24002118 *./app/assets/index-WBsDV-IS.js
+5a571a3247b0afc28bbd3fec43038380ee52bb50b1957ae7a9aee973a2e19d10 *./app/assets/index-WBsDV-IS.js.map
+f7f544dc5cb1d5a8fcb241645f2d8d8d0b3a2bf447f1f32125a48526b5493619 *./app/index.html
+ec7d96e5bcaabb8e895d6d14caa7f5e0d6526362b017d00ba71b79bd877c126b *./icons/blotter.svg
+5cdd0eddaf518f9b6167f5dcc01b265d87c8d037f9457c0a8d5f89835e942b68 *./plugin.toml

@@ -1,0 +1,11 @@
+{
+  "name": "DeskModal",
+  "version": "0.1.0",
+  "published_at": "2026-04-15T01:47:38Z",
+  "platforms": {
+    "win-x64": {
+      "binary": "win-x64/DeskModal.exe",
+      "checksums": "win-x64/checksums.txt"
+    }
+  }
+}

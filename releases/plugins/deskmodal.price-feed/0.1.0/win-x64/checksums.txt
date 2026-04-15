@@ -1,0 +1,3 @@
+c9a1c2c6588d64480a79c20d909ccdb559e79b6363543cf0f6ff3e7b535de8a8 *./plugin.toml
+64c4fbafb67aea7ed59eefb8af0e2745d2e07c3d5a7e2768b91abca60de7ebe3 *./services/deskmodal_price_feed.dll
+7c9a11f50134299de9d730ac328a36e9ac3a380a3408ff3313c61680b91411c0 *./services/deskmodal_price_feed.dll.sig

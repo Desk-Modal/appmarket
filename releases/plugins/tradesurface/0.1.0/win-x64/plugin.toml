@@ -1,0 +1,35 @@
+[plugin]
+name = "tradesurface"
+version = "0.1.0"
+description = "TradeSurface multi-asset charting platform — installs all apps and services"
+author = "Deskmodal"
+
+[bundle]
+includes = [ "deskmodal.feeds", "deskmodal.chart", "deskmodal.watchlist", "deskmodal.depth", "deskmodal.analytics", "deskmodal.screener", "deskmodal.alerts", "deskmodal.order-ticket", "deskmodal.blotter", "deskmodal.positions", "deskmodal.price-feed", "deskmodal.paper-trading",]
+
+[workspaces]
+default = "day-trading"
+[[workspaces.templates]]
+id = "day-trading"
+name = "Day Trading"
+description = "Optimized for intraday scalping and day trading"
+file = "workspaces/day-trading.toml"
+
+[[workspaces.templates]]
+id = "multi-chart"
+name = "Multi-Chart"
+description = "Four charts across multiple timeframes with independent instrument selection"
+file = "workspaces/multi-chart.toml"
+
+[[workspaces.templates]]
+id = "defi-research"
+name = "DeFi Research"
+description = "Analytics-focused layout for DeFi research and on-chain analysis"
+file = "workspaces/defi-research.toml"
+
+[[workspaces.templates]]
+id = "scalping"
+name = "Scalping"
+description = "Compact layout optimized for fast scalping with depth and feed monitoring"
+file = "workspaces/scalping.toml"
+

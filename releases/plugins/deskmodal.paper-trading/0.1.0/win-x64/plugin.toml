@@ -1,0 +1,33 @@
+[[services]]
+id = "deskmodal.paper-trading"
+name = "Paper Trading Service"
+description = "Simulated order execution with per-exchange balance isolation, OCO, if-done, trailing stops, and performance analytics"
+type = "native"
+entry_point = "deskmodal_paper_trading"
+hosting = "inprocess"
+auto_start = true
+restart_policy = "permanent"
+
+[services.fdc3]
+broadcasts = [ "deskmodal.deal", "deskmodal.position", "deskmodal.order", "deskmodal.orderReject", "deskmodal.balance", "deskmodal.equityCurve",]
+listens_for = [ "deskmodal.quote", "deskmodal.order", "deskmodal.orderCancel", "deskmodal.tick",]
+channels = [ "deskmodal.prices",]
+intents = [ "deskmodal.PlaceOrder", "deskmodal.CancelOrder", "deskmodal.ModifyOrder", "deskmodal.GetOrders", "deskmodal.GetPositions", "deskmodal.GetBalances", "deskmodal.GetAnalytics", "deskmodal.ResetPaperEngine", "deskmodal.ExportTrades",]
+[services.security]
+context_broadcast = [ "deskmodal.deal", "deskmodal.position", "deskmodal.order", "deskmodal.orderReject", "deskmodal.balance", "deskmodal.equityCurve",]
+context_receive = [ "deskmodal.quote", "deskmodal.order", "deskmodal.orderCancel", "deskmodal.tick",]
+channels_join = [ "deskmodal.prices",]
+intents_handle = [ "deskmodal.PlaceOrder", "deskmodal.CancelOrder", "deskmodal.ModifyOrder", "deskmodal.GetOrders", "deskmodal.GetPositions", "deskmodal.GetBalances", "deskmodal.GetAnalytics", "deskmodal.ResetPaperEngine", "deskmodal.ExportTrades",]
+intents_raise = []
+dlp_classification = "internal"
+[services.permissions]
+storage_keys = [ "paper-trading.*",]
+[services.health]
+interval_ms = 15000
+timeout_ms = 5000
+
+[plugin]
+name = "deskmodal.paper-trading"
+version = "0.1.0"
+description = "Simulated order execution with per-exchange balance isolation, OCO, if-done, trailing stops, and performance analytics"
+author = "Deskmodal"

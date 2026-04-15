@@ -1,0 +1,61 @@
+# OptiScript Plugin — scripting engine for DeskModal
+#
+# Provides:
+#   - OptiScript Editor (web app) — write, debug, and backtest scripts
+#   - OptiScript Service (native) — compile, execute, and backtest engine
+#
+# Install: copy this directory to {deskmodal}/plugins/optiscript/
+# The service binary goes in services/ and must be signed.
+
+[plugin]
+name = "optiscript"
+version = "0.1.0"
+description = "OptiScript — write, run, and backtest trading indicators and strategies"
+author = "DeskModal"
+
+# ── Editor App ──────────────────────────────────────────────────────────────
+
+[apps]
+asset_root = "app"
+
+[[apps.entries]]
+appId = "optiscript.editor"
+name = "OptiScript Editor"
+type = "web"
+version = "0.1.0"
+title = "OptiScript"
+tooltip = "Write, debug, and backtest trading scripts"
+description = "Full IDE for OptiScript with syntax highlighting, debugger, and backtesting."
+path = "."
+
+[apps.entries.icons]
+src = "icons/optiscript.svg"
+
+[apps.entries.interop.intents.listensFor."optiscript.RunScript"]
+displayName = "Run Script"
+contexts = ["optiscript.script"]
+
+[apps.entries.interop.intents.listensFor."optiscript.Debug"]
+displayName = "Debug Script"
+contexts = ["optiscript.script"]
+
+[apps.entries.interop.userChannels]
+broadcasts = ["optiscript.script", "optiscript.signal", "optiscript.plot-data", "optiscript.backtest-result"]
+listensFor = ["fdc3.instrument", "optiscript.script"]
+
+# ── Native Service ──────────────────────────────────────────────────────────
+
+[[services]]
+id = "optiscript.engine"
+name = "OptiScript Engine"
+description = "Compilation, execution, and backtesting engine"
+type = "native"
+entry_point = "optiscript_service"
+hosting = "inprocess"
+auto_start = true
+restart_policy = "transient"
+
+[services.fdc3]
+broadcasts = ["optiscript.signal", "optiscript.plot-data", "optiscript.backtest-result"]
+channels = []
+intents = ["optiscript.Compile", "optiscript.Run", "optiscript.Backtest", "optiscript.Compare", "optiscript.CheckParity", "optiscript.Debug"]
