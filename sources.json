@@ -1,12 +1,10 @@
 {
-  "comment": "Declarative list of GitHub Releases to aggregate into index.json. Each entry names the source repo, how to discover entries within it, and how to tag it in the catalog. The aggregator treats this file as the single source of truth for 'what is available on the DeskModal platform'. THIS FILE IS CODEOWNERS-GATED — entries are only added after a Publisher signup issue has been filed, reviewed, and approved by Desk-Modal. Third parties DO NOT open direct PRs against this file; they open a signup issue (.github/ISSUE_TEMPLATE/publisher-signup.yml) and Desk-Modal commits the approved entry on their behalf. The Desk-Modal-owned entries below are the initial first-party seed (paper-trading, price-feed-service, tradesurface); once a third-party publisher is approved they get identical treatment from the aggregator. See PUBLISHING.md for the full onboarding contract.",
+  "comment": "Declarative source list for the DeskModal App Market. The aggregator reads GitHub Releases from these repos and builds the catalog. CODEOWNERS-gated — third parties submit a publisher-signup issue, Desk-Modal adds their entry.",
   "publisher_keys": {
-    "deskmodal-primary": {
+    "deskmodal-ci": {
       "algorithm": "ed25519",
-      "public_key_hex": "REPLACE_WITH_PUBLIC_KEY_HEX_FROM_DESKMODAL_SIGNING_KEY",
-      "valid_from": "2026-04-01T00:00:00Z",
-      "owner": "Desk-Modal",
-      "notes": "Fill this in before the first signed aggregation. Derive the public key from DESKMODAL_SIGNING_KEY (the Ed25519 private key secret used by every plugin repo's release workflow) via: python3 -c 'from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey; import os; k=Ed25519PrivateKey.from_private_bytes(bytes.fromhex(os.environ[\"DESKMODAL_SIGNING_KEY\"])); print(k.public_key().public_bytes_raw().hex())'"
+      "source": "GitHub App (deskmodal-ci) signing key",
+      "owner": "Desk-Modal"
     }
   },
   "categories": [
@@ -15,34 +13,22 @@
     { "id": "data",       "name": "Data",       "description": "Market data feeds and streaming" },
     { "id": "analytics",  "name": "Analytics",  "description": "Cross-instrument analysis and metrics" },
     { "id": "simulation", "name": "Simulation", "description": "Paper trading, backtesting, replay" },
-    { "id": "tooling",    "name": "Tooling",    "description": "Developer tools, SDKs, CLIs" }
+    { "id": "scripting",  "name": "Scripting",  "description": "Indicator and strategy scripting" },
+    { "id": "platform",   "name": "Platform",   "description": "DeskModal agent and core components" }
   ],
   "sources": [
     {
       "owner": "Desk-Modal",
-      "repo": "paper-trading",
-      "mode": "single_release",
-      "content_type": "service",
-      "id": "desk-modal.paper-trading",
-      "display_name": "Paper Trading Service",
-      "tagline": "Risk-free order simulation with realistic fills",
-      "categories": ["trading", "simulation"],
-      "tags": ["paper", "simulator", "ems"],
+      "repo": "deskmodal",
+      "mode": "platform_release",
+      "content_type": "platform",
+      "id": "deskmodal",
+      "display_name": "DeskModal",
+      "tagline": "FDC3 2.2 Desktop Agent for multi-asset trading",
+      "categories": ["platform"],
+      "tags": ["agent", "fdc3", "desktop"],
       "featured": true,
-      "asset_name_template": "deskmodal.paper-trading-{version}-{platform}.dmpkg.tar.gz"
-    },
-    {
-      "owner": "Desk-Modal",
-      "repo": "price-feed-service",
-      "mode": "single_release",
-      "content_type": "service",
-      "id": "desk-modal.price-feed-service",
-      "display_name": "Price Feed Service",
-      "tagline": "Multi-exchange real-time price streaming",
-      "categories": ["data"],
-      "tags": ["prices", "streaming", "websocket", "exchanges"],
-      "featured": true,
-      "asset_name_template": "deskmodal-price-feed-{platform}.tar.gz"
+      "asset_name_template": "DeskModal-{version}-{platform}.{ext}"
     },
     {
       "owner": "Desk-Modal",
@@ -50,19 +36,35 @@
       "mode": "multi_plugin_release",
       "content_type": "app",
       "plugins": [
-        { "slug": "feeds",     "id": "desk-modal.tradesurface.feeds",     "display_name": "TradeSurface Feeds",     "tagline": "Real-time multi-exchange price feeds",                    "categories": ["data"],      "tags": ["feeds","streaming"],         "featured": true  },
-        { "slug": "chart",     "id": "desk-modal.tradesurface.chart",     "display_name": "TradeSurface Chart",     "tagline": "Advanced charting with 50+ indicators",                   "categories": ["charting"],  "tags": ["chart","indicators"],        "featured": true  },
-        { "slug": "watchlist", "id": "desk-modal.tradesurface.watchlist", "display_name": "TradeSurface Watchlist", "tagline": "Multi-exchange watchlist with streaming quotes",          "categories": ["trading"],   "tags": ["watchlist"],                 "featured": true  },
-        { "slug": "depth",     "id": "desk-modal.tradesurface.depth",     "display_name": "TradeSurface Depth",     "tagline": "Cross-exchange order book depth visualization",           "categories": ["trading"],   "tags": ["depth","orderbook"],         "featured": false },
-        { "slug": "analytics", "id": "desk-modal.tradesurface.analytics", "display_name": "TradeSurface Analytics", "tagline": "Market analytics and cross-exchange metrics",             "categories": ["analytics"], "tags": ["analytics","correlation"],   "featured": false },
-        { "slug": "screener",  "id": "desk-modal.tradesurface.screener",  "display_name": "TradeSurface Screener",  "tagline": "Real-time market screener with custom filters",           "categories": ["trading"],   "tags": ["screener"],                  "featured": false },
-        { "slug": "alerts",    "id": "desk-modal.tradesurface.alerts",    "display_name": "TradeSurface Alerts",    "tagline": "Price alerts and condition monitoring",                   "categories": ["trading"],   "tags": ["alerts","notifications"],    "featured": false },
-        { "slug": "trading",   "id": "desk-modal.tradesurface.trading",   "display_name": "TradeSurface Trading",   "tagline": "Order ticket, blotter, and positions management",         "categories": ["trading"],   "tags": ["order","blotter","ems"],     "featured": true  }
+        { "slug": "feeds",        "id": "deskmodal.feeds",        "display_name": "Price Feed Hub",      "tagline": "Real-time multi-exchange price feeds",          "categories": ["data"],        "featured": true  },
+        { "slug": "chart",        "id": "deskmodal.chart",        "display_name": "Chart",               "tagline": "Advanced charting with 50+ indicators",         "categories": ["charting"],    "featured": true  },
+        { "slug": "watchlist",    "id": "deskmodal.watchlist",    "display_name": "Watchlist",           "tagline": "Multi-exchange watchlist with streaming quotes", "categories": ["trading"],     "featured": true  },
+        { "slug": "depth",        "id": "deskmodal.depth",        "display_name": "Depth",               "tagline": "Cross-exchange order book depth",                "categories": ["trading"],     "featured": false },
+        { "slug": "analytics",    "id": "deskmodal.analytics",    "display_name": "Analytics",           "tagline": "Market analytics and cross-exchange metrics",    "categories": ["analytics"],   "featured": false },
+        { "slug": "screener",     "id": "deskmodal.screener",     "display_name": "Screener",            "tagline": "Real-time market screener with custom filters",  "categories": ["trading"],     "featured": false },
+        { "slug": "alerts",       "id": "deskmodal.alerts",       "display_name": "Alerts",              "tagline": "Price alerts and condition monitoring",          "categories": ["trading"],     "featured": false },
+        { "slug": "order-ticket", "id": "deskmodal.order-ticket", "display_name": "Order Ticket",        "tagline": "Order entry widget",                             "categories": ["trading"],     "featured": true  },
+        { "slug": "blotter",      "id": "deskmodal.blotter",      "display_name": "Order Blotter",       "tagline": "Working and filled orders log",                  "categories": ["trading"],     "featured": false },
+        { "slug": "positions",    "id": "deskmodal.positions",    "display_name": "Positions",           "tagline": "Cross-exchange position viewer",                 "categories": ["trading"],     "featured": false }
       ],
-      "asset_name_template": "tradesurface-{slug}-{version}-{platform}.tar.gz",
-      "per_plugin_manifest_template": "{slug}-plugin.toml",
-      "per_plugin_checksums_template": "{slug}-checksums.txt",
-      "per_plugin_signature_template": "{slug}-SIGNATURE"
+      "services": [
+        { "id": "deskmodal.price-feed",     "display_name": "Price Feed Service",     "tagline": "Multi-exchange WebSocket streaming",     "categories": ["data"],       "featured": true  },
+        { "id": "deskmodal.paper-trading",  "display_name": "Paper Trading Service",  "tagline": "Risk-free order simulation with realistic fills", "categories": ["trading", "simulation"], "featured": true  }
+      ],
+      "asset_name_template": "tradesurface-{slug}-{version}-{platform}.dmpkg"
+    },
+    {
+      "owner": "Desk-Modal",
+      "repo": "optiscript",
+      "mode": "single_plugin_release",
+      "content_type": "plugin",
+      "id": "optiscript",
+      "display_name": "OptiScript",
+      "tagline": "Write, run, and backtest trading indicators and strategies",
+      "categories": ["scripting", "simulation"],
+      "tags": ["scripting", "indicators", "backtesting", "pine"],
+      "featured": true,
+      "asset_name_template": "optiscript-{version}-{platform}.dmpkg"
     }
   ]
 }
