@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-11T06:35:13Z",
+  "generated_at": "2026-04-15T01:15:17Z",
   "generator": {
     "name": "appmarket-aggregator",
     "version": "1.1.0",
-    "source_commit": "fa7a3f9"
+    "source_commit": "efb1b45"
   },
   "publisher_keys": {
     "deskmodal-primary": {
@@ -47,148 +47,6 @@
     }
   ],
   "catalog": [
-    {
-      "id": "desk-modal.paper-trading",
-      "owner": "Desk-Modal",
-      "repo": "paper-trading",
-      "name": "Paper Trading Service",
-      "tagline": "Risk-free order simulation with realistic fills",
-      "description": "",
-      "content_type": "service",
-      "categories": [
-        "trading",
-        "simulation"
-      ],
-      "tags": [
-        "paper",
-        "simulator",
-        "ems"
-      ],
-      "featured": true,
-      "publisher": {
-        "display_name": "Desk-Modal",
-        "verified": true,
-        "key_id": "deskmodal-primary"
-      },
-      "latest_version": "0.1.2",
-      "min_deskmodal_version": "0.0.0",
-      "published_at": "2026-04-11T02:56:55Z",
-      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/paper-trading-v0.1.2",
-      "changelog_url": "https://github.com/Desk-Modal/paper-trading/releases",
-      "icon": {
-        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.paper-trading-market.svg",
-        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.paper-trading-toolbar.svg"
-      },
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.paper-trading-market.svg",
-      "screenshots": [],
-      "homepage": "https://github.com/Desk-Modal/paper-trading",
-      "license": "Proprietary",
-      "dependencies": [],
-      "capabilities": {},
-      "platforms": {
-        "win32-x64": {
-          "url": "https://github.com/Desk-Modal/appmarket/releases/download/paper-trading-v0.1.2/deskmodal.paper-trading-0.1.2-win32-x64.dmpkg.tar.gz",
-          "asset_name": "deskmodal.paper-trading-0.1.2-win32-x64.dmpkg.tar.gz",
-          "sha256": "7cab16eb39c3448d26626e052c288420bf6260b272d71ae471fd6f38bd896d02",
-          "size_bytes": 3270096
-        },
-        "darwin-arm64": {
-          "url": "https://github.com/Desk-Modal/appmarket/releases/download/paper-trading-v0.1.2/deskmodal.paper-trading-0.1.2-darwin-arm64.dmpkg.tar.gz",
-          "asset_name": "deskmodal.paper-trading-0.1.2-darwin-arm64.dmpkg.tar.gz",
-          "sha256": "ddf04ab702dde5ef89e5b59771959292ec4f8e673475be891594d7fba0b191b8",
-          "size_bytes": 2819076
-        },
-        "darwin-x64": {
-          "url": "https://github.com/Desk-Modal/appmarket/releases/download/paper-trading-v0.1.2/deskmodal.paper-trading-0.1.2-darwin-x64.dmpkg.tar.gz",
-          "asset_name": "deskmodal.paper-trading-0.1.2-darwin-x64.dmpkg.tar.gz",
-          "sha256": "bba4d2308228c874553567aafa15d7af5bad2abbb388b4a7a1f8555a41f204af",
-          "size_bytes": 3115003
-        },
-        "linux-x64": null,
-        "wasm": null
-      },
-      "manifest": {
-        "url": null,
-        "sha256": null
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "publisher_key_id": "deskmodal-primary",
-        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/paper-trading-v0.1.2/checksums.txt",
-        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/paper-trading-v0.1.2/SIGNATURE"
-      }
-    },
-    {
-      "id": "desk-modal.price-feed-service",
-      "owner": "Desk-Modal",
-      "repo": "price-feed-service",
-      "name": "Price Feed Service",
-      "tagline": "Multi-exchange real-time price streaming",
-      "description": "",
-      "content_type": "service",
-      "categories": [
-        "data"
-      ],
-      "tags": [
-        "prices",
-        "streaming",
-        "websocket",
-        "exchanges"
-      ],
-      "featured": true,
-      "publisher": {
-        "display_name": "Desk-Modal",
-        "verified": true,
-        "key_id": "deskmodal-primary"
-      },
-      "latest_version": "0.1.2",
-      "min_deskmodal_version": "0.0.0",
-      "published_at": "2026-04-11T02:57:02Z",
-      "release_url": "https://github.com/Desk-Modal/appmarket/releases/tag/price-feed-service-v0.1.2",
-      "changelog_url": "https://github.com/Desk-Modal/price-feed-service/releases",
-      "icon": {
-        "market": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.price-feed-service-market.svg",
-        "toolbar": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.price-feed-service-toolbar.svg"
-      },
-      "icon_url": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/desk-modal.price-feed-service-market.svg",
-      "screenshots": [],
-      "homepage": "https://github.com/Desk-Modal/price-feed-service",
-      "license": "Proprietary",
-      "dependencies": [],
-      "capabilities": {},
-      "platforms": {
-        "win32-x64": {
-          "url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/deskmodal-price-feed-win32-x64.tar.gz",
-          "asset_name": "deskmodal-price-feed-win32-x64.tar.gz",
-          "sha256": "8d531bbfa6f8a15dd867ebb866f1bc96cf5f0c34a817ddbc376b143a3c726c8e",
-          "size_bytes": 2579116
-        },
-        "darwin-arm64": {
-          "url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/deskmodal-price-feed-darwin-arm64.tar.gz",
-          "asset_name": "deskmodal-price-feed-darwin-arm64.tar.gz",
-          "sha256": "0b7640212c67bce7549bca362b9073558a6f93fd9afe6504fcb5aa88765a0cdb",
-          "size_bytes": 2402641
-        },
-        "darwin-x64": {
-          "url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/deskmodal-price-feed-darwin-x64.tar.gz",
-          "asset_name": "deskmodal-price-feed-darwin-x64.tar.gz",
-          "sha256": "de4f194f52096e03a4330e8e1f94eb80bd2a5df6a2c78077a2f2edbbcbb51233",
-          "size_bytes": 2567969
-        },
-        "linux-x64": null,
-        "wasm": null
-      },
-      "manifest": {
-        "url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/plugin.toml",
-        "sha256": null
-      },
-      "signature": {
-        "algorithm": "ed25519",
-        "publisher_key_id": "deskmodal-primary",
-        "checksums_url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/checksums.txt",
-        "signature_url": "https://github.com/Desk-Modal/appmarket/releases/download/price-feed-service-v0.1.2/SIGNATURE"
-      }
-    },
     {
       "id": "desk-modal.tradesurface.alerts",
       "owner": "Desk-Modal",
