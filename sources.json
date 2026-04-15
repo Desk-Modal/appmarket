@@ -20,7 +20,7 @@
     {
       "owner": "Desk-Modal",
       "repo": "deskmodal",
-      "mode": "platform_release",
+      "mode": "single_release",
       "content_type": "platform",
       "id": "deskmodal",
       "display_name": "DeskModal",
@@ -56,7 +56,7 @@
     {
       "owner": "Desk-Modal",
       "repo": "optiscript",
-      "mode": "single_plugin_release",
+      "mode": "single_release",
       "content_type": "plugin",
       "id": "optiscript",
       "display_name": "OptiScript",
