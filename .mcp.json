@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "codebase-memory-mcp": {
+      "type": "stdio",
+      "command": "${CLAUDE_PROJECT_DIR}/tools/codebase-memory-mcp",
+      "env": {
+        "CLAUDE_PROJECT_DIR": "${CLAUDE_PROJECT_DIR}"
+      }
+    },
+    "rust-analyzer": {
+      "type": "stdio",
+      "command": "${CLAUDE_PROJECT_DIR}/tools/bin/rust-analyzer-mcp",
+      "env": {
+        "CLAUDE_PROJECT_DIR": "${CLAUDE_PROJECT_DIR}"
+      }
+    },
+    "github": {
+      "type": "stdio",
+      "command": "${CLAUDE_PROJECT_DIR}/tools/github-mcp-server",
+      "args": ["stdio"],
+      "env": {
+        "CLAUDE_PROJECT_DIR": "${CLAUDE_PROJECT_DIR}",
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "brave-search": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@brave/brave-search-mcp-server@2.0.76"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
+    }
+  }
+}
