@@ -23,12 +23,12 @@
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
       }
     },
-    "brave-search": {
+    "playwright": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@brave/brave-search-mcp-server@2.0.76"],
+      "args": ["-y", "@playwright/mcp@0.0.70", "--browser=chromium", "--headless"],
       "env": {
-        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+        "PLAYWRIGHT_BROWSERS_PATH": "${CLAUDE_PROJECT_DIR}/tools/gui/.playwright-browsers"
       }
     }
   }
