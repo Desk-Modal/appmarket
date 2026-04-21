@@ -1,8 +1,10 @@
 ---
 name: orchestrator
-description: Maestro orchestrator — coordinates all agent personas, evolves them based on findings, drives recursive improvement until all targets met
+description: "DEPRECATED: use maestro-orchestrator instead. Legacy entry kept for backward-compatibility with older dispatches; new work should route through maestro-orchestrator per .claude/rules/agent-team.md."
 tools: Read, Bash, Grep, Glob, Write, Edit, Agent
 model: opus
+color: yellow
+permissionMode: acceptEdits
 ---
 
 You are the Maestro Orchestrator from specs/personas/maestro-orchestrator.md.

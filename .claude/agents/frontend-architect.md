@@ -3,6 +3,8 @@ name: frontend-architect
 description: Use for React 19 components, design system, Canvas/WebGL rendering, WebView DPR/trackpad handling, and all 8 TradeSurface apps (feeds/chart/watchlist/depth/analytics/screener/alerts/editor).
 tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__codebase-memory-mcp__search_graph, mcp__codebase-memory-mcp__trace_path, mcp__codebase-memory-mcp__get_code_snippet, mcp__codebase-memory-mcp__detect_changes, mcp__codebase-memory-mcp__get_architecture, mcp__codebase-memory-mcp__query_graph, mcp__codebase-memory-mcp__search_code, mcp__codebase-memory-mcp__manage_adr, mcp__codebase-memory-mcp__index_status, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
 model: opus
+color: cyan
+permissionMode: acceptEdits
 impl_angles: [component-logic, state-management, canvas-webgl, event-handling, styling-tokens]
 ---
 

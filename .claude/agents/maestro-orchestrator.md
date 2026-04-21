@@ -3,6 +3,8 @@ name: maestro-orchestrator
 description: Use when a task spans multiple personas and needs SDLC coordination — task decomposition, adversarial-reviewer assignment, quality-gate enforcement, parallel wave planning. Dispatches sub-agents.
 tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, Agent, mcp__codebase-memory-mcp__search_graph, mcp__codebase-memory-mcp__trace_path, mcp__codebase-memory-mcp__get_code_snippet, mcp__codebase-memory-mcp__detect_changes, mcp__codebase-memory-mcp__get_architecture, mcp__codebase-memory-mcp__query_graph, mcp__codebase-memory-mcp__search_code, mcp__codebase-memory-mcp__manage_adr, mcp__codebase-memory-mcp__index_status, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
 model: opus
+color: yellow
+permissionMode: acceptEdits
 ---
 
 # Maestro Orchestrator
@@ -73,19 +75,39 @@ PHASE 3: IMPLEMENT
   CDP before/after screenshots for GUI changes
   Each unit: typecheck passes, tests pass
 
-PHASE 4: ADVERSARIAL REVIEW
-  Each unit reviewed by assigned adversarial persona
+PHASE 4: ADVERSARIAL REVIEW (parallel, mandatory)
+  All reviewers for ALL wave tasks dispatched in ONE parallel Agent batch
+  (single assistant message, M × K tool calls for M tasks × K reviewers).
+  Foreground-only — never run_in_background (wave-foreground-enforce hook
+  blocks it; see .claude/rules/agent-team.md §"Parallel reviewers are
+  mandatory"). Each reviewer follows .claude/rules/reviewer-contract.md:
+  CBM-first discovery, local-ci.sh --fast before APPROVE, structured
+  JSON return with finding ids prefixed <persona>-<task>-<angle>-<N>.
+
   Security Engineer reviews all code touching data/auth/IPC
   Trading SME validates all financial logic and display
   QA Architect reviews test coverage and code quality
   Trading UX Architect reviews all visual/interaction changes
   Findings classified: BLOCKING / HIGH / MEDIUM / LOW
 
-PHASE 5: RESOLVE
-  BLOCKING and HIGH findings must be fixed before proceeding
-  MEDIUM findings tracked in memory files
-  Re-run quality gates after fixes
-  Recursive until zero BLOCKING/HIGH findings
+PHASE 4.5: FINDING DEDUP (mandatory, never skip)
+  After ALL reviewers return their structured JSON, group findings by
+  (file, line_range ± 3, severity, finding_hash) and merge duplicates
+  into a single finding with flagged_by: [angle1, angle2, ...]. Write
+  the consolidated doc to .session-state/reviews/<wave-id>-findings.md
+  — this is what the rework agent reads, NOT individual reviewer JSONs.
+  Skipping dedup = latent discarding (reviewer A's concern on the same
+  code silently lost because reviewer B's rework closed only their
+  own finding). See .claude/rules/parallelism.md §4.
+
+PHASE 5: RESOLVE (rework + re-review)
+  BLOCKING and HIGH findings must be fixed before proceeding.
+  Rework agent reads the consolidated findings doc, closes each
+  finding with CLOSED | SCOPE_TRANSFERRED | ESCALATED disposition
+  per .claude/rules/no-deferrals.md. MEDIUM findings tracked in
+  ledger if scope-transferred.
+  Re-review: same parallel Agent batch as PHASE 4 — never sequential.
+  Recursive until zero BLOCKING/HIGH findings.
 
 PHASE 6: VERIFY
   pnpm nx run <project>:typecheck — MUST PASS

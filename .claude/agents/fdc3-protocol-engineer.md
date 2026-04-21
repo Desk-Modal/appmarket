@@ -3,6 +3,8 @@ name: fdc3-protocol-engineer
 description: Use for FDC3 2.x conformance, channel semantics, intent routing, app directory, bridge protocol (DAB/WCP/DACP), and window.deskmodal feature-detection. Owns FINOS FDC3 spec fidelity.
 tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__codebase-memory-mcp__search_graph, mcp__codebase-memory-mcp__trace_path, mcp__codebase-memory-mcp__get_code_snippet, mcp__codebase-memory-mcp__detect_changes, mcp__codebase-memory-mcp__get_architecture, mcp__codebase-memory-mcp__query_graph, mcp__codebase-memory-mcp__search_code, mcp__codebase-memory-mcp__manage_adr, mcp__codebase-memory-mcp__index_status, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read, mcp__brave-search__brave_web_search, mcp__brave-search__brave_summarizer
 model: opus
+color: purple
+permissionMode: acceptEdits
 impl_angles: [conformance-spec, channels-broadcast, intents-routing, appd-bridge, dab-wcp-dacp]
 ---
 
