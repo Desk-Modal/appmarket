@@ -7,3 +7,12 @@ __pycache__/
 *.pem
 *.key
 DESKMODAL_SIGNING_KEY
+
+# Rust / Cargo build artefacts (verification-gateway crate). The
+# workspace ships a binary crate (`deskmodal-verification-gateway`)
+# so `Cargo.lock` IS tracked for reproducible builds — only
+# `/target/` is ignored.
+/target/
+# Runtime SQLite job-queue database (developer local)
+/appmarket.db
+/appmarket.db-*

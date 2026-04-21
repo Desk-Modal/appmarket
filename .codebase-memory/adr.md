@@ -121,3 +121,50 @@ without downloading all.
   their own repos, catalog is one signed file.
 - Immutable catalog releases — every `index.json` is frozen; clients
   can pin any previous catalog state.
+
+## M202 EXTENSION (2026-04-22) — verification-gateway Rust crate
+
+**AD-8 — Cargo workspace bootstrap for the Verification Gateway.**
+`Cargo.toml` at the appmarket repo root establishes a workspace with
+one member, `crates/verification-gateway`
+(`deskmodal-verification-gateway`). Co-lives with the Python
+`scripts/aggregate.py` aggregator. Separation of concerns:
+- Aggregator builds the **catalog** (`index.json`).
+- Gateway runs the **compliance pipeline** (schema/FDC3/signature/
+  WASM sandbox/.../fallback — M208).
+Both feed off the same `sources.json` publisher registry so trust
+anchors are shared.
+
+**AD-9 — Intake surface: GitHub `repository_dispatch` only (per
+ADR-0007).** Not npm, not generic webhooks. The gateway's `/dispatch`
+handler accepts `event_type=release-published` payloads (`repo`, `tag`,
+`asset_base_url`, `publisher_key_id`) from registered publishers, then
+HMAC-verifies via per-publisher token + enforces `sources.json`
+registration. On miss: 400 + `reason: unregistered_publisher`. On
+signature failure: 400 + `reason: invalid_signature`. On success: 202
+and a `pending` row in the job queue.
+
+**AD-10 — 5-minute poll fallback over the GitHub Releases API.**
+Guards against dispatch losses (workflow silently skips, network
+glitch, misconfigured secret). Iterates every `sources[].owner/repo`
+and `GET /repos/:owner/:repo/releases/latest`; any tag not yet in the
+queue is enqueued as a `poll`-sourced `pending` row. The queue's
+UNIQUE `(publisher_repo, tag, pipeline_step)` index resolves dispatch
+/poll races — whichever intake wins, the other becomes an
+idempotent no-op.
+
+**AD-11 — sqlx job queue (SQLite for dev, Postgres schema parity).**
+Migration at `migrations/0001_gateway_init.sql` uses only the
+portable type subset (TEXT, INTEGER) so the same file applies to
+both backends. Rows carry `{publisher_repo, tag, pipeline_step,
+decision, evidence, intake_source, ts}`. M208 replaces the
+`NoopPipeline` (records `pending → skipped`) with the real 10-step
+compliance pipeline; the skeleton exists so end-to-end intake can
+be exercised independently of M208.
+
+**AD-12 — Per-publisher dispatch tokens (per-publisher trust
+anchor).** Dispatch token resolution is bound to
+`sources.json[*].publisher_key_id`; a key leaked for publisher A
+cannot be reused to spoof publisher B. Closes the open question in
+M202 spec §sec:open-questions as "per-publisher".
+

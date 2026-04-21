@@ -1,0 +1,57 @@
+[package]
+name = "deskmodal-verification-gateway"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Compliance verification gateway for DeskModal App Market — GitHub repository_dispatch intake + poll fallback + job queue."
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "deskmodal-verification-gateway"
+path = "src/bin/gateway.rs"
+
+[dependencies]
+# Async + web
+tokio = { workspace = true }
+axum = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
+hyper = { workspace = true }
+
+# HTTP client
+reqwest = { workspace = true }
+
+# Data
+serde = { workspace = true }
+serde_json = { workspace = true }
+url = { workspace = true }
+
+# Persistence
+sqlx = { workspace = true }
+
+# Crypto
+hmac = { workspace = true }
+sha2 = { workspace = true }
+subtle = { workspace = true }
+hex = { workspace = true }
+
+# Time + errors + logging
+chrono = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+[dev-dependencies]
+# Test harness — raw hyper client for axum integration tests
+tower = { workspace = true, features = ["util"] }
+# `BodyExt::collect` for reading axum response bodies in tests
+http-body-util = "0.1"
+# Temp DB path for integration tests
+tempfile = "3"
+# Mock HTTP server for GitHub Releases poll-fallback tests
+wiremock = "0.6"
