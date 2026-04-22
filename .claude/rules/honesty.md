@@ -12,7 +12,7 @@
 2. **Screenshot/visual proof**: A captured image of the actual rendered state
 3. **Test output**: A passing automated test that exercises the user-facing behavior
 4. **Direct observation**: Actual output from the component (logs, responses, data)
-5. **CDP/DOM assertion**: Verified UI state via programmatic inspection
+5. **Playwright/DOM assertion**: Verified UI state via programmatic inspection (cross-platform; vendored Chromium under `tests/gui/`). CDP-via-port was removed 2026-04-21 — not reachable on macOS WKWebView.
 6. **Process inspection**: lsof, ps, network state — proves process is alive, NOT that features work
 7. **File existence**: Proves deployment, NOT functionality
 8. **Assumption**: NEVER acceptable as verification

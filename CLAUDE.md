@@ -86,7 +86,7 @@ All 23 domain personas + orchestrator live as native subagent definitions at `.c
 | Full CI | `./scripts/local-ci.sh --full --sign` | Before push |
 | Build + launch | `./scripts/launch.sh --fast-build` | Development |
 | Full build + launch | `./scripts/launch.sh --build` | Testing |
-| Validate apps | `python scripts/cdp-test-runner.py` | After launch |
+| GUI regression | `scripts/prod-check.sh gui` | GUI/visual/interaction changes (Playwright) |
 
 **RULE: CI must pass before ANY deploy or launch.** The launch script enforces this — use `--build` or `--fast-build` to run CI + build + launch as one pipeline. Never launch from `target/` directly.
 
@@ -266,6 +266,8 @@ See `.claude/rules/code-discovery.md` for the full tool reference.
   canonical pipeline — don't invoke cargo/pnpm/npm/npx directly.
 - **Launch with signed plugins** — GUI / FDC3 / plugin / dist changes
   are only verified by `scripts/launch.sh --verify` (runs `local-ci
-  --full --sign`, then `build-dist --release --sign`, then CDP
-  assertion suite). `target/` output is not the runtime; the signed
-  `dist/` is.
+  --full --sign`, which includes `build-dist --release --sign`).
+  Runtime behaviour assertions live in the Rust + TS test suites
+  exercised by `local-ci`, plus Playwright GUI specs under
+  `tests/gui/` (invoked via `scripts/prod-check.sh gui`). `target/`
+  output is not the runtime; the signed `dist/` is.

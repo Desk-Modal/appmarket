@@ -42,10 +42,10 @@ pointing to `.claude/rules/context-discipline.md`. Key invariants:
 | Rust / Tauri / platform core | `rust-systems-architect` |
 | React / UI | `frontend-architect` |
 | Visual / UX | `trading-ux-architect` |
-| Financial logic | `trading-sme` *(MANDATORY reviewer on any financial-logic change)* |
+| Financial logic | `trading-sme` *(CONDITIONAL reviewer — see §"Conditional reviewer matrix")* |
 | Chart engine | `charting-expert` |
 | Security / supply-chain / ACL | `security-engineer` |
-| Testing / QA / CDP | `qa-architect` |
+| Testing / QA | `qa-architect` |
 | FDC3 / channels / bridge | `fdc3-protocol-engineer` |
 | Data / exchanges / feeds | `data-pipeline-engineer` |
 | Build / dist / CI | `build-deploy-engineer` |
@@ -70,13 +70,58 @@ For the full 23-persona roster, `ls .claude/agents/`.
 - **Maestro** (`maestro-orchestrator.md`) is the only persona with
   `Agent` in its tools list — it dispatches sub-personas.
 
+## Conditional reviewer matrix
+
+DeskModal is a domain-agnostic plugin platform. Reviewer dispatch is
+**capability-driven**, not domain-framed. For every task the main /loop
+(or Spec Kit) determines mandatory reviewers using the following
+capability filter applied to the task's plugin fixture + code touch set:
+
+| Capability signal | Mandatory reviewer |
+|---|---|
+| **Universal** (every task) | `qa-architect` |
+| Task writes Rust/Tauri/platform core | `rust-systems-architect` (impl) |
+| Task writes React/UI | `frontend-architect` (impl) |
+| Task writes script-runtime or editor | `plugin-sdk-engineer` (impl) |
+| Task touches signing / ACL / auth / supply-chain / secrets | `security-engineer` |
+| Task touches plugin-platform boundary (SDK, IPC, loader, channels) | `integration-architect` |
+| Task touches FDC3 channels / intents / bridge | `fdc3-protocol-engineer` |
+| Task changes user-visible surface (DeskModal app UI, storefront UI) | `ux-design-lead` (review) and/or `trading-ux-architect` (design) |
+| Plugin fixture has `manifest.categories ⊇ {trading, market-data, finance, derivatives}` | `trading-sme` |
+| Plugin fixture's `manifest.fdc3_intents_raised` includes any order/pnl/position intent (e.g. `deskmodal.PlaceOrder`, `deskmodal.GetPositions`) | `trading-sme` |
+| Plugin fixture is `deskmodal.chart` or a chart-engine change | `charting-expert` |
+| Task touches marketplace aggregator, catalog schema, or storefront | `marketplace-qa` |
+
+Rules:
+
+- **`trading-sme` is CONDITIONAL, never universal.** It is mandatory
+  if and only if the task's plugin fixture meets the category or
+  intent criteria above. Non-financial tasks (clock widget, Markdown
+  editor, screenshot tool, dev utility) do NOT dispatch `trading-sme`.
+- If a task's fixture is a **tri-surface chaos test** that includes
+  any financial-capability plugin in the fixture set, `trading-sme`
+  is mandatory for that task even if the other fixtures are
+  non-financial.
+- A missing capability signal is NOT a reason to skip `qa-architect`
+  — it remains universal.
+- Reviewer selection is declared statically in the task spec's
+  `reviewers:` field (Spec Kit format). The main /loop refuses
+  dispatch if the declared reviewers contradict the capability
+  filter (e.g. financial-capability fixture without `trading-sme`,
+  or non-financial fixture with `trading-sme` as mandatory).
+
 ## Adversarial review (non-negotiable)
 
 - No code ships without review by a domain-hostile persona.
-- **Trading SME must approve** any financial-logic change (block authority).
-- **Trading UX Architect must approve** any visual change.
+- **Trading SME must approve** any task whose plugin fixture meets
+  the financial-capability trigger above (block authority on
+  financial state / order flow / PnL / position).
+- **Trading UX Architect must approve** any visual change to a
+  trading-capable plugin surface; for non-trading surfaces
+  `ux-design-lead` is the visual gate.
 - **QA Architect reviews all changes.**
-- **Security Engineer reviews** any auth / ACL / signature / supply-chain touch.
+- **Security Engineer reviews** any auth / ACL / signature /
+  supply-chain / secrets touch.
 
 ### Parallel reviewers are mandatory (INVARIANT)
 
@@ -208,18 +253,22 @@ Enforcement:
 - Task-spec reviewer lists with one entry still dispatch as a
   single-item parallel batch (format consistency).
 
-## CDP verification (non-negotiable for GUI)
+## GUI verification (non-negotiable for GUI)
 
-- Every GUI change requires CDP before/after screenshots.
-- Run `python scripts/cdp-test-runner.py` after `scripts/launch.sh --verify`.
-- Assertion configs in `scripts/cdp-assertions/*.json`.
+- Every GUI change requires before/after Playwright screenshots
+  under `tests/gui/` (cross-platform; macOS-compatible). See
+  `scripts/prod-check.sh gui` for the runner.
+- CDP was removed 2026-04-21 — the
+  `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` env is Windows-only and
+  macOS WKWebView doesn't expose a Chrome DevTools port.
+  Playwright's vendored Chromium is the cross-platform replacement.
 - Delete temporary screenshots after review.
 
 ## Quality gates (must pass before commit)
 
 - `scripts/local-ci.sh --fast` — fmt + clippy + typecheck + hook tests + prod-check --fast
 - Zero BLOCKING / HIGH findings from adversarial review
-- CDP verification passes for GUI changes
+- Playwright GUI specs pass for GUI changes (`scripts/prod-check.sh gui` when the change touches visuals/interaction)
 - Constitution + compat-ladder clean (`.specify/memory/constitution.md`; `specs/compat-ladder.yml`)
 
 ## Amendment
