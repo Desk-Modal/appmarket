@@ -110,8 +110,8 @@ contract is tightened:
 
 1. Phase 3 returns reviewer findings in the structured JSON
    format.
-2. Phase 4 rework dispatches the implementation persona back into
-   its worktree with the reviewer findings in the prompt.
+2. Phase 4 rework re-dispatches the implementation persona with
+   the reviewer findings in the prompt.
 3. The rework agent's return JSON declares, for every finding, one
    of `CLOSED | SCOPE_TRANSFERRED | ESCALATED` — no other value.
 4. Any `SCOPE_TRANSFERRED` finding carries the receiver's task ID;

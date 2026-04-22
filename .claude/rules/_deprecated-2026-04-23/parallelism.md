@@ -8,25 +8,12 @@ dispatch, review pass — explicitly considers whether work can run
 in parallel and what determinism guarantees hold under that
 parallelism.
 
-## The five determinism mechanisms
+## The four determinism mechanisms
 
 Parallelism that breaks determinism is a defect, not a win. These
-five mechanisms make concurrent agent execution reproducible:
+four mechanisms make concurrent agent execution reproducible:
 
-### 1. Worktree isolation for every parallel dispatch
-
-Every Agent dispatched concurrently with another Agent runs in its
-own `git worktree` via `Agent(isolation: "worktree")`. Each agent
-operates on an isolated checkout pinned to a specific `main` SHA;
-their changes land on a dedicated branch; the main loop integrates
-branches sequentially after all parallel dispatches return.
-
-Consequence: no two Agents can race on the same working-tree file.
-If their merge-back causes a textual conflict, the main loop
-surfaces it as a deterministic failure mode, not a silent
-corruption.
-
-### 2. Declared file-set per task
+### 1. Declared file-set per task
 
 Every task spec declares what it reads and writes. The scheduler
 refuses to dispatch two tasks concurrently when their write sets
@@ -42,13 +29,17 @@ Declared in the spec's `## Parallelism` section:
 - Concurrent with: <task IDs> | any | none
 - Serialise after: <task IDs> | none
 - Wave eligibility: concurrent | serial | exclusive
-- Worktree isolation: required | optional
 ```
 
 Specs without a complete Parallelism section are **rejected** by
 the /loop at Phase 1 (same posture as missing Personas section).
 
-### 3. Single-writer state files
+Write-set disjointness is the correctness guarantee: two agents
+can never be dispatched when their writes overlap, so no
+file-level race is possible regardless of how the sub-agents
+organise their work on disk.
+
+### 2. Single-writer state files
 
 The following files have exactly one writer — the main /loop. No
 sub-agent writes them directly:
@@ -66,7 +57,7 @@ state. This eliminates the write-after-write race that made
 distributed mutable memory systems (mem0-style) so hard to reason
 about.
 
-### 4. Deterministic integration order
+### 3. Deterministic integration order
 
 When N parallel Agents finish a wave, the main loop integrates
 their branches in **task-number order** (lowest NNN first), not
@@ -77,7 +68,7 @@ Rework cycles preserve this: if task 005 needs rework and task 008
 is already integrated, only 005's branch re-dispatches; 008 stays
 integrated. No global rollback on a local failure.
 
-### 5. Structured outputs, constrained non-determinism
+### 4. Structured outputs, constrained non-determinism
 
 LLM outputs are inherently non-deterministic at the token level.
 Specs absorb this by expressing acceptance as a **boolean contract**
@@ -122,10 +113,13 @@ separate dispatcher script:
    - the wave has no `exclusive` task (exclusive = alone)
    - the wave has no `serial` task (serial = alone within its
      wave)
-4. Dispatch every wave member as an `Agent(isolation: "worktree",
-   subagent_type: <persona from tasks.md>)` in a single message
-   (parallel execution). Persona is resolved from the task's
-   `persona:` field (Spec Kit tasks-template.md extension).
+4. Dispatch every wave member as an
+   `Agent(subagent_type: <persona from tasks.md>)` in a single
+   message (parallel execution). Persona is resolved from the
+   task's `persona:` field (Spec Kit tasks-template.md extension).
+   Claude selects the execution-isolation strategy that best fits
+   the current best practices of the harness; the rule does not
+   prescribe it.
 5. Await all — each Agent returns structured JSON.
 6. Integrate in task-number order:
    - Phase 3 adversarial review — **every reviewer across every
@@ -133,9 +127,7 @@ separate dispatcher script:
      (one assistant message, M × K tool calls for M tasks with
      K reviewers each). Sequential reviewer dispatch is a rule
      violation per `.claude/rules/agent-team.md` §"Parallel
-     reviewers are mandatory". Review-only personas have no
-     write scope, so no worktree isolation is needed for the
-     review batch.
+     reviewers are mandatory".
    - Phase 3.5 smoke-check runs against each integrated branch.
    - Phase 4 rework per-task (in parallel across tasks,
      sequential within a task). Re-review after rework is the
@@ -162,8 +154,6 @@ the model.
   but `005` spec says `concurrent with: none`).
 - **Main-loop refuses** to dispatch from a spec without a complete
   Parallelism section (Phase 1 precondition).
-- **Worktree isolation** is enforced by the main loop passing
-  `isolation: "worktree"` on every `Agent()` call in a wave.
 
 ## Known escape hatches (documented, not encouraged)
 
@@ -190,9 +180,8 @@ When the current wave enters Phase 3 (review) and the review
 batch is dispatched, the main /loop MAY dispatch the next wave's
 impl agents speculatively in parallel with the review.
 
-- Speculative worktrees: `/tmp/dm-spec-TNNN` on branch
-  `spec/task/TNNN-<slug>`, pinned to the CURRENT integration tip
-  (post-review tip is not yet known).
+- Speculative branch: `spec/task/TNNN-<slug>`, pinned to the
+  CURRENT integration tip (post-review tip is not yet known).
 - Rollback contract:
   - Current wave verdict = APPROVE / APPROVE_WITH_COMMENTS →
     rebase speculative branches onto post-integration tip; keep.
@@ -201,9 +190,9 @@ impl agents speculatively in parallel with the review.
     re-dispatch after integration.
   - Current wave verdict = BLOCK / ESCALATED → discard
     speculative unconditionally.
-- Speculative impl agents use the SAME persona + write-set +
-  worktree-isolation discipline as non-speculative dispatches.
-  They cannot merge their own branches.
+- Speculative impl agents use the SAME persona + write-set
+  discipline as non-speculative dispatches. They cannot merge
+  their own branches.
 - Every discard appends one line to
   `.session-state/speculation-log.md` with timestamp + task +
   reason + tokens-wasted estimate.
@@ -232,8 +221,9 @@ Opt-out: `DESKMODAL_INTEG_MODE=cherry-pick`. Default:
 ### 3. Write-set-gated impl-count cap (replaces fixed max=3)
 
 The fixed "max 3 impl per wave" was a proxy for write-set
-safety. Worktree isolation already enforces write-set safety
-per-task; the real residual constraint is cost, not correctness.
+safety. The declared file-set mechanism (§1 determinism
+mechanism) enforces write-set safety per-task; the real residual
+constraint is cost, not correctness.
 
 - Compute the wave's cumulative write-set (union across tasks).
 - If tasks' write-sets are pairwise disjoint: dispatch up to
@@ -302,7 +292,6 @@ single-loop (preserves current behaviour exactly).
 - Integration order remains task-number ascending; merge-train
   enforces it atomically.
 - Model-ID pinning unchanged.
-- Worktree isolation invariant (§1) unchanged.
 
 ### Enforcement
 
@@ -339,5 +328,4 @@ structural shift requiring careful rollout.
 Amendments follow the Constitution's Governance section
 (`.specify/memory/constitution.md`). Required reviewers:
 `integration-architect` (primary) + `qa-architect` +
-`security-engineer` (worktree isolation has attack-surface
-implications).
+`security-engineer`.

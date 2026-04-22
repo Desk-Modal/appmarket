@@ -21,7 +21,6 @@ Anthropic-native patterns we're adopting.
 | Required frontmatter | `name`, `description` | Same | ✅ |
 | Tool scoping | `tools:` allowlist + review-only omits `Write/Edit/NotebookEdit` | Same | ✅ |
 | Model pinning | `model: opus` / inherit | Same | ✅ |
-| Worktree isolation | `Agent(isolation: "worktree")` on every parallel dispatch | Officially supported via `isolation: worktree` frontmatter or call arg | ✅ |
 | Parallel dispatch | Multiple `Agent()` calls in ONE assistant message | Documented as the official parallel primitive (no `batch{}` wrapper) | ✅ |
 | Hook events used | `SessionStart`, `PreToolUse`, `PostToolUse`, `Stop` | All canonical | ✅ |
 | Hook matcher syntax | `Grep\|Glob\|Read`, `Bash`, `*`, regex | Canonical — pipe-separated exact or JS regex | ✅ |
@@ -38,8 +37,7 @@ hook or regression test enforcing it.
 | Extension | DeskModal rule | Anthropic posture | Why we extend |
 |---|---|---|---|
 | **Mandatory parallel reviewers** | `.claude/rules/agent-team.md` §"Parallel reviewers are mandatory" | Recommended but optional | Sequential reviewer dispatch was the #1 quality slow-down; mandate + audit via Phase-3 single-message contract |
-| **Worktree isolation always-on for parallel dispatch** | `.claude/rules/parallelism.md` §1 | Opt-in per dispatch | Eliminates silent working-tree races; deterministic by construction |
-| **Declared read/write sets per task** | `.claude/rules/parallelism.md` §2 (Parallelism section in every spec) | Not documented | Lets the scheduler greedily parallelise without human triage |
+| **Declared read/write sets per task** | `.claude/rules/parallelism.md` §1 (Parallelism section in every spec) | Not documented | Lets the scheduler greedily parallelise without human triage |
 | **Single-writer state files** | `.claude/rules/parallelism.md` §3 (`.session-state/handoff.md`, `.prod-check/*`, `specs/compat-ladder.yml`, `specs/tasks/queue/done/`) | Not documented | Sub-agents return structured JSON; main loop merges — no write-after-write race |
 | **Deterministic integration order** | `.claude/rules/parallelism.md` §4 (task-number ascending merge-train) | Not documented | Same input → same history byte-identically; critical for team reproducibility |
 | **`review_angles` / `impl_angles` frontmatter** | `.claude/rules/agent-team.md` §"Granular reviewer decomposition" / `.claude/rules/parallelism.md` §4 | Anthropic describes angle-dispatch as runtime, not frontmatter | Declaring angles in frontmatter lets the scheduler pre-plan fan-out; Anthropic's runtime pattern is equivalent for cost, but our spec-driven workflow prefers static declarations |

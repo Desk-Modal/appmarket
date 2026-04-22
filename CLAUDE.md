@@ -4,14 +4,15 @@
 
 | Concern | Location |
 |---|---|
-| Canonical rules | `.claude/rules/*.md` — context-discipline, code-discovery, honesty, agent-team, naming, production-code, verification, **parallelism** |
-| Agent personas | `.claude/agents/*.md` (24 native Claude Code subagents — 23 domain personas + orchestrator; see `.claude/rules/agent-team.md`) |
-| Spec Kit templates | `.specify/templates/`, `.specify/memory/`, `.specify/scripts/` — consumed by the `speckit-*` skills |
-| Task workflow | `./scripts/task-new.sh <slug> "<title>"` — creates issue + branch + `specs/tasks/<N>/{spec,handoff}.md` |
-| Team-shared memory | **Git-native** — `.specify/memory/constitution.md` (invariants), `specs/adrs/` + `specs/ADR-*.md` (decisions), `MEMORY.md`-style indexes in project roots. No MCP or docker stack — every teammate gets the same memory on `git pull`. CBM (`codebase-memory-mcp`) handles code-structural knowledge; git handles decision memory. |
-| Cross-repo sync | `./scripts/sync-specs.sh` — root is canonical; rsync mirrors a whitelist into each sub-repo |
-| Session handoff | `.session-state/handoff.md` — SessionStart hook surfaces it; `scripts/prod-check.sh` auto-writes it on FAIL (single writer — dispatcher, never per-domain subshell) |
-| Gate runner | `scripts/prod-check.sh <domain> [--fast\|--only <gate>\|--all]` — per-domain modules at `specs/prod-check-gates/<domain>.sh`; writes `.prod-check/<domain>/status.json` and `.prod-check/workspace.json`. Legacy `.claude/scripts/optiscript-prod-check.sh` is a back-compat wrapper. |
+| Canonical rules | `.claude/rules/core.md` (authoritative — honesty/verification/parallelism/naming/production/reviewer-matrix/handoff), `.claude/rules/agents.md` (dispatch + pod patterns), `.claude/rules/parallel-sessions.md` (multi-session isolation). Historical rules preserved under `.claude/rules/_deprecated-2026-04-23/`. |
+| Agent personas | `.claude/agents/*.md` — slim persona files: frontmatter (`name`, `description`, `tools`, `model`) + ≤15-line body. Model tiering: Opus for orchestration + adversarial review + critical impl; Sonnet 4.6 for most impl; Haiku 4.5 for `style-bot` trivial sweeps. |
+| Spec Kit templates | `.specify/templates/`, `.specify/memory/`, `.specify/scripts/` — consumed by `speckit-*` skills. Use only for wave-level / multi-persona features; single-row work bypasses Spec Kit. |
+| Task workflow | `./scripts/task-new.sh <slug> "<title>"` (when using Spec Kit). Session branches: `sess/<topic>-<YYYY-MM-DD-HHMM>` or `feat/<NNN>-<topic>`. |
+| Team-shared memory | Git-native — `.specify/memory/constitution.md` (invariants), `specs/adrs/`, `MEMORY.md` indexes. CBM (`codebase-memory-mcp`) handles code-structural knowledge. |
+| Cross-repo sync | `scripts/_deprecated-2026-04-23/sync-specs.sh` — on-demand only, NOT gated by pre-commit. Parallel-session discipline per `.claude/rules/parallel-sessions.md`. |
+| Session handoff | `.session-state/handoffs/<feature-id>.md` (per-feature) or `.session-state/handoff.md` (workspace default). Commit-driven — post-commit hook appends one entry per commit. |
+| Gate runner | `scripts/prod-check.sh` + `scripts/local-ci.sh --fast|--full`. `scripts/launch.sh --verify` for GUI (single-instance via `/tmp/deskmodal-launch.lock`). |
+| Pod atomic merge | `scripts/pod-apply.sh` — applies N persona patches atomically with write-set disjointness check + integrated-state verification. Personas return patches; main loop commits. |
 
 ## Structure
 All paths are relative to this repo root. Works identically on macOS and Windows.
@@ -86,7 +87,7 @@ All 23 domain personas + orchestrator live as native subagent definitions at `.c
 | Full CI | `./scripts/local-ci.sh --full --sign` | Before push |
 | Build + launch | `./scripts/launch.sh --fast-build` | Development |
 | Full build + launch | `./scripts/launch.sh --build` | Testing |
-| GUI regression | `scripts/prod-check.sh gui` | GUI/visual/interaction changes (Playwright) |
+| Validate apps | `python scripts/cdp-test-runner.py` | After launch |
 
 **RULE: CI must pass before ANY deploy or launch.** The launch script enforces this — use `--build` or `--fast-build` to run CI + build + launch as one pipeline. Never launch from `target/` directly.
 
@@ -266,8 +267,6 @@ See `.claude/rules/code-discovery.md` for the full tool reference.
   canonical pipeline — don't invoke cargo/pnpm/npm/npx directly.
 - **Launch with signed plugins** — GUI / FDC3 / plugin / dist changes
   are only verified by `scripts/launch.sh --verify` (runs `local-ci
-  --full --sign`, which includes `build-dist --release --sign`).
-  Runtime behaviour assertions live in the Rust + TS test suites
-  exercised by `local-ci`, plus Playwright GUI specs under
-  `tests/gui/` (invoked via `scripts/prod-check.sh gui`). `target/`
-  output is not the runtime; the signed `dist/` is.
+  --full --sign`, then `build-dist --release --sign`, then CDP
+  assertion suite). `target/` output is not the runtime; the signed
+  `dist/` is.

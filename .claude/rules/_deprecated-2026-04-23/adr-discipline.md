@@ -34,7 +34,6 @@ Paths **exempt** from drift detection (touching only these never
 triggers a warning):
 
 - `dist/**`, `target/**`, `node_modules/**`, `**/*.lock`
-- `_worktrees/**` (transient parallel-dispatch workspaces)
 - `tests/fixtures/**`, `fixtures/**`
 - Pure documentation: `README.md`, `CHANGELOG.md`, `docs/**/*.md`
   (these MAY still warrant an ADR update; but the check does not

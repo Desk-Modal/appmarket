@@ -45,7 +45,7 @@ pointing to `.claude/rules/context-discipline.md`. Key invariants:
 | Financial logic | `trading-sme` *(CONDITIONAL reviewer — see §"Conditional reviewer matrix")* |
 | Chart engine | `charting-expert` |
 | Security / supply-chain / ACL | `security-engineer` |
-| Testing / QA | `qa-architect` |
+| Testing / QA / CDP | `qa-architect` |
 | FDC3 / channels / bridge | `fdc3-protocol-engineer` |
 | Data / exchanges / feeds | `data-pipeline-engineer` |
 | Build / dist / CI | `build-deploy-engineer` |
@@ -156,8 +156,10 @@ decompose into more agents.
 
 When a task spans multiple domains (e.g., Rust backend + React
 frontend + security review). Dispatch ONE impl agent per domain
-in a single parallel batch, each pinned to its own worktree.
-Write-sets audited via `scripts/audit-wave-write-sets.sh`.
+in a single parallel batch. Write-sets are declared per task and
+audited via `scripts/audit-wave-write-sets.sh`; Claude selects
+the per-dispatch execution-isolation strategy that best fits
+current harness practice.
 Example: `drag-preview pod = [frontend-architect,
 rust-systems-architect]` with write-set partition (TSX vs Rust).
 
@@ -232,8 +234,7 @@ Consequences:
 - If a wave has M tasks and each task has K reviewers, Phase 3
   emits one message with `M × K` parallel `Agent` calls.
 - Reviewers run on review-only personas (tool scope forbids
-  mutation) so parallel dispatch has no write-set race; no
-  worktree isolation is required for review passes.
+  mutation) so parallel dispatch has no write-set race.
 - Rework Phase 4 re-runs the **same parallel batch** after the
   impl rework commits land — no sequential reviewer re-check.
 
@@ -253,22 +254,18 @@ Enforcement:
 - Task-spec reviewer lists with one entry still dispatch as a
   single-item parallel batch (format consistency).
 
-## GUI verification (non-negotiable for GUI)
+## CDP verification (non-negotiable for GUI)
 
-- Every GUI change requires before/after Playwright screenshots
-  under `tests/gui/` (cross-platform; macOS-compatible). See
-  `scripts/prod-check.sh gui` for the runner.
-- CDP was removed 2026-04-21 — the
-  `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` env is Windows-only and
-  macOS WKWebView doesn't expose a Chrome DevTools port.
-  Playwright's vendored Chromium is the cross-platform replacement.
+- Every GUI change requires CDP before/after screenshots.
+- Run `python scripts/cdp-test-runner.py` after `scripts/launch.sh --verify`.
+- Assertion configs in `scripts/cdp-assertions/*.json`.
 - Delete temporary screenshots after review.
 
 ## Quality gates (must pass before commit)
 
 - `scripts/local-ci.sh --fast` — fmt + clippy + typecheck + hook tests + prod-check --fast
 - Zero BLOCKING / HIGH findings from adversarial review
-- Playwright GUI specs pass for GUI changes (`scripts/prod-check.sh gui` when the change touches visuals/interaction)
+- CDP verification passes for GUI changes
 - Constitution + compat-ladder clean (`.specify/memory/constitution.md`; `specs/compat-ladder.yml`)
 
 ## Amendment

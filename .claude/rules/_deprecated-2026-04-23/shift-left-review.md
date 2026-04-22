@@ -2,7 +2,7 @@
 
 **Cardinal rule:** review runs BEFORE implementation, not after. Every
 task dispatches reviewers at spec-time (Phase 1.5) so blocking
-concerns surface while pivoting is cheap, not after a worktree full
+concerns surface while pivoting is cheap, not after a branch full
 of commits is waiting for merge.
 
 This rule expands the main /loop's phased lifecycle with two new
@@ -161,7 +161,7 @@ architectural — lighter-weight than the full Phase 3 batch.
 Same parallel-dispatch invariant as Phase 1.5 and Phase 3 — all
 reviewers in ONE message. Impl persona submits:
 
-- The current branch's SHA + worktree path.
+- The current branch's SHA.
 - A short "what's been scaffolded" summary.
 - A pointer to the structural outline (module graph, interface
   definitions, or key data-flow lines).

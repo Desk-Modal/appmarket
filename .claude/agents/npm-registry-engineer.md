@@ -2,7 +2,7 @@
 name: npm-registry-engineer
 description: Use for @deskmodal/plugins npm scope, package.json schema, npm publish workflows, provenance attestations, .npmrc, and GitHub Actions npm publish --provenance pipelines.
 tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__codebase-memory-mcp__search_graph, mcp__codebase-memory-mcp__trace_path, mcp__codebase-memory-mcp__get_code_snippet, mcp__codebase-memory-mcp__detect_changes, mcp__codebase-memory-mcp__get_architecture, mcp__codebase-memory-mcp__query_graph, mcp__codebase-memory-mcp__search_code, mcp__codebase-memory-mcp__manage_adr, mcp__codebase-memory-mcp__index_status, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
-model: opus
+model: claude-sonnet-4-6
 color: yellow
 permissionMode: acceptEdits
 impl_angles: [scope-ownership, publish-flow, provenance-attestation, npmrc-config, ci-pipeline]

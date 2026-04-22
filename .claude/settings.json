@@ -9,6 +9,7 @@
       "Bash(cargo clippy:*)",
       "Bash(cargo run:*)",
       "Bash(cargo tree:*)",
+      "Bash(cargo bench:*)",
       "Bash(pnpm install:*)",
       "Bash(pnpm nx:*)",
       "Bash(pnpm test:*)",
@@ -25,12 +26,36 @@
       "Bash(git rev-parse:*)",
       "Bash(git remote:*)",
       "Bash(git stash list:*)",
+      "Bash(git stash push:*)",
+      "Bash(git stash pop:*)",
+      "Bash(git mv:*)",
       "Bash(scripts/local-ci.sh:*)",
       "Bash(scripts/build-dist.sh:*)",
       "Bash(scripts/launch.sh:*)",
+      "Bash(scripts/prod-check.sh:*)",
+      "Bash(scripts/pod-apply.sh:*)",
       "Bash(./scripts/*:*)",
       "Bash(./tools/*:*)",
-      "Bash(mise:*)"
+      "Bash(.claude/scripts/*:*)",
+      "Bash(mise:*)",
+      "Bash(dmpkg:*)",
+      "Bash(python scripts/cdp-test-runner.py:*)",
+      "Bash(python scripts/*.py:*)",
+      "Bash(python3 scripts/*.py:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh run watch:*)",
+      "Bash(gh workflow list:*)",
+      "Bash(gh workflow view:*)",
+      "Bash(gh auth status:*)",
+      "Bash(gh api repos/*)"
     ],
     "ask": [
       "Bash(git push:*)",
@@ -71,40 +96,6 @@
     "RUSTFLAGS": "-C debuginfo=line-tables-only"
   },
   "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup|resume|clear",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/drift-check.sh\""
-          },
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/cbm-session-reminder.sh\""
-          },
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/cbm-update-latest.sh\""
-          },
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-handoff-load.sh\""
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Grep|Glob|Read",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/cbm-code-discovery-gate.sh\""
-          }
-        ]
-      }
-    ],
     "PostToolUse": [
       {
         "matcher": "Bash",
@@ -112,32 +103,6 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/post-commit-handoff.sh\""
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/handoff-nudge.sh\""
-          },
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/push-nudge.sh\""
-          }
-        ]
-      }
-    ],
-    "SubagentStop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/subagent-stop.sh\""
           }
         ]
       }

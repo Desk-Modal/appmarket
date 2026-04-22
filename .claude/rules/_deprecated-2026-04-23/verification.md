@@ -15,7 +15,7 @@ entrypoints:
 | `scripts/local-ci.sh --fast` | Per-commit sanity: fmt + clippy + typecheck + hook tests + prod-check --fast. ~2 min. |
 | `scripts/local-ci.sh --full` | Pre-push Rust-centric: adds cargo test + release check + lock audit + Rust-side integration tests. ~10 min. |
 | `scripts/local-ci.sh --full --sign` | Adds dmpkg sign round-trip. Required any time the change touches a signed plugin or the SDK signing path. |
-| `scripts/launch.sh --verify` | **End-gate**: runs `local-ci --full --sign` (which includes `build-dist --release --sign`), then exits 0. The signed `dist/` is the shipping artefact. No launch, no CDP — runtime behaviour is asserted by the Rust + TS test suites exercised inside `local-ci`. |
+| `scripts/launch.sh --verify` | **End-to-end truth**: runs `local-ci --full --sign`, then `build-dist --release --sign`, then launches DeskModal with CDP, then runs the CDP assertion suite. The **only** acceptable verification for GUI / FDC3 / plugin / dist changes. |
 | `scripts/build-dist.sh --sign` | Explicit artefact build. Invoked by the two above; call directly only when you need the signed dist without launching. |
 | `.claude/scripts/optiscript-prod-check.sh` (→ `scripts/prod-check.sh` after task 005) | Gate runner. Invoked by `local-ci.sh` and `launch.sh --verify`. |
 
@@ -33,14 +33,10 @@ do not satisfy any Acceptance clause in any task spec.
   looking for `config/desk.toml`; `target/` doesn't have that
   marker. Launching from `target/` runs a fundamentally different
   code path than what teammates and users run.
-- **Runtime behaviour lives in the test suites.** Rust `cargo test`
-  (incl. integration tests that spin up a real `Tauri::Builder`) plus
-  TS `vitest` / `@playwright/test` assertions are the runtime truth.
-  They run inside `local-ci --full`. CDP was removed 2026-04-21 — it
-  was never reachable on macOS WKWebView and introduced a
-  cross-platform-infeasible gate. Apps/FDC3/price-flow assertions now
-  live in Rust integration tests + Playwright GUI specs under
-  `tests/gui/`.
+- **CDP verification closes the loop.** CLI/build success is not
+  user-facing success. `launch.sh --verify` launches DeskModal and
+  asserts apps render, FDC3 channels publish, prices flow end-to-end.
+  No other path does this.
 - **CI/CD parity.** The `.github/workflows/prod-check.yml` matrix job
   runs `scripts/setup.sh --ci` + `.claude/scripts/optiscript-prod-check.sh`.
   Local verification must hit the same gates or local-green → remote-red
