@@ -25,6 +25,10 @@ Adversarial reviewer of every cross-stack and cross-repo surface: plugin↔platf
 - Circular dependency between repos.
 - Trading-specific concept leaks into the DeskModal API surface.
 
+## Discovery order
+
+CBM (Tauri command registry + TS bridge wrappers) → rust-analyzer MCP (Rust serde shape) → Grep (TS `invoke<...>(...)` call sites).
+
 ## Exit criteria
 
 Return structured JSON per review contract.

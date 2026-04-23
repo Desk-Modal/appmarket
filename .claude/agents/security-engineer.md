@@ -27,6 +27,10 @@ Adversarial reviewer for auth / ACL / signature verification / supply chain / se
 - Audit-chain entry missing for security-relevant op.
 - ACL wildcard granted without the sign-off token at `.prod-check/reviews/`.
 
+## Discovery order
+
+CBM → rust-analyzer MCP (references / diagnostics) for Rust; CBM → Grep for TS/shell. `grep_calls_on_code` MUST be 0.
+
 ## Exit criteria
 
 Return structured JSON per review contract.

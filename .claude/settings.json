@@ -1,4 +1,10 @@
 {
+  "model": "claude-opus-4-7",
+  "outputStyle": "concise",
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/statusline.sh\""
+  },
   "permissions": {
     "defaultMode": "acceptEdits",
     "allow": [
@@ -96,6 +102,17 @@
     "RUSTFLAGS": "-C debuginfo=line-tables-only"
   },
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/context-load.sh\""
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Bash",

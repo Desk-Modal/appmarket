@@ -22,11 +22,19 @@ Raw `cargo build|test|check|run` and `pnpm nx build|test` are dev iteration, not
 
 **`rc ≠ 0` is never APPROVE.** No "failures outside my write-set" rationalisation. Either the failures were pre-existing on `origin/main` with identical signatures (cite the SHA of the passing baseline) or rc=0 is required.
 
-## 3. CBM-first code discovery
+## 3. Discovery order — MCP first, always
 
-For `.rs`, `.ts`, `.tsx`, `.py`: use `mcp__codebase-memory-mcp__search_graph` / `trace_path` / `get_code_snippet` before `Grep` / `Read`. Fall back to Grep/Read only when the graph returns nothing useful.
+Strict priority for code (`.rs`, `.ts`, `.tsx`, `.py`):
+
+1. **`mcp__codebase-memory-mcp__*`** — graph-indexed, ranked, file:line precise. First stop for every symbol lookup, call chain, impact analysis.
+2. **`mcp__rust-analyzer__*`** — for Rust only. Symbol references, hover, diagnostics, rename prep.
+3. **`mcp__playwright__browser_*`** — for visual / CDP / DOM verification. Replaces ad-hoc screenshot scripts.
+4. **`mcp__github__*`** — for PR / issue / run / workflow queries. Faster than shelling to `gh`.
+5. **Grep / Read** — fallback only when the MCPs return nothing useful.
 
 Non-code (markdown, TOML, YAML, JSON, shell): Grep/Read directly.
+
+Using Grep on a `.rs` file before querying CBM + rust-analyzer is a hallucination vector — the MCPs have context Grep doesn't.
 
 ## 4. Parallelism — minimal contract
 
@@ -117,3 +125,29 @@ Stop when: the task converges, the user says stop, or a blocker requires human i
 - No deleting branches, files, or data without confirming the state is recoverable.
 - No invoking `sync-specs.sh --apply` while another session is actively editing sub-repo canonical files — canonical file ownership is split, see `.claude/rules/parallel-sessions.md`.
 - One terminal + one cloud + one `/launch --verify` in flight at a time per machine (launch-lockfile at `/tmp/deskmodal-launch.lock`).
+
+## 13. Autonomy protocol
+
+Goal: user never re-pastes prompts or re-explains context. State lives in git + `.session-state/`.
+
+On session start, the `context-load` SessionStart hook prints: active feature, branch + ahead/behind, gate state, latest handoff entry. Read that before asking the user anything.
+
+When resuming a task:
+1. Read `.session-state/handoff.md` (workspace) or `.session-state/handoffs/<feature>.md` (per-feature). Skip any hypothesis in the "Dead-ends" section.
+2. Read the active feature's `spec.md` + `benchmark.md` (if applicable).
+3. Re-verify live state — gates, branch, dirty files — don't trust the handoff as ground truth. Handoff is a SNAPSHOT; the gate file is LIVE.
+4. Continue. Do not ask the user to re-state the goal unless you have hit a BLOCK.
+
+Between sessions:
+- A commit is the durable checkpoint. Post-commit hook appends to the handoff automatically.
+- `.session-state/active-feature` (optional) holds one feature-id string; the statusline surfaces it.
+- Never claim "I don't have context" — write a handoff and continue.
+
+## 14. Output style
+
+Claude Code default output style for this workspace is `concise`. Prefer:
+- Short, dense sentences. Commands over descriptions.
+- State changes and decisions directly. Cite file:line, exit codes, SHAs.
+- No teaching tone. No motivational framing. No "let me explain."
+- End-of-turn summary = 1-2 sentences MAX. What changed + what's next.
+- Working update = 1 sentence per key moment (finding, direction change, blocker).

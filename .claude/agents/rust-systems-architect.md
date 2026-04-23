@@ -26,6 +26,10 @@ All Rust in `platform/` — crates, Tauri app backend, tile/window-manager, IPC 
 - Platform-specific code behind `#[cfg]` + trait abstraction.
 - Logging via `tracing` only.
 
+## Discovery order
+
+CBM → rust-analyzer MCP (symbol / references / diagnostics) → Grep/Read. Never skip CBM or rust-analyzer for Rust symbol work.
+
 ## Exit criteria
 
 `scripts/local-ci.sh --full` exit 0. Bench targets hit when touched. Return patch + verification output per `.claude/rules/agents.md` return contract.

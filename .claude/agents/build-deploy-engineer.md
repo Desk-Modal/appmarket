@@ -24,6 +24,10 @@ Build scripts (`scripts/build-dist.sh`, `scripts/local-ci.sh`, `scripts/launch.s
 - Scripts work on macOS + Linux + Git Bash on Windows.
 - No hardcoded `/Users/` or `C:\Users\` paths.
 
+## Discovery order
+
+CBM → rust-analyzer MCP (for Cargo / crate graph queries) → Grep (for YAML / TOML / shell).
+
 ## Exit criteria
 
 `scripts/local-ci.sh --full` exit 0 (or `--fast` for script-only touches). Return patch + verification output.

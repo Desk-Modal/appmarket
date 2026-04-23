@@ -24,6 +24,10 @@ Exchange adapters, WebSocket reconnection (exponential backoff + jitter), order-
 - DQS computed over rolling window; stale-price detection with configurable threshold.
 - Web Worker message schema validated at boundary; no `any`.
 
+## Discovery order
+
+CBM → rust-analyzer MCP (adapter trait impls, channel types) → Grep/Read.
+
 ## Exit criteria
 
 `scripts/local-ci.sh --fast` exit 0 + relevant unit tests pass. Return patch + verification output.
