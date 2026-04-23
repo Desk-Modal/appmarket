@@ -20,17 +20,19 @@ Impl personas that show REWORK > 1 per 5 iterations get promoted to Opus. Adjust
 
 ## Dispatch patterns
 
-**Default is Direct (single impl agent per wave).** Opus 4.7 with 1M context owns cross-stack work end-to-end; contract-edge violations become impossible; token cost ~50% vs multi-agent pods. Use Direct unless a strict criterion below fires.
+Claude Code's native sub-agent system is the dispatch mechanism (`Agent` tool). This section is workflow POLICY for when to use it.
 
-| Pattern | When (strict criteria) | How |
+**Default is single-agent per wave.** Opus 4.7 1M-ctx owns cross-stack work end-to-end; contract-edge violations impossible; token cost ~50% vs multi-agent.
+
+| Pattern | When | How |
 |---|---|---|
-| **Direct** (default) | Any wave with zero contract-edge conflicts internally — single agent owns Rust + TS + CSS if needed | Single `Agent` call; agent edits in-place; returns unified diff via JSON |
-| **Pod** (rare) | Write-sets are proven-disjoint AND no symbol produced by one member is consumed by another. In practice: style-bot CSS sweep, perf benches, independent docs | ≤3 parallel `Agent` calls in one message; each returns a patch; `scripts/pod-apply.sh` atomic-merges |
-| **Pipeline** (contract-edge present) | Persona A's output is persona B's input (e.g. Rust command → TS bridge → React caller) | Sequential single-agent dispatches; commit between each step |
-| **Angle-swarm** (review only) | Single reviewer persona, multiple orthogonal lenses | Up to 5 parallel of same persona; each prompt narrows to one angle |
-| **Adversarial pod** (review, mandatory every wave) | Every declared reviewer for the wave | All in ONE parallel `Agent` batch per core.md §7 |
+| **Single-agent** (default) | Any wave — one agent owns Rust + TS + CSS end-to-end | One `Agent` call; agent edits in-place; returns unified diff via JSON |
+| **Sequenced single-agent** | Rare — if a commit must land before the next step can proceed (e.g. serde shape change that forces downstream TS regen) | Sequential `Agent` calls with a commit between |
+| **Pod** (rare exception) | Proven-disjoint write-sets AND zero contract edges between members (style-bot CSS sweep, perf bench wave, independent docs) | Parallel `Agent` batch; `scripts/pod-apply.sh` atomic-merges all patches or rolls back |
+| **Angle-swarm** (review only) | One reviewer persona, multiple lenses | Parallel dispatch of same persona with angle-specialised prompts |
+| **Adversarial review** (mandatory every wave) | All declared reviewers for the wave | ONE parallel `Agent` batch per core.md §7 |
 
-Reviewers are always parallel (read-only, no race risk). Impl is single-agent by default.
+Reviewers always parallel (read-only, no race risk). Impl single-agent by default.
 
 Each prompt ≤ 15 concrete objectives. Past that: decompose the wave, not the agent.
 

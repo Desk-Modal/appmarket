@@ -1,0 +1,37 @@
+# Memory Index
+
+- [project_status.md](project_status.md) — Phases 0-12 complete, 13-20 planned with full specs, ready for implementation
+- [user_role.md](user_role.md) — Product owner, expects autonomous work, no verbose updates, full SDLC ownership
+- [feedback_code_quality.md](feedback_code_quality.md) — Production-grade code only, no demos/placeholders/workarounds ever
+- [feedback_framework.md](feedback_framework.md) — React 19 (not SolidJS), FDC3-only (no standalone), evolve Desk if needed
+- [feedback_engineering.md](feedback_engineering.md) — No versioned interfaces, no redundant files, refactor not duplicate, always integrated
+- [knowledge_system.md](knowledge_system.md) — How the knowledge management system works across sessions and agents
+- [feedback_terse_updates.md](feedback_terse_updates.md) — No verbose status updates, only important updates requiring action
+- [phase0_progress.md](phase0_progress.md) — All phase completion states: 0-10 and 12 complete, 11 deferred, 13-20 pending
+- [phase0_patterns.md](phase0_patterns.md) — Reference patterns from Phase 0: style injection, test/story format, barrel exports, token architecture
+- [feedback_speed.md](feedback_speed.md) — Parallel agents preferred, maximize throughput
+- [project_desk_rename.md](project_desk_rename.md) — FDC3 desktop agent renamed from "Desk" to "DeskModal"
+- [reference_deskmodal.md](reference_deskmodal.md) — DeskModal repo at D:\celer\desk, cross-session coordination via ~/.claude/coordination/
+- [reference_deskmodal_plugin_dev.md](reference_deskmodal_plugin_dev.md) — DeskModal plugin dev guide: build/deploy/debug, ~/.deskmodal/plugins/ path, HTML requirements, FDC3 injection, manifest format
+- [feedback_gui_testing.md](feedback_gui_testing.md) — GUI testing must deploy plugin to DeskModal and test inside it, not standalone dev servers
+- [feedback_deskmodal_scope.md](feedback_deskmodal_scope.md) — DeskModal is general-purpose, never bake trading/financial knowledge into it
+- [process_recursive_review.md](process_recursive_review.md) — Multi-wave team process: build → deploy → E2E test → audit → fix → recurse until zero issues
+- [findings_wave1.md](findings_wave1.md) — Wave 1 findings: build EPERM, 18 manifest/deployment gaps across 3 severity levels
+- [feedback_no_workarounds.md](feedback_no_workarounds.md) — Never workaround, always fix root causes, 100% deterministic builds
+- [feedback_expert_agents.md](feedback_expert_agents.md) — Use domain-expert agent profiles, commit at stable evolution points
+- [findings_wave2_apps.md](findings_wave2_apps.md) — Wave 2: 2 critical, 10 high, 26 medium findings across 8 apps
+- [findings_wave2_packages.md](findings_wave2_packages.md) — Wave 2: 2 critical, 9 high, 18 medium findings across 7 packages
+- [findings_a6_trading_expert.md](findings_a6_trading_expert.md) — Pro trader review: 8 P0, 15 P1, 15 P2 feature gaps for future phases (order entry, multi-chart, positions, alerts)
+- [feedback_bundle_packaging.md](feedback_bundle_packaging.md) — Always build and deploy price-feed service binary with the tradesurface plugin bundle
+- [feedback_inprocess_services.md](feedback_inprocess_services.md) — Services should run within DeskModal process, not as separate binaries, for easier deployment
+- [reference_agent_team.md](reference_agent_team.md) — 9 agent personas, 11 skills, 30 anti-patterns, quality gates defined in specs/AGENT-TEAM-DESIGN.md
+- [persona_completeness_auditor.md](persona_completeness_auditor.md) — Gate-keeper persona that blocks forward progress until gaps are resolved
+- [findings_service_sdk_audit.md](findings_service_sdk_audit.md) — 5-persona audit of Service SDK: 12 P0, 14 P1, 11 P2, 8 P3 gaps. Gap register at specs/SERVICE-SDK-GAP-REGISTER.md
+- [issues_build_infra.md](issues_build_infra.md) — 4 pre-existing build/test failures: Vitest heap OOM, tinypool worker crash, DeskModal test API drift, clippy warnings
+- [marketplace_phase_status.md](marketplace_phase_status.md) — Marketplace MP-1→MP-11 tracker, code moved to D:\celer\desk, Rust crate enhancements in progress
+- [ci_architecture.md](ci_architecture.md) — CI across 7 repos: canonical doc at D:\celer\desk\docs\ci-architecture.md, composite protoc action, rust-cache hashFiles, advisory exception process, what was already fixed
+- [ci_remotes.md](ci_remotes.md) — GitHub org is deskmodaldev; susspectsoftware-dev is deprecated; deskmodal + tradesurface `origin` is stale, upstream tracking fixed to deskmodaldev
+- [feedback_bot_identity_naming.md](feedback_bot_identity_naming.md) — Bot/app/machine-user identities must live under the deskmodal-* namespace, never reference claude or any assistant brand
+- [project_icon_system.md](project_icon_system.md) — Two-tier icon architecture: colored market variants + glass translucent toolbar variants, design spec + end-to-end plumbing
+- [feedback_no_git_push.md](feedback_no_git_push.md) — HARD GUARDRAIL: no git push, no gh workflow run, no release creation — remote pushes cost real CI money, stay local-only until product owner unblocks
+- [feedback_sdk_only_access.md](feedback_sdk_only_access.md) — Services MUST interact with DeskModal ONLY via ServiceSDK, expand SDK if capabilities missing

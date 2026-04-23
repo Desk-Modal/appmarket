@@ -2,13 +2,26 @@
 
 **SessionStart hook `context-load.sh` surfaces active feature, branch, gate state, and current handoff. Read that before asking the user anything. See `.claude/rules/core.md` §13 (Autonomy protocol).**
 
+## What's native vs augmentation
+
+Claude Code (April 2026) provides natively: `Agent` tool for sub-agents, hook events (SessionStart/PreToolUse/PostToolUse/Stop/SubagentStop), plugin marketplaces, MCP servers, auto memory, CLAUDE.md, custom skills, `/loop` and `/schedule` scheduling primitives, routines, native `/review` and `/security-review`.
+
+**We augment with:**
+- Workflow policy (`.claude/rules/*.md`) — when to dispatch, reviewer matrix, wave discipline
+- Personas (`.claude/agents/*.md`) — domain-scoped system prompts with tool scoping
+- Atomic multi-agent integration (`scripts/pod-apply.sh` + `scripts/wave-sandbox.sh`) — prevents partial-landing failure modes native doesn't address
+- Domain pipeline (`scripts/local-ci.sh`, `scripts/launch.sh`, `scripts/build-dist.sh`) — DeskModal Cargo/Nx/signed-dist specifics
+- Feature-scoped handoffs (`.session-state/handoffs/<feature>.md`) — execution state, distinct from native auto-memory's learnings
+
+**We do NOT replicate:** scheduling (use `/schedule` + `/loop`), orchestration primitive (use native `Agent` tool; maestro is workflow policy), code review skill (use native `/review`).
+
 ## Rules (authoritative)
 
-- `.claude/rules/core.md` — honesty, verification path, discovery order (MCP-first), parallelism, production-code, naming, reviewer matrix, handoff, autonomy, output style.
-- `.claude/rules/agents.md` — persona dispatch, pod patterns, return contract.
+- `.claude/rules/core.md` — honesty, verification path, discovery order (MCP-first), parallelism (single-agent default), production-code, naming, reviewer matrix, handoff, autonomy, output style, wave discipline.
+- `.claude/rules/agents.md` — dispatch patterns (workflow policy on native `Agent`), return contract.
 - `.claude/rules/parallel-sessions.md` — multi-session isolation (`CLAUDE_PROJECT_DIR`, branch discipline, canonical-file ownership, launch-lockfile).
 
-Legacy 12 rule files preserved under `.claude/rules/_deprecated-2026-04-23/` for reference.
+Legacy 12 rule files + 8 redundant skills preserved under `_deprecated-2026-04-23/` for reference.
 
 ## Structure
 
