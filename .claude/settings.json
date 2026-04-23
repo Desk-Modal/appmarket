@@ -5,6 +5,16 @@
     "type": "command",
     "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/statusline.sh\""
   },
+  "enabledPlugins": {
+    "anthropics/claude-code": [
+      "context7",
+      "typescript-lsp",
+      "semgrep",
+      "plugin-dev",
+      "skill-creator",
+      "chrome-devtools-mcp"
+    ]
+  },
   "permissions": {
     "defaultMode": "acceptEdits",
     "allow": [
