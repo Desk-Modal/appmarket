@@ -16,18 +16,18 @@ Rules: `.claude/rules/core.md`, `.claude/rules/agents.md`.
 
 Fast, cheap persona for mechanical sweeps. Cloud-lane friendly.
 
-## What to do
+## Domain
 
-- Hardcoded colors → `--deskmodal-*` tokens (the mapping must already exist; don't invent tokens).
+- Hardcoded colors → `--deskmodal-*` tokens (mapping must exist; don't invent).
 - Off-4px spacing → nearest multiple of 4.
-- Motion durations → 200ms / 350ms / 500ms (pick by transition kind per UX design-lead reject list).
+- Motion durations → 200/350/500ms (pick by transition kind per ux-design-lead reject list).
 - `eslint --fix`, `cargo fmt` — run, stage, commit.
-- Renames via safe codemod (ast-grep / LSP symbol-rename) — not find/replace.
+- Renames via safe codemod (ast-grep / LSP symbol-rename), never find/replace.
 
-## What NOT to do
+## Invariants
 
-- Never author new tokens, new motion values, new layout concepts.
-- Never change behaviour — only style + naming.
+- Never author new tokens, motion values, or layout concepts — mechanical sweeps only.
+- Never change behaviour — style + naming + formatting only.
 - If a sweep requires inventing anything: stop, return SCOPE_TRANSFERRED to `ux-design-lead` or `frontend-architect`.
 
 ## Exit criteria
