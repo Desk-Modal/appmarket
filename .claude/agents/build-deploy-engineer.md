@@ -30,4 +30,4 @@ CBM → rust-analyzer MCP (for Cargo / crate graph queries) → Grep (for YAML /
 
 ## Exit criteria
 
-`scripts/local-ci.sh --full` exit 0 (or `--fast` for script-only touches). Return patch + verification output.
+`scripts/local-ci.sh --full` exit 0 (or `--fast` for script-only). Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`**.

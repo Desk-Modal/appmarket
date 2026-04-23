@@ -27,4 +27,4 @@ React 19 components, Jotai/Zustand state, Canvas 2D/WebGL rendering, DeskModal a
 
 ## Exit criteria
 
-`scripts/local-ci.sh --fast` exit 0. Return patch + verification output.
+`scripts/local-ci.sh --fast` exit 0. Return JSON per `.claude/rules/agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Do NOT `git commit` or `git push`** — orchestrator integrates via `scripts/pod-apply.sh` or `git apply`.

@@ -36,22 +36,33 @@ Non-code (markdown, TOML, YAML, JSON, shell): Grep/Read directly.
 
 Using Grep on a `.rs` file before querying CBM + rust-analyzer is a hallucination vector — the MCPs have context Grep doesn't.
 
-## 4. Parallelism — minimal contract
+## 4. Parallelism — single-agent default; pods reserved
 
-Every task spec that will be dispatched as a pod includes:
+**Default: ONE impl agent per wave.** Opus 4.7 with 1M ctx handles cross-stack work (Rust + Tauri command + TS bridge + React + CSS) better in one agent than three coordinated ones. Contract-edge violations become impossible because the agent owns both sides. Token cost drops ~50%.
+
+**Pods (parallel impl agents) reserved for narrow cases only:**
+- Pure CSS/token sweep (style-bot) — disjoint from any impl work.
+- Perf benches (own bench files, no impl).
+- Independent docs wave (no code writes).
+
+Not a pod case: anything with Rust↔TS crossing, anything touching a Tauri command + its TS caller, anything where one persona's output is another's input.
+
+**Reviewers are ALWAYS parallel** — dispatched in one `Agent` batch per §7. They're read-only; no race risk; the parallelism is pure wall-clock win.
+
+Every task spec declares:
 
 ```markdown
 ## Parallelism
 - Reads: <paths or globs>
 - Writes: <paths or globs>
-- Contract produces: <named symbols this task creates>
-- Contract consumes: <named symbols this task calls from peers or existing code>
+- Contract produces: <named symbols this wave creates>
+- Contract consumes: <named symbols this wave calls from existing code>
+- Dispatch shape: single-agent | pod | pipeline
 ```
 
-Rules:
-- Write-set disjointness is enforced at dispatch. If two pod members' Writes overlap, they run sequentially, not in parallel.
-- **Contract edges force serial ordering.** If pod member A consumes what B produces, B commits first; A dispatches only after B's commit lands.
-- Pod returns are **patches + verification output**, not commits. The main loop applies all patches atomically or discards all. No partial landings.
+Invariants:
+- Single-agent waves use ONE `Agent()` call. The agent edits in-place and returns a unified diff via JSON (never commits).
+- Pod waves (rare): write-sets MUST be pairwise disjoint. `scripts/pod-apply.sh` applies all patches atomically or rolls all back.
 - Single-writer files (never written by sub-agents): `.session-state/**`, `.prod-check/**`, `specs/compat-ladder.yml`, `.specify/memory/constitution.md`, `.claude/rules/**`, `.claude/settings.json`.
 
 No worktree mandate. Claude picks per-dispatch execution isolation.
@@ -151,3 +162,30 @@ Claude Code default output style for this workspace is `concise`. Prefer:
 - No teaching tone. No motivational framing. No "let me explain."
 - End-of-turn summary = 1-2 sentences MAX. What changed + what's next.
 - Working update = 1 sentence per key moment (finding, direction change, blocker).
+
+## 15. Wave discipline — preventing ITER-02 re-occurrence
+
+The ITER-02 failure mode: three parallel impl Agents dispatched; one rejected by user; the other two pushed their commits; result = feature branch references symbols that don't exist. Rework: ~300K tokens.
+
+**Structural defenses (every wave, not optional):**
+
+1. **Pre-wave snapshot.** Before any Agent dispatch: `scripts/wave-sandbox.sh init` captures `WAVE_BASE=$(git rev-parse HEAD)` and `git stash push -u -m "pre-wave-<id>"`. Working tree guaranteed clean before dispatch.
+
+2. **Impl Agents NEVER commit or push.** Agent instructions explicit: "edit files in-place. Do NOT `git commit`. Do NOT `git push`. Return your work as a unified diff via JSON field `patch`." The orchestrator's return-handling code rejects any response that includes a `commit_sha` — if present, `git reset --hard $WAVE_BASE` and log the persona violation to the handoff.
+
+3. **Post-wave sanity.** After Agent returns: `scripts/wave-sandbox.sh assert-clean $WAVE_BASE` — if `HEAD != WAVE_BASE`, someone committed behind the orchestrator's back. Hard reset + rollback.
+
+4. **Atomic integration.** `scripts/pod-apply.sh` takes the patches collected from each Agent return, applies them to a clean working tree, runs verification on integrated state, commits only on success. Any failure → `scripts/wave-sandbox.sh rollback`.
+
+5. **Agent-rejection = wave-abort.** If any dispatched `Agent()` tool call is rejected, errors, or returns non-APPROVE, the ENTIRE wave aborts. Zero patches apply. Log the rejection reason to the handoff. Next wave re-scopes.
+
+6. **Wave ceiling.** Max 3 rows per wave when truly independent. Max 1 row when contract edges exist between personas in the wave. Smaller waves = smaller rework cost.
+
+7. **Shift-left scope review.** Before impl dispatch, a single `qa-architect` review pass validates the wave's `## Parallelism` section and spec Acceptance clauses. Catches contract holes at spec-time (cheap) not impl-time (expensive).
+
+8. **Contract-edge serialization.** When the wave has persona-to-persona contract edges, serialise — never dispatch in parallel. Example: FDC3 protocol changes go FDC3-first → Rust-next → TS-last. Each step commits before the next Agent dispatches.
+
+**Verification cadence (batching discipline):**
+- `scripts/local-ci.sh --fast` runs once per wave (Phase C gate).
+- `scripts/launch.sh --verify` runs once per wave (only when wave touches GUI/FDC3/dist).
+- Never per-row. Never per-persona.

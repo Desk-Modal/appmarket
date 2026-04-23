@@ -13,29 +13,34 @@ Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. Claude's native router 
 | Orchestrator | `claude-opus-4-7` | `maestro-orchestrator` |
 | Adversarial review | `claude-opus-4-7` | `qa-architect`, `security-engineer`, `trading-sme`, `ux-design-lead` |
 | Architecturally critical | `claude-opus-4-7` | `rust-systems-architect`, `integration-architect` |
-| Impl (default) | `claude-sonnet-4-6` | `frontend-architect`, `interaction-designer`, `data-pipeline-engineer`, `charting-expert`, `fdc3-protocol-engineer`, `build-deploy-engineer`, `plugin-sdk-engineer`, `trading-ux-architect`, `service-plugin-exemplar`, `documentation-engineer`, `deskmodal-design-agent`, `marketplace-architect`, `marketplace-ux-engineer`, `npm-registry-engineer`, `verification-gateway-engineer` |
+| Impl (default) | `claude-sonnet-4-6` | `frontend-architect`, `interaction-designer`, `data-pipeline-engineer`, `charting-expert`, `fdc3-protocol-engineer`, `build-deploy-engineer`, `plugin-sdk-engineer`, `trading-ux-architect`, `service-plugin-exemplar`, `documentation-engineer`, `deskmodal-design-agent`, `marketplace-architect`, `marketplace-ux-engineer`, `verification-gateway-engineer` |
 | Trivial | `claude-haiku-4-5-20251001` | `style-bot` (new — token replacements, lint fixes, naming sweeps) |
 
 Impl personas that show REWORK > 1 per 5 iterations get promoted to Opus. Adjust per observed quality.
 
-## Pod patterns
+## Dispatch patterns
 
-| Pattern | When | How |
+**Default is Direct (single impl agent per wave).** Opus 4.7 with 1M context owns cross-stack work end-to-end; contract-edge violations become impossible; token cost ~50% vs multi-agent pods. Use Direct unless a strict criterion below fires.
+
+| Pattern | When (strict criteria) | How |
 |---|---|---|
-| **Direct** | Single-domain, one impl agent | Single `Agent` call |
-| **Pod** | Multi-domain, disjoint writes, ≤3 impls | Parallel `Agent` batch in one message |
-| **Pair** | Backend + frontend slice | 2 parallel Agents; each owns its file set |
-| **Pipeline** | One persona, overlapping writes | Sequential calls with handoff |
-| **Angle-swarm** | One reviewer persona, multiple lenses | Up to 5 parallel of same persona, each with an angle prompt |
-| **Adversarial pod** | Any impl review | All declared reviewers in ONE parallel batch (mandatory) |
+| **Direct** (default) | Any wave with zero contract-edge conflicts internally — single agent owns Rust + TS + CSS if needed | Single `Agent` call; agent edits in-place; returns unified diff via JSON |
+| **Pod** (rare) | Write-sets are proven-disjoint AND no symbol produced by one member is consumed by another. In practice: style-bot CSS sweep, perf benches, independent docs | ≤3 parallel `Agent` calls in one message; each returns a patch; `scripts/pod-apply.sh` atomic-merges |
+| **Pipeline** (contract-edge present) | Persona A's output is persona B's input (e.g. Rust command → TS bridge → React caller) | Sequential single-agent dispatches; commit between each step |
+| **Angle-swarm** (review only) | Single reviewer persona, multiple orthogonal lenses | Up to 5 parallel of same persona; each prompt narrows to one angle |
+| **Adversarial pod** (review, mandatory every wave) | Every declared reviewer for the wave | All in ONE parallel `Agent` batch per core.md §7 |
 
-Each prompt ≤ 15 concrete objectives. Past that: decompose into more agents.
+Reviewers are always parallel (read-only, no race risk). Impl is single-agent by default.
+
+Each prompt ≤ 15 concrete objectives. Past that: decompose the wave, not the agent.
 
 ## Return contract (every impl sub-agent)
 
+**Impl Agents NEVER `git commit` or `git push`.** They edit files in-place and return the unified diff via JSON.
+
 ```json
 {
-  "patch": "<unified-diff string>",
+  "patch": "<output of: git diff HEAD -- <declared write-set>>",
   "write_set_declared": ["<path>", ...],
   "write_set_actual": ["<path>", ...],
   "verification_command": "scripts/local-ci.sh --fast",
@@ -47,12 +52,16 @@ Each prompt ≤ 15 concrete objectives. Past that: decompose into more agents.
 }
 ```
 
-Main loop rejects returns where:
-- `write_set_actual ⊄ write_set_declared`
-- `verification_exit_code != 0`
-- `self_assessment == APPROVE` with non-empty `open_concerns`
+**`patch` field** is required; MUST contain a valid unified diff. If an agent returns `commit_sha` (old shape), orchestrator treats it as a violation: `git reset --hard $WAVE_BASE`, log the persona to handoff, abort wave.
 
-Personas NEVER commit or push their own work — they return patches. Main loop applies patches atomically (see `scripts/pod-apply.sh`).
+**Orchestrator rejects returns where:**
+- `patch` is empty or malformed.
+- `write_set_actual ⊄ write_set_declared`.
+- `verification_exit_code != 0`.
+- `self_assessment == APPROVE` with non-empty `open_concerns`.
+- The agent committed or pushed (HEAD moved during agent's run).
+
+**Integration flow:** `scripts/wave-sandbox.sh init` (snapshot + stash) → dispatch Agent(s) → collect patches → `scripts/wave-sandbox.sh assert-clean` → `scripts/pod-apply.sh` (or `git apply` for single-agent) → verify → commit → push. On any failure: `scripts/wave-sandbox.sh rollback`.
 
 ## Adversarial review contract
 

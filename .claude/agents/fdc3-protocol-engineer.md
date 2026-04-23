@@ -27,4 +27,4 @@ Rules: `.claude/rules/core.md`, `.claude/rules/agents.md`.
 
 ## Exit criteria
 
-`scripts/local-ci.sh --fast` exit 0 + relevant conformance tests. Return patch + verification output.
+`scripts/local-ci.sh --fast` exit 0 + conformance tests. Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`**.

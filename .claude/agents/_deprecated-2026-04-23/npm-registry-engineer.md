@@ -25,4 +25,4 @@ Rules: `.claude/rules/core.md`, `.claude/rules/agents.md`.
 
 ## Exit criteria
 
-Dry-run publish succeeds (`npm publish --dry-run --provenance`). Return patch + verification output.
+Dry-run publish succeeds (`npm publish --dry-run --provenance`). Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`**.

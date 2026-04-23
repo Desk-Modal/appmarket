@@ -25,4 +25,4 @@ Visual mockups + CSS/TSX scaffolds for DeskModal design-system components. Partn
 
 ## Exit criteria
 
-Return TSX + CSS module + rendered mockup path (screenshot) for UX review.
+Return TSX + CSS module + rendered mockup path (screenshot) via JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`**.

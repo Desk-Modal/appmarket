@@ -25,4 +25,4 @@ Trading surfaces specifically: layout + density at trader widths (300/500/800/12
 
 ## Exit criteria
 
-`scripts/local-ci.sh --fast` exit 0 + CDP snapshot at 4 breakpoints. Return patch + verification output.
+`scripts/local-ci.sh --fast` exit 0 + CDP snapshot at 4 breakpoints. Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`**.

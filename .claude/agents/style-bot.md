@@ -32,4 +32,4 @@ Fast, cheap persona for mechanical sweeps. Cloud-lane friendly.
 
 ## Exit criteria
 
-`scripts/local-ci.sh --fast` exit 0. Return patch + verification output.
+`scripts/local-ci.sh --fast` exit 0. Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`** — orchestrator integrates.

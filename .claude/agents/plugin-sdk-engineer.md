@@ -25,4 +25,4 @@ Rules: `.claude/rules/core.md`, `.claude/rules/agents.md`.
 
 ## Exit criteria
 
-`scripts/local-ci.sh --fast` exit 0 + `dmpkg init && dmpkg build && dmpkg verify` round-trip green. Return patch + verification output.
+`scripts/local-ci.sh --fast` exit 0 + `dmpkg init && dmpkg build && dmpkg verify` round-trip green. Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`**.

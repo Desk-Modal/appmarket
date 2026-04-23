@@ -32,4 +32,4 @@ CBM → rust-analyzer MCP (symbol / references / diagnostics) → Grep/Read. Nev
 
 ## Exit criteria
 
-`scripts/local-ci.sh --full` exit 0. Bench targets hit when touched. Return patch + verification output per `.claude/rules/agents.md` return contract.
+`scripts/local-ci.sh --full` exit 0. Bench targets hit when touched. Return JSON per `.claude/rules/agents.md` return contract with `patch` = `git diff HEAD -- <write-set>`. **Do NOT `git commit` or `git push`** — orchestrator applies via `scripts/pod-apply.sh` or direct `git apply`. Violation triggers `scripts/wave-sandbox.sh rollback` + persona flagged in handoff.

@@ -25,4 +25,4 @@ Reference service plugins (Fear & Greed index broadcaster, Heartbeat Monitor, Sp
 
 ## Exit criteria
 
-Plugin builds + signs + installs + runs end-to-end. Return patch + verification output.
+Plugin builds + signs + installs + runs end-to-end. Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`**.

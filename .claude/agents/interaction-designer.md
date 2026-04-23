@@ -27,4 +27,4 @@ All drag/pointer/touch/gesture surfaces. Tile dock/undock, modal-window → tile
 
 ## Exit criteria
 
-`scripts/local-ci.sh --fast` exit 0 + CDP assertion for the interaction. Return patch + verification output.
+`scripts/local-ci.sh --fast` exit 0 + CDP assertion. Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`** — orchestrator integrates.

@@ -26,4 +26,4 @@ Compliance pipeline that watches `@deskmodal/plugins` npm publishes: 10-step ver
 
 ## Exit criteria
 
-`scripts/local-ci.sh --fast` exit 0 + pipeline integration tests pass. Return patch + verification output.
+`scripts/local-ci.sh --fast` exit 0 + integration tests pass. Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`**.

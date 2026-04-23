@@ -25,4 +25,4 @@ Storefront 7 screens (browse, detail, installed, updates, publisher, moderation,
 
 ## Exit criteria
 
-`scripts/local-ci.sh --fast` exit 0. CDP snapshot for any visible change. Return patch + verification output.
+`scripts/local-ci.sh --fast` exit 0 + CDP snapshot for visible changes. Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`**.
