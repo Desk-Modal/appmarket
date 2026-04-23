@@ -1,27 +1,35 @@
 # Claude Code plugins — DeskModal workspace
 
-Declared in `.claude/settings.json` under `enabledPlugins.anthropics/claude-code`. Committed to git so every machine gets the same set on `git pull`.
+Declared in `.claude/settings.json` under `enabledPlugins` with the format `"<plugin>@<marketplace>": true` (the actual format Claude Code 2.x writes on `claude plugin install --scope project`).
 
-If `enabledPlugins` auto-install does not fire in your Claude Code version, run the idempotent fallback: `scripts/install-plugins.sh`.
+Auto-installed on every fresh `git clone` + first Claude Code session via the `bootstrap-plugins.sh` SessionStart hook — zero manual step required.
 
 ## Installed (6)
 
 | Plugin | Purpose for DeskModal |
 |---|---|
-| **context7** | Live version-specific docs lookup. Anti-hallucination for hot external APIs: Tauri 2, React 19, FDC3 2.2, tokio, serde, flume, DashMap, ArcSwap. Used when authoring integration code against these surfaces. |
-| **typescript-lsp** | TypeScript/JavaScript language server. Symbol references, diagnostics, hover across all TS code: 8 TradeSurface apps, marketplace/, plugin-tools/, core-server-api/. Complements `codebase-memory-mcp` (graph) with per-file LSP signals. |
-| **semgrep** | Real-time scanning for command injection, XSS, unsafe eval, hardcoded secrets. Complements `security-engineer` post-hoc review with inline detection. Fires as code is authored. |
-| **plugin-dev** | Seven skills for authoring Claude Code hooks, MCP servers, commands, agents. We actively author all four in `.claude/` — this plugin's checks prevent configuration drift. |
-| **skill-creator** | Author and measure skills. Useful as more workflow patterns emerge in `.claude/skills/`. |
-| **chrome-devtools-mcp** | Control and inspect live Chrome browsers via CDP. Complements `scripts/cdp-test-runner.py` with richer DOM + network + evaluation during GUI verification of DeskModal + TradeSurface apps. |
+| **context7** | Live version-specific docs for Tauri 2, React 19, FDC3 2.2, tokio, serde, flume, DashMap, ArcSwap. Anti-hallucination when authoring against these surfaces. |
+| **typescript-lsp** | TS symbol refs, diagnostics, hover across 8 TradeSurface apps, marketplace/, plugin-tools/, core-server-api/. Complements `codebase-memory-mcp`. |
+| **semgrep** | Real-time scanning for command injection, XSS, unsafe eval, hardcoded secrets. Fires inline as code is authored. |
+| **plugin-dev** | Seven skills for authoring Claude Code hooks, MCP servers, commands, agents. Correctness for our own `.claude/` configuration. |
+| **skill-creator** | Author and measure additional skills as workflow patterns emerge. |
+| **chrome-devtools-mcp** | Control and inspect live Chrome via CDP. Richer DOM + network + evaluation than our `scripts/cdp-test-runner.py`. |
+
+## Auto-installation mechanism
+
+1. **`enabledPlugins` in `.claude/settings.json` (git-committed).** Format is `"<plugin>@<marketplace>": true`. Claude Code 2.x reads this on session start and enables the plugins if they're installed.
+2. **`.claude/hooks/bootstrap-plugins.sh` (SessionStart hook).** On every session start, runs `scripts/install-plugins.sh --check`. If any listed plugin is missing, runs the full installer once. Idempotent — steady-state silent.
+3. **`scripts/install-plugins.sh` (manual fallback).** Idempotent plugin installer. Uses `claude plugin install <name> --scope project` so installs persist into `.claude/settings.json`. Run once per new developer machine if the bootstrap hook hasn't fired yet (e.g. first `git clone` before a Claude Code session).
+
+Marketplace `claude-plugins-official` (sourced from `anthropics/claude-plugins-official` GitHub repo) is ensured by the installer — adds the marketplace if missing.
 
 ## Explicitly NOT installed — conflict with existing MCPs
 
 | Plugin | Conflict |
 |---|---|
-| `playwright` | `.mcp.json` already declares `@playwright/mcp@0.0.70` with project-local chromium under `tools/gui/.playwright-browsers`. |
+| `playwright` | `.mcp.json` declares `@playwright/mcp@0.0.70` with project-local chromium under `tools/gui/.playwright-browsers`. |
 | `github` | `.mcp.json` declares custom `github-mcp-server` binary in `tools/`. |
-| `rust-analyzer-lsp` | `.mcp.json` declares custom `rust-analyzer-mcp` binary in `tools/bin/`. |
+| `rust-analyzer-lsp` | `.mcp.json` declares custom `rust-analyzer-mcp` binary in `tools/bin/`. (If the marketplace variant is also installed at user scope, it's harmless overlap — our MCP takes priority.) |
 
 ## Explicitly NOT installed — overlap with existing config
 
@@ -32,25 +40,24 @@ If `enabledPlugins` auto-install does not fire in your Claude Code version, run 
 | `feature-dev`, `ralph-loop` | Overlap the `/loop` skill + `maestro-orchestrator` persona. |
 | `coderabbit`, `code-review`, `pr-review-toolkit`, `optibot` | Adversarial-review matrix in `.claude/rules/core.md` §7 is custom-tuned per capability signal. |
 | `frontend-design`, `code-simplifier` | Overlap `deskmodal-design-agent`, `ux-design-lead`, `style-bot`. |
-| `explanatory-output-style`, `learning-output-style` | `outputStyle: "concise"` is set; these go the opposite direction. |
+| `explanatory-output-style`, `learning-output-style` | `outputStyle: "concise"` is set — these go the opposite direction. |
 
 ## Explicitly NOT installed — out of scope
 
-- Non-TS language LSPs (clangd, csharp, gopls, jdtls, kotlin, swift, php, ruby, lua, elixir-ls, pyright) — workspace has no code in these languages beyond minimal Python scripts.
-- Hosting/DevOps plugins (vercel, supabase, firebase, railway, netlify-skills, deploy-on-aws, aws-serverless, fastly, aikido, sonatype-guide, endor-labs) — DeskModal ships as signed desktop binary + `@deskmodal/plugins` npm scope; none of these hosts apply.
-- PM/Comms (linear, asana, atlassian, slack, discord, telegram, imessage, intercom, zoominfo) — not part of our workflow.
-- Payment/Marketing (stripe, sumup, revenuecat, adspirer, postiz) — not our domain.
-- CMS (sanity, wix, mintlify) — not our domain.
-- Data/ML (data-engineering, huggingface, pinecone, posthog, product-tracking) — not our domain.
+Non-TS language LSPs (clangd, csharp, gopls, jdtls, kotlin, swift, php, ruby, lua, elixir-ls, pyright) — no code in these languages beyond minimal Python scripts. Hosting/DevOps (vercel, supabase, firebase, railway, netlify-skills, deploy-on-aws, aws-serverless, fastly) — DeskModal ships as signed desktop binary. PM/comms (linear, asana, atlassian, slack, discord, telegram, imessage, intercom, zoominfo). Payment/marketing/CMS/data plugins — not our domain.
+
+## Verifying install state
+
+```bash
+bash scripts/install-plugins.sh --check       # workspace view — should report all 6 already installed
+claude plugin list | grep claude-plugins-official
+cat .claude/settings.json | python3 -c 'import json,sys; print(list(json.load(sys.stdin).get("enabledPlugins", {}).keys()))'
+```
 
 ## Revising the set
 
-Add or remove from the array in `.claude/settings.json`, update this file, update `scripts/install-plugins.sh`, commit all three together. Sub-repos mirror via the canonical-file sync — see `.claude/rules/parallel-sessions.md`.
+Edit the `PLUGINS=( ... )` array in `scripts/install-plugins.sh`, then either:
+- Run `claude plugin install <new-plugin> --scope project` (Claude Code writes to `.claude/settings.json` for you), OR
+- Edit `.claude/settings.json` `enabledPlugins` manually using the `"<plugin>@<marketplace>": true` format.
 
-## Verifying install
-
-```bash
-claude plugin list                    # all installed plugins
-claude plugin info context7           # details of a specific plugin
-cat .claude/settings.json | jq .enabledPlugins
-```
+Update this file to document the addition. Commit all three together. Sub-repos mirror via the canonical-file sync (see `.claude/rules/parallel-sessions.md`).

@@ -1,22 +1,11 @@
 {
-  "model": "claude-opus-4-7",
-  "outputStyle": "concise",
-  "statusLine": {
-    "type": "command",
-    "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/statusline.sh\""
-  },
-  "enabledPlugins": {
-    "anthropics/claude-code": [
-      "context7",
-      "typescript-lsp",
-      "semgrep",
-      "plugin-dev",
-      "skill-creator",
-      "chrome-devtools-mcp"
-    ]
+  "env": {
+    "DESKMODAL_WORKSPACE": "${CLAUDE_PROJECT_DIR}",
+    "DESKMODAL_TOOLS": "${CLAUDE_PROJECT_DIR}/tools",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "RUSTFLAGS": "-C debuginfo=line-tables-only"
   },
   "permissions": {
-    "defaultMode": "acceptEdits",
     "allow": [
       "Bash(cargo check:*)",
       "Bash(cargo build:*)",
@@ -73,16 +62,6 @@
       "Bash(gh auth status:*)",
       "Bash(gh api repos/*)"
     ],
-    "ask": [
-      "Bash(git push:*)",
-      "Bash(git reset --hard:*)",
-      "Bash(gh pr merge:*)",
-      "Bash(gh pr close:*)",
-      "Bash(gh release:*)",
-      "Bash(pnpm publish:*)",
-      "Bash(npm publish:*)",
-      "Bash(cargo publish:*)"
-    ],
     "deny": [
       "Bash(rm -rf /*)",
       "Bash(rm -rf ~/*)",
@@ -103,19 +82,29 @@
       "Write(./.env)",
       "Write(./.env.*)",
       "Write(./secrets/**)"
-    ]
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(gh pr close:*)",
+      "Bash(gh release:*)",
+      "Bash(pnpm publish:*)",
+      "Bash(npm publish:*)",
+      "Bash(cargo publish:*)"
+    ],
+    "defaultMode": "acceptEdits"
   },
-  "env": {
-    "DESKMODAL_WORKSPACE": "${CLAUDE_PROJECT_DIR}",
-    "DESKMODAL_TOOLS": "${CLAUDE_PROJECT_DIR}/tools",
-    "PYTHONDONTWRITEBYTECODE": "1",
-    "RUSTFLAGS": "-C debuginfo=line-tables-only"
-  },
+  "model": "claude-opus-4-7",
   "hooks": {
     "SessionStart": [
       {
         "matcher": "startup|resume|clear",
         "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/bootstrap-plugins.sh\""
+          },
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/context-load.sh\""
@@ -134,5 +123,18 @@
         ]
       }
     ]
-  }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/statusline.sh\""
+  },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "semgrep@claude-plugins-official": true,
+    "plugin-dev@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true
+  },
+  "outputStyle": "concise"
 }
