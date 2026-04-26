@@ -1,8 +1,8 @@
 <!-- MIRROR — DO NOT EDIT HERE -->
 <!-- Source-of-truth: root wiki/CLAUDE.md -->
 <!-- Mirror-script: scripts/wiki-mirror.sh -->
-<!-- Mirrored-at: 2026-04-26T02:13:58Z -->
-<!-- Mirror-source-sha: ac33ddb5d3986623f22a616974909c6e02e01cd5 -->
+<!-- Mirrored-at: 2026-04-26T05:28:44Z -->
+<!-- Mirror-source-sha: 6e3a4500d78023509b4eff43e96a7760dc93fa2c -->
 
 > **This file is a MIRROR.** The authoritative copy lives at root
 > `wiki/CLAUDE.md`. Sub-repo edits to this file are overwritten on
@@ -78,7 +78,7 @@ core-server-api}`. Resolved by `wiki-mcp` (Wave 3); fallback resolution
 walks the per-repo `wiki/` directories directly.
 
 **Ownership invariant:** root `wiki/` is edited only from a session whose
-`CLAUDE_PROJECT_DIR=/Users/adrian/deskmodal` (or equivalent). Sub-repo `wiki/`
+`CLAUDE_PROJECT_DIR=$WORKSPACE_ROOT` (or equivalent). Sub-repo `wiki/`
 is edited only from a session whose `CLAUDE_PROJECT_DIR` points at that
 sub-repo. Mirrored copies in sub-repos are read-only — `sync-specs.sh`
 overwrites them.
