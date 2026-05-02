@@ -24,17 +24,29 @@ Raw `cargo build|test|check|run` and `pnpm nx build|test` are dev iteration, not
 
 ## 3. Discovery order — MCP first, always
 
-Strict priority for code (`.rs`, `.ts`, `.tsx`, `.py`):
+Strict priority. **Two MCPs share top tier** — pick by question shape:
 
-1. **`mcp__codebase-memory-mcp__*`** — graph-indexed, ranked, file:line precise. First stop for every symbol lookup, call chain, impact analysis.
-2. **`mcp__rust-analyzer__*`** — for Rust only. Symbol references, hover, diagnostics, rename prep.
-3. **`mcp__playwright__browser_*`** — for visual / CDP / DOM verification. Replaces ad-hoc screenshot scripts.
-4. **`mcp__github__*`** — for PR / issue / run / workflow queries. Faster than shelling to `gh`.
-5. **Grep / Read** — fallback only when the MCPs return nothing useful.
+| Question shape | First MCP |
+|---|---|
+| "Where is symbol X / what calls Y / what does Z look like / impact analysis" — **code-structure facts** | `mcp__codebase-memory-mcp__*` (CBM symbol graph) |
+| "How does the FDC3 bridge work / what's the brand voice / which persona owns Y / what playbook covers Z / what governance applies / cross-cutting synthesis" — **synthesis facts** | `mcp__wiki-mcp__*` (wiki synthesis layer) |
 
-Non-code (markdown, TOML, YAML, JSON, shell): Grep/Read directly.
+Then in priority order:
 
-Using Grep on a `.rs` file before querying CBM + rust-analyzer is a hallucination vector — the MCPs have context Grep doesn't.
+1. **`mcp__codebase-memory-mcp__*`** — code symbol graph; first stop for every code-structure question for `.rs`, `.ts`, `.tsx`, `.py`.
+2. **`mcp__wiki-mcp__*`** — cross-cutting synthesis from `wiki/` (84 root pages + 7 sub-repo mirrors). First stop for any synthesis question. Tools: `wiki_search`, `wiki_get_page`, `wiki_get_links`, `wiki_check_staleness`, `wiki_get_visual`.
+3. **`mcp__rust-analyzer__*`** — for Rust only. Symbol references, hover, diagnostics, rename prep.
+4. **`mcp__playwright__browser_*`** — for visual / CDP / DOM verification. Replaces ad-hoc screenshot scripts.
+5. **`mcp__github__*`** — for PR / issue / run / workflow queries. Faster than shelling to `gh`.
+6. **Grep / Read** — fallback only when the MCPs return nothing useful, AND only for non-code/non-wiki content.
+
+Non-code, non-wiki (markdown specs, TOML, YAML, JSON, shell): Grep/Read directly.
+
+**Anti-patterns flagged by hooks:**
+- Grep on `.rs` / `.ts` / `.tsx` / `.py` before CBM = hallucination vector.
+- Grep / Read on `wiki/**` paths before wiki-mcp = same. The wiki has its own MCP for a reason.
+
+Specs and rules are *cited from*, not *discovered through*. Use the active feature spec for current intent; use rules/agents for workflow contract; use CBM for code; use wiki-mcp for synthesis.
 
 ## 4. Parallelism — single-agent default; pods reserved
 
@@ -163,29 +175,43 @@ Claude Code default output style for this workspace is `concise`. Prefer:
 - End-of-turn summary = 1-2 sentences MAX. What changed + what's next.
 - Working update = 1 sentence per key moment (finding, direction change, blocker).
 
-## 15. Wave discipline — preventing ITER-02 re-occurrence
+## 15. Wave discipline — evolve-and-fix-forward (NEVER ROLL BACK)
 
-The ITER-02 failure mode: three parallel impl Agents dispatched; one rejected by user; the other two pushed their commits; result = feature branch references symbols that don't exist. Rework: ~300K tokens.
+**Cardinal rule: every wave moves forward.** Reviewer REWORK / BLOCK / HIGH findings close via a **subsequent commit on top of the current HEAD**, never via `git reset --hard`, `git revert`, or any destructive rewind. Rollback is banned as a wave-mechanic because it discards partial-value work the next wave would otherwise build on.
 
-**Structural defenses (every wave, not optional):**
+**The four invariants (replace the old rollback-based ITER-02 mitigations):**
 
-1. **Pre-wave snapshot.** Before any Agent dispatch: `scripts/wave-sandbox.sh init` captures `WAVE_BASE=$(git rev-parse HEAD)` and `git stash push -u -m "pre-wave-<id>"`. Working tree guaranteed clean before dispatch.
+1. **Impl Agents NEVER commit or push.** Agent instructions explicit: "edit files in-place. Do NOT `git commit`. Do NOT `git push`. Return your work as a unified diff via JSON field `patch`." If an agent returns `commit_sha` (committed behind the orchestrator): the orchestrator reconciles by adding a follow-up commit that completes the contract (never resets). The violation is logged to the handoff for persona-prompt tuning.
 
-2. **Impl Agents NEVER commit or push.** Agent instructions explicit: "edit files in-place. Do NOT `git commit`. Do NOT `git push`. Return your work as a unified diff via JSON field `patch`." The orchestrator's return-handling code rejects any response that includes a `commit_sha` — if present, `git reset --hard $WAVE_BASE` and log the persona violation to the handoff.
+2. **Pre-wave snapshot is ADVISORY, not enforced.** `scripts/wave-sandbox.sh init` still captures `WAVE_BASE=$(git rev-parse HEAD)` so reviewers have a stable reference for their diffs. `assert-clean` still runs — if HEAD moved, that becomes a persona-tuning signal, **NOT** a rollback trigger. The orchestrator's response to HEAD-moved is: inspect, accept if the change is consistent with wave scope, fix-forward if not.
 
-3. **Post-wave sanity.** After Agent returns: `scripts/wave-sandbox.sh assert-clean $WAVE_BASE` — if `HEAD != WAVE_BASE`, someone committed behind the orchestrator's back. Hard reset + rollback.
+3. **Reviewer REWORK = one or more follow-up commits on the same branch.** Findings close in the order they reduce risk (BLOCKING → HIGH → MEDIUM → LOW). Each close is a separate small commit whose message cites the finding ID. Re-review runs against the final HEAD after all follow-ups land. Max 2 rework cycles; cycle 3 = ESCALATE to user, not reset.
 
-4. **Atomic integration.** `scripts/pod-apply.sh` takes the patches collected from each Agent return, applies them to a clean working tree, runs verification on integrated state, commits only on success. Any failure → `scripts/wave-sandbox.sh rollback`.
+4. **Pod integration is evolution-safe.** `scripts/pod-apply.sh` applies patches in declared order; if verification fails after apply, the fix is **another commit on top** (usually a reviewer-finding closure), not a reset. The pod's atomic guarantee is about patch application, not about undoing committed work.
 
-5. **Agent-rejection = wave-abort.** If any dispatched `Agent()` tool call is rejected, errors, or returns non-APPROVE, the ENTIRE wave aborts. Zero patches apply. Log the rejection reason to the handoff. Next wave re-scopes.
+**Agent-rejection handling (replaces wave-abort):**
+- Rejected / errored Agent → inspect the partial state. If files are untouched, re-dispatch with sharpened prompt. If files were edited and the partial patch is usable, accept + close reviewer findings via follow-up commits. No reset.
+- Non-APPROVE self-assessment → still integrate the patch, then dispatch a scoped follow-up to close the `open_concerns`.
 
-6. **Wave ceiling.** Max 3 rows per wave when truly independent. Max 1 row when contract edges exist between personas in the wave. Smaller waves = smaller rework cost.
+**What's still prescribed (unchanged):**
 
-7. **Shift-left scope review.** Before impl dispatch, a single `qa-architect` review pass validates the wave's `## Parallelism` section and spec Acceptance clauses. Catches contract holes at spec-time (cheap) not impl-time (expensive).
+5. **Wave ceiling.** Max 3 rows per wave when truly independent. Max 1 row when contract edges exist between personas in the wave. Smaller waves = smaller rework surface.
 
-8. **Contract-edge serialization.** When the wave has persona-to-persona contract edges, serialise — never dispatch in parallel. Example: FDC3 protocol changes go FDC3-first → Rust-next → TS-last. Each step commits before the next Agent dispatches.
+6. **Shift-left scope review.** Before impl dispatch, a single `qa-architect` review pass validates the wave's `## Parallelism` section and Acceptance clauses. Catches contract holes at spec-time (cheap).
+
+7. **Contract-edge serialization.** When the wave has persona-to-persona contract edges, serialise — never dispatch in parallel. Each step commits before the next Agent dispatches.
 
 **Verification cadence (batching discipline):**
-- `scripts/local-ci.sh --fast` runs once per wave (Phase C gate).
-- `scripts/launch.sh --verify` runs once per wave (only when wave touches GUI/FDC3/dist).
+- `scripts/local-ci.sh --fast` runs once per wave (at integration gate) and once per rework cycle (after follow-up commits land).
+- `scripts/launch.sh --verify` runs once per wave (only when wave touches GUI/FDC3/dist), after all rework closes.
 - Never per-row. Never per-persona.
+
+**What this rule forbids:**
+- `git reset --hard <any-prior-sha>` as a wave-mechanic response to reviewer findings.
+- `git revert` of an in-wave commit unless a reviewer finding specifically requests reversion as the fix-forward (rare; typically the fix is amend-on-top).
+- `wave-sandbox.sh rollback` as the default response to REWORK. The script's `rollback` subcommand is deprecated; use `wave-sandbox.sh fix-forward` (no-op stub that logs the finding for handoff) instead.
+- "Throw away the Agent's work and re-dispatch fresh" as a first response. Re-dispatch only when the partial state is fundamentally unsalvageable (rare).
+
+**What this rule requires:**
+- Every reviewer BLOCKING / HIGH finding has a named close-out commit (or scope-transfer / escalation ledger entry) BEFORE the benchmark row is marked green.
+- The post-commit-handoff hook records each close-out commit with its finding ID so future sessions see the fix-forward trail.

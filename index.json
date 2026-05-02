@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-15T01:47:38Z",
+  "generated_at": "2026-04-27T07:41:20Z",
   "generator": {
     "name": "build-dist.sh",
     "version": "1.0.0"
@@ -11,9 +11,10 @@
       "version": "0.1.0",
       "type": "platform",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.alerts",
@@ -21,11 +22,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
+      "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.analytics",
@@ -33,11 +35,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
+      "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.blotter",
@@ -45,11 +48,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
+      "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.chart",
@@ -57,11 +61,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
+      "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.depth",
@@ -69,11 +74,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
+      "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.feeds",
@@ -81,11 +87,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
+      "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.order-ticket",
@@ -93,11 +100,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
+      "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.paper-trading",
@@ -105,11 +113,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
       "has_app": false,
-      "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "has_services": true,
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.positions",
@@ -117,11 +126,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
+      "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.price-feed",
@@ -129,11 +139,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
       "has_app": false,
-      "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "has_services": true,
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.screener",
@@ -141,11 +152,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
+      "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "deskmodal.watchlist",
@@ -153,11 +165,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
+      "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "optiscript",
@@ -165,11 +178,12 @@
       "version": "0.1.0",
       "type": "plugin",
       "platforms": [
-        "win-x64"
+        "win-x64",
+        "darwin-arm64"
       ],
-      "has_app": false,
-      "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
+      "has_app": true,
+      "has_services": true,
+      "published_at": "2026-04-27T07:41:20Z"
     },
     {
       "id": "tradesurface",

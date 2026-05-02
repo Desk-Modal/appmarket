@@ -54,16 +54,26 @@ Each prompt ≤ 15 concrete objectives. Past that: decompose the wave, not the a
 }
 ```
 
-**`patch` field** is required; MUST contain a valid unified diff. If an agent returns `commit_sha` (old shape), orchestrator treats it as a violation: `git reset --hard $WAVE_BASE`, log the persona to handoff, abort wave.
+**`patch` field** is required; MUST contain a valid unified diff. If an agent returns `commit_sha` (old shape), orchestrator reconciles by folding the agent's commit into a wave-cohort commit on top of current HEAD and logs the persona-prompt violation to the handoff. **Never reset.**
 
-**Orchestrator rejects returns where:**
-- `patch` is empty or malformed.
-- `write_set_actual ⊄ write_set_declared`.
-- `verification_exit_code != 0`.
-- `self_assessment == APPROVE` with non-empty `open_concerns`.
-- The agent committed or pushed (HEAD moved during agent's run).
+**Orchestrator handles (does NOT reject) returns where:**
+- `patch` is empty or malformed → dispatch a follow-up Agent with the exact malformation cited; never reset.
+- `write_set_actual ⊄ write_set_declared` → review the out-of-set files; accept if consistent with wave scope, otherwise carve them into a separate scoped follow-up commit.
+- `verification_exit_code != 0` → diagnose inline; the fix is a forward commit (reviewer finding or impl patch), not a reset.
+- `self_assessment == APPROVE` with non-empty `open_concerns` → integrate the patch; dispatch a scoped follow-up to close `open_concerns` before benchmark row marks green.
+- HEAD moved during agent's run → inspect the commit. If consistent with wave scope, accept + continue. If not, add a reconciling commit. Never `git reset --hard`.
 
-**Integration flow:** `scripts/wave-sandbox.sh init` (snapshot + stash) → dispatch Agent(s) → collect patches → `scripts/wave-sandbox.sh assert-clean` → `scripts/pod-apply.sh` (or `git apply` for single-agent) → verify → commit → push. On any failure: `scripts/wave-sandbox.sh rollback`.
+**Integration flow (evolve-and-fix-forward per core.md §15):**
+1. `scripts/wave-sandbox.sh init` (advisory snapshot — stable diff reference, NOT a rollback anchor).
+2. Dispatch Agent(s) → collect patches.
+3. `scripts/wave-sandbox.sh assert-clean` → if dirty, inspect + reconcile via follow-up commits (never reset).
+4. `scripts/pod-apply.sh` (pod) or `git apply` (single-agent) → integrate.
+5. `scripts/local-ci.sh --fast` → on failure, dispatch a scoped follow-up or close inline; commit the fix. Never reset.
+6. Parallel adversarial review → findings close via follow-up commits in severity order.
+7. `scripts/launch.sh --verify` (GUI/FDC3/dist-touching waves only) after all reviewer findings close.
+8. Benchmark row marks green in a final outer-workspace commit; push both repos.
+
+**Rollback is banned** as a wave-mechanic. If a wave's direction is wrong at the strategic level (rare), ESCALATE to the user and let them decide; do not `git reset` unilaterally.
 
 ## Adversarial review contract
 

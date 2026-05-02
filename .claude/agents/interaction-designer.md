@@ -25,6 +25,15 @@ All drag/pointer/touch/gesture surfaces. Tile dock/undock, modal-window → tile
 - `touch-action: none` on drag surfaces + html/body; `{ passive: false }` on touch listeners.
 - Platform parity: macOS WKWebView, Windows WebView2, Linux WebKitGTK.
 
+## Palette/keyboard DRY contract (MANDATORY when adding palette entries)
+
+CommandPalette entries and keyboard bindings for the SAME action MUST share a single handler path. The reviewer matrix REWORKs any dispatch that violates this:
+
+1. **NO fire-and-forget CustomEvents.** Do NOT emit `window.dispatchEvent(new CustomEvent("deskmodal:X"))` from a palette entry unless you wire the matching `window.addEventListener("deskmodal:X", handler)` in the SAME commit, with the handler being a direct reference to the keyboard-path function (not a re-implementation).
+2. **Prefer direct handler refs.** The palette's `getBuiltinCommands()` array should reference the same handler the keyboard path invokes. If the palette needs to reach into a hook's internal state, extract a shared module under `apps/deskmodal-agent/src/components/TileContainer/` that both the hook and the palette import.
+3. **Verify receiver exists before shipping.** Before returning APPROVE, CBM `search_code "addEventListener.*<event-name>"` MUST return a matching listener. If no listener → either add it inline or BLOCK the palette entry. Dead CustomEvents are a BLOCKING finding.
+4. **Shortcut strings via modKey helper.** Never hardcode `Ctrl+F4` / `⌘W` in palette `shortcut` fields — use the existing `modKey` / `isMacOSLike()` helpers so the rendered shortcut matches the binding that's actually installed.
+
 ## Exit criteria
 
 `scripts/local-ci.sh --fast` exit 0 + CDP assertion. Return JSON per `agents.md` with `patch` = `git diff HEAD -- <write-set>`. **Never `git commit` / `git push`** — orchestrator integrates.

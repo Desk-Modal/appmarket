@@ -2,24 +2,22 @@
   "mcpServers": {
     "codebase-memory-mcp": {
       "type": "stdio",
-      "command": "${CLAUDE_PROJECT_DIR}/tools/codebase-memory-mcp",
-      "env": {
-        "CLAUDE_PROJECT_DIR": "${CLAUDE_PROJECT_DIR}"
-      }
+      "command": "${CLAUDE_PROJECT_DIR}/tools/codebase-memory-mcp"
+    },
+    "wiki-mcp": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["${CLAUDE_PROJECT_DIR}/scripts/wiki-mcp-server.py"]
     },
     "rust-analyzer": {
       "type": "stdio",
-      "command": "${CLAUDE_PROJECT_DIR}/tools/bin/rust-analyzer-mcp",
-      "env": {
-        "CLAUDE_PROJECT_DIR": "${CLAUDE_PROJECT_DIR}"
-      }
+      "command": "${CLAUDE_PROJECT_DIR}/tools/bin/rust-analyzer-mcp"
     },
     "github": {
       "type": "stdio",
       "command": "${CLAUDE_PROJECT_DIR}/tools/github-mcp-server",
       "args": ["stdio"],
       "env": {
-        "CLAUDE_PROJECT_DIR": "${CLAUDE_PROJECT_DIR}",
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
       }
     },

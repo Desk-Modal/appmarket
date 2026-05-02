@@ -21,7 +21,7 @@ Decompose a feature into waves with declared write-sets + Contract (produces/con
 
 - **Single-agent default.** One impl agent owns each wave's full scope (cross-stack where needed). Contract-edge violations become impossible.
 - **Every reviewer in ONE parallel `Agent` batch** (core.md §7). Sequential reviewer dispatch is a defect.
-- **Impl agents return patches, never commit.** Orchestrator integrates via `git apply` (single-agent) or `scripts/pod-apply.sh` (pod). Wave sandboxed via `scripts/wave-sandbox.sh init/assert-clean/rollback/finish` (core.md §15).
+- **Impl agents return patches, never commit.** Orchestrator integrates via `git apply` (single-agent) or `scripts/pod-apply.sh` (pod). `wave-sandbox.sh init/assert-clean` is advisory (stable diff anchor + drift signal). **Rollback is banned** — reviewer findings close via follow-up commits on top of current HEAD, never via `git reset --hard` / revert / `wave-sandbox.sh rollback` (core.md §15 evolve-and-fix-forward).
 - Model pinned on every `Agent()` call.
 
 ## Exit criteria
