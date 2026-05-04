@@ -3,6 +3,14 @@
 *.pyc
 __pycache__/
 
+# Build artefacts — appmarket is a registry, not a source repo. Binaries
+# live on GitHub Releases (mirrored by aggregate.py); they must NEVER land
+# in the git tree. Historical commits filtered 2026-05-05.
+target/
+node_modules/
+dist/
+releases/
+
 # Signing keys must NEVER be committed — they live in GitHub Actions secrets
 *.pem
 *.key
