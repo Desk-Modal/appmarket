@@ -804,6 +804,42 @@ def aggregate(sources_path: str, out_path: str, token: Optional[str], mirror: bo
             platforms_available = [p for p, v in e["platforms"].items() if v]
             print(f"  [+] {e['id']} @ {e['latest_version']} platforms={platforms_available}")
 
+    # Bundled packs — content shipped inside the DeskModal binary itself
+    # (e.g. the default brand theme under platform/branding/themes/). They
+    # have no GitHub release; the platform resolves them locally via
+    # install_root()/branding/. Surface them in the catalog so they appear
+    # in the marketplace UI as "installed / bundled" first-class entries.
+    for bp in sources_doc.get("bundled_packs", []):
+        if bp["id"] in seen_ids:
+            print(f"  [skip] duplicate id '{bp['id']}' — already in catalog", file=sys.stderr)
+            continue
+        seen_ids.add(bp["id"])
+        publisher = bp.get("publisher", {})
+        catalog.append({
+            "id": bp["id"],
+            "owner": publisher.get("id", "deskmodal"),
+            "repo": "deskmodal",
+            "name": bp.get("name", bp["id"]),
+            "tagline": bp.get("tagline", ""),
+            "description": bp.get("description", ""),
+            "content_type": bp.get("type", "theme"),
+            "categories": bp.get("categories", []),
+            "tags": bp.get("tags", []),
+            "featured": bool(bp.get("featured", False)),
+            "bundled": True,
+            "publisher": {
+                "display_name": publisher.get("name", "DeskModal Technologies"),
+                "verified": bool(publisher.get("verified", True)),
+                "key_id": "deskmodal-primary",
+            },
+            "latest_version": bp.get("version", "1.0.0"),
+            "min_deskmodal_version": bp.get("min_deskmodal_version", "0.0.0"),
+            "published_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "license": bp.get("license", "Proprietary"),
+            "platforms": {"win-x64": True, "darwin-arm64": True, "linux-x64": True},
+        })
+        print(f"  [+] {bp['id']} @ {bp.get('version', '1.0.0')} (bundled)")
+
     # Sort for stable output
     catalog.sort(key=lambda e: e["id"])
 

@@ -196,6 +196,30 @@
       "has_app": false,
       "has_services": false,
       "published_at": "2026-04-15T01:47:38Z"
+    },
+    {
+      "id": "deskmodal-default",
+      "name": "DeskModal Default",
+      "version": "1.0.0",
+      "type": "theme",
+      "bundled": true,
+      "tagline": "The original DeskModal brand — dark navy + brand red-orange",
+      "description": "The original DeskModal brand pack: dark navy + brand red-orange accent. Apple-school glass, OKLCH-aligned, 4px grid. Ships pre-installed with DeskModal.",
+      "categories": ["branding"],
+      "tags": ["theme", "brand", "default", "dark"],
+      "featured": true,
+      "publisher": {
+        "display_name": "DeskModal Technologies",
+        "verified": true,
+        "key_id": "deskmodal-primary"
+      },
+      "license": "Proprietary",
+      "platforms": [
+        "win-x64",
+        "darwin-arm64",
+        "linux-x64"
+      ],
+      "published_at": "2026-05-04T00:00:00Z"
     }
   ],
   "categories": [
@@ -228,6 +252,11 @@
       "id": "scripting",
       "name": "Scripting",
       "description": "Indicator and strategy scripting"
+    },
+    {
+      "id": "branding",
+      "name": "Branding",
+      "description": "Brand themes and white-label packs"
     },
     {
       "id": "platform",
