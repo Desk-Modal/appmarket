@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-06T21:16:45Z",
+  "generated_at": "2026-05-06T21:48:24Z",
   "generator": {
     "name": "build-dist.sh",
     "version": "1.0.0"
@@ -21,7 +21,7 @@
       "platforms": [
         "darwin-arm64"
       ],
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.alerts",
@@ -41,7 +41,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.analytics",
@@ -61,7 +61,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.blotter",
@@ -81,7 +81,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.brand-editor",
@@ -101,7 +101,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.chart",
@@ -121,7 +121,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.depth",
@@ -141,7 +141,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.feeds",
@@ -161,7 +161,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.order-ticket",
@@ -181,7 +181,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.paper-trading",
@@ -201,7 +201,7 @@
       ],
       "has_app": false,
       "has_services": true,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.positions",
@@ -221,7 +221,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.price-feed",
@@ -241,7 +241,7 @@
       ],
       "has_app": false,
       "has_services": true,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.screener",
@@ -261,7 +261,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal.watchlist",
@@ -281,7 +281,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "optiscript",
@@ -301,7 +301,7 @@
       ],
       "has_app": true,
       "has_services": true,
-      "published_at": "2026-05-06T21:16:45Z"
+      "published_at": "2026-05-06T21:48:24Z"
     },
     {
       "id": "deskmodal-default",
@@ -320,7 +320,7 @@
         "darwin-arm64",
         "linux-x64"
       ],
-      "published_at": "2026-05-06T21:16:45Z",
+      "published_at": "2026-05-06T21:48:24Z",
       "license": "Proprietary",
       "tags": [
         "theme",
