@@ -82,10 +82,37 @@ jobs:
         run: python3 scripts/aggregate.py --sources sources.json --out index.json
 
       - name: Sign index.json with DeskModal publisher key
-        if: env.SIGNING_KEY != ''
+        # 113-A iter24 F-071 — drop the `if: env.SIGNING_KEY != ''`
+        # guard. Previous behaviour: if the secret was unset the
+        # workflow silently published an UNSIGNED index.json. Combined
+        # with the agent's soft-posture boot verifier (iter 10),
+        # the sign-and-verify chain had two soft links.
+        # Now: fail-closed. CI fails the run if SIGNING_KEY isn't
+        # configured, forcing the operator to set the secret rather
+        # than silently shipping unsigned catalogs.
         env:
           SIGNING_KEY: ${{ secrets.DESKMODAL_SIGNING_KEY }}
         run: |
+          if [ -z "$SIGNING_KEY" ]; then
+            echo "::error::DESKMODAL_SIGNING_KEY secret is not configured." >&2
+            echo "::error::Catalog publishing requires a configured Ed25519 signing key." >&2
+            echo "::error::See marketplace/appmarket/CLAUDE.md for setup; do not bypass." >&2
+            exit 1
+          fi
+          # 113-A iter24 F-072 — pre-validate hex shape before
+          # passing to from_private_bytes. Without this, a malformed
+          # secret raises a crypto error whose message includes the
+          # input length, leaking partial-shape info to GitHub Actions
+          # logs. With the mask + length guard, errors stay opaque.
+          echo "::add-mask::$SIGNING_KEY"
+          if [ ${#SIGNING_KEY} -ne 64 ]; then
+            echo "::error::SIGNING_KEY length is not 64 hex chars." >&2
+            exit 1
+          fi
+          if ! printf '%s' "$SIGNING_KEY" | grep -Eqi '^[0-9a-f]{64}$'; then
+            echo "::error::SIGNING_KEY contains non-hex characters." >&2
+            exit 1
+          fi
           python3 <<'PY'
           import os
           from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
