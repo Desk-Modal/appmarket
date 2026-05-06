@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-27T07:41:20Z",
+  "generated_at": "2026-05-06T05:09:21Z",
   "generator": {
     "name": "build-dist.sh",
     "version": "1.0.0"
@@ -8,218 +8,285 @@
     {
       "id": "deskmodal",
       "name": "DeskModal",
+      "tagline": "FDC3 desktop agent + plugin platform",
       "version": "0.1.0",
       "type": "platform",
+      "content_type": "platform",
+      "categories": [
+        "platform"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.alerts",
-      "name": "deskmodal.alerts",
+      "name": "DeskModal Alerts",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.analytics",
-      "name": "deskmodal.analytics",
+      "name": "DeskModal Analytics",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.blotter",
-      "name": "deskmodal.blotter",
+      "name": "DeskModal Blotter",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
+    },
+    {
+      "id": "deskmodal.brand-editor",
+      "name": "DeskModal Brand Editor",
+      "tagline": "",
+      "version": "0.1.0",
+      "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "branding"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
+      "platforms": [
+        "darwin-arm64"
+      ],
+      "has_app": true,
+      "has_services": false,
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.chart",
-      "name": "deskmodal.chart",
+      "name": "DeskModal Chart",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.depth",
-      "name": "deskmodal.depth",
+      "name": "DeskModal Depth",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.feeds",
-      "name": "deskmodal.feeds",
+      "name": "DeskModal Feeds",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.order-ticket",
-      "name": "deskmodal.order-ticket",
+      "name": "DeskModal Order Ticket",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.paper-trading",
-      "name": "deskmodal.paper-trading",
+      "name": "DeskModal Paper Trading",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "service",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": false,
       "has_services": true,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.positions",
-      "name": "deskmodal.positions",
+      "name": "DeskModal Positions",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.price-feed",
-      "name": "deskmodal.price-feed",
+      "name": "DeskModal Price Feed",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "service",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": false,
       "has_services": true,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.screener",
-      "name": "deskmodal.screener",
+      "name": "DeskModal Screener",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "deskmodal.watchlist",
-      "name": "deskmodal.watchlist",
+      "name": "DeskModal Watchlist",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "trading"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-04-27T07:41:20Z"
+      "published_at": "2026-05-06T05:09:21Z"
     },
     {
       "id": "optiscript",
-      "name": "optiscript",
+      "name": "Optiscript",
+      "tagline": "",
       "version": "0.1.0",
       "type": "plugin",
+      "content_type": "app",
+      "categories": [
+        "scripting"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
       "platforms": [
-        "win-x64",
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": true,
-      "published_at": "2026-04-27T07:41:20Z"
-    },
-    {
-      "id": "tradesurface",
-      "name": "tradesurface",
-      "version": "0.1.0",
-      "type": "plugin",
-      "platforms": [
-        "win-x64"
-      ],
-      "has_app": false,
-      "has_services": false,
-      "published_at": "2026-04-15T01:47:38Z"
-    },
-    {
-      "id": "deskmodal-default",
-      "name": "DeskModal Default",
-      "version": "1.0.0",
-      "type": "theme",
-      "bundled": true,
-      "tagline": "The original DeskModal brand — dark navy + brand red-orange",
-      "description": "The original DeskModal brand pack: dark navy + brand red-orange accent. Apple-school glass, OKLCH-aligned, 4px grid. Ships pre-installed with DeskModal.",
-      "categories": ["branding"],
-      "tags": ["theme", "brand", "default", "dark"],
-      "featured": true,
-      "publisher": {
-        "display_name": "DeskModal Technologies",
-        "verified": true,
-        "key_id": "deskmodal-primary"
-      },
-      "license": "Proprietary",
-      "platforms": [
-        "win-x64",
-        "darwin-arm64",
-        "linux-x64"
-      ],
-      "published_at": "2026-05-04T00:00:00Z"
+      "published_at": "2026-05-06T05:09:21Z"
     }
   ],
   "categories": [
