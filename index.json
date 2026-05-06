@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-06T20:29:13Z",
+  "generated_at": "2026-05-06T21:16:45Z",
   "generator": {
     "name": "build-dist.sh",
     "version": "1.0.0"
@@ -17,10 +17,11 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.alerts",
@@ -34,12 +35,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.analytics",
@@ -53,12 +55,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.blotter",
@@ -72,12 +75,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.brand-editor",
@@ -91,12 +95,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.chart",
@@ -110,12 +115,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.depth",
@@ -129,12 +135,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.feeds",
@@ -148,12 +155,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.order-ticket",
@@ -167,12 +175,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.paper-trading",
@@ -186,12 +195,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": false,
       "has_services": true,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.positions",
@@ -205,12 +215,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.price-feed",
@@ -224,12 +235,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": false,
       "has_services": true,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.screener",
@@ -243,12 +255,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal.watchlist",
@@ -262,12 +275,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "optiscript",
@@ -281,12 +295,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
+      "verification_tier": "verified",
       "platforms": [
         "darwin-arm64"
       ],
       "has_app": true,
       "has_services": true,
-      "published_at": "2026-05-06T20:29:13Z"
+      "published_at": "2026-05-06T21:16:45Z"
     },
     {
       "id": "deskmodal-default",
@@ -305,14 +320,15 @@
         "darwin-arm64",
         "linux-x64"
       ],
-      "published_at": "2026-05-06T20:29:13Z",
+      "published_at": "2026-05-06T21:16:45Z",
       "license": "Proprietary",
       "tags": [
         "theme",
         "brand",
         "default",
         "dark"
-      ]
+      ],
+      "verification_tier": "verified"
     }
   ],
   "categories": [
