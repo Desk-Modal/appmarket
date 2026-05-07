@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-07T01:57:13Z",
+  "generated_at": "2026-05-07T11:35:52Z",
   "generator": {
     "name": "build-dist.sh",
     "version": "1.0.0"
@@ -27,7 +27,7 @@
       "id": "deskmodal.alerts",
       "name": "DeskModal Alerts",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -41,13 +41,13 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.analytics",
       "name": "DeskModal Analytics",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -61,13 +61,13 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.blotter",
       "name": "DeskModal Blotter",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -81,7 +81,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.brand-editor",
@@ -106,8 +106,8 @@
     {
       "id": "deskmodal.chart",
       "name": "DeskModal Chart",
-      "tagline": "",
-      "version": "0.1.0",
+      "tagline": "State-of-the-art trading chart \u2014 info-density top bar, AI smart-suggest, position drawings, FDC3-linked",
+      "version": "0.3.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -121,13 +121,13 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.depth",
       "name": "DeskModal Depth",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -141,13 +141,13 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.feeds",
       "name": "DeskModal Feeds",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -161,13 +161,13 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.order-ticket",
       "name": "DeskModal Order Ticket",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -181,13 +181,13 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.paper-trading",
       "name": "DeskModal Paper Trading",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
@@ -201,13 +201,13 @@
       ],
       "has_app": false,
       "has_services": true,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.positions",
       "name": "DeskModal Positions",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -221,13 +221,13 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.price-feed",
       "name": "DeskModal Price Feed",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
@@ -241,13 +241,13 @@
       ],
       "has_app": false,
       "has_services": true,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.screener",
       "name": "DeskModal Screener",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -261,13 +261,13 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "deskmodal.watchlist",
       "name": "DeskModal Watchlist",
       "tagline": "",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -281,7 +281,7 @@
       ],
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "published_at": "2026-05-07T11:35:52Z"
     },
     {
       "id": "optiscript",
