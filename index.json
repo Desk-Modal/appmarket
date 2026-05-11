@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-07T11:35:52Z",
+  "generated_at": "2026-05-11T22:15:16Z",
   "generator": {
-    "name": "build-dist.sh",
+    "name": "build_appmarket_catalog.py",
     "version": "1.0.0"
   },
   "catalog": [
@@ -9,7 +9,9 @@
       "id": "deskmodal",
       "name": "DeskModal",
       "tagline": "FDC3 desktop agent + plugin platform",
-      "version": "0.1.0",
+      "description": "DeskModal is a high-performance FDC3 2.2 desktop agent. Sub-microsecond IPC via shared memory, WASM plugin system, Erlang/OTP supervision, tamper-evident audit trail.",
+      "version": "0.1.1",
+      "latest_version": "0.1.1",
       "type": "platform",
       "content_type": "platform",
       "categories": [
@@ -18,76 +20,181 @@
       "featured": true,
       "publisher": "DeskModal",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
-      "published_at": "2026-05-07T01:57:13Z"
+      "platforms": {
+        "darwin-arm64": {
+          "binary": "darwin-arm64/DeskModal",
+          "checksums": "darwin-arm64/checksums.txt"
+        }
+      },
+      "dependencies": [],
+      "published_at": "2026-05-11T22:15:16Z"
     },
     {
       "id": "deskmodal.alerts",
-      "name": "DeskModal Alerts",
-      "tagline": "",
+      "name": "TradeSurface Alerts",
+      "tagline": "Alert management: price, indicator, compound conditions, webhooks",
+      "description": "Alert management with compound conditions, webhook delivery, and FDC3 integration",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "fe878a576ab18377d3183cea852b0bb91828000e9a961257dc63139823ec7399",
+          "size_bytes": 95983025
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Price alerts trigger off the deskmodal.prices stream \u2014 without the service, alerts can't fire."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/icons/alerts.svg"
+      },
+      "icon_url": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/icons/alerts.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.analytics",
-      "name": "DeskModal Analytics",
-      "tagline": "",
+      "name": "TradeSurface Analytics",
+      "tagline": "On-chain metrics, liquidation heatmaps, funding rates",
+      "description": "Crypto analytics dashboard with on-chain data, liquidation maps, and funding rate surfaces",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "5cab75ebc65a4c6cd9a31be9b9557df768c3f00135f46c5be82590ff4744ca09",
+          "size_bytes": 68186570
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.paper-trading",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Performance analytics consume fills + positions emitted by the paper-trading service via FDC3 intents (GetTrades / GetPositions)."
+        },
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Mark-to-market and unrealised PnL require live prices on deskmodal.prices."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/icons/analytics.svg"
+      },
+      "icon_url": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/icons/analytics.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.blotter",
-      "name": "DeskModal Blotter",
-      "tagline": "",
+      "name": "TradeSurface Order Blotter",
+      "tagline": "Working and filled orders",
+      "description": "Order blotter showing working and filled orders with real-time status updates.",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "ff25525a28057c9128f4ba7defec1f5ff3013f037143c43d1f07dbcbf7fac9b3",
+          "size_bytes": 71849480
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.paper-trading",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Paper trading simulation engine \u2014 order routing, fills, position tracking. Order Ticket / Blotter / Positions apps subscribe to its FDC3 intents."
+        },
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Live price quotes on deskmodal.prices channel \u2014 Order Ticket needs them for limit-price reference, Positions for mark-to-market."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/icons/blotter.svg"
+      },
+      "icon_url": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/icons/blotter.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.brand-editor",
-      "name": "DeskModal Brand Editor",
-      "tagline": "",
+      "name": "Brand Editor",
+      "tagline": "Edit brand tokens, typography, motion, and brand strings",
+      "description": "First-party white-label Brand Editor \u2014 configure the 12-token design-system surface and export DTCG theme.json + strings.json.",
       "version": "0.1.0",
+      "latest_version": "0.1.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -96,198 +203,478 @@
       "featured": true,
       "publisher": "DeskModal",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "fa4d9f1b51aca5cd92390106692ed461681e01ca640e69a8a44f6361239bbf2d",
+          "size_bytes": 662840
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T01:57:13Z"
+      "dependencies": [],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/icons/brand-editor.svg"
+      },
+      "icon_url": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/icons/brand-editor.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.chart",
-      "name": "DeskModal Chart",
-      "tagline": "State-of-the-art trading chart \u2014 info-density top bar, AI smart-suggest, position drawings, FDC3-linked",
+      "name": "TradeSurface Chart",
+      "tagline": "State-of-the-art trading chart \u2014 info-density top bar, dark default, AI smart-suggest, position drawings, FDC3-linked",
+      "description": "State-of-the-art trading chart \u2014 info-density top bar, Jony-Ive declutter, brand-native dark default, long/short position drawings with PnL+R:R, AI smart-suggest pill, OptiScript prompt-to-script, right-rail panel system, 9-preset date-range bar, FPS overlay, 4x4 multi-chart with culling, cross-window sync, glassmorphism+OKLCH+spring motion, FDC3 2.2 conformant. 18 chart types, 132 indicators, 8 drawing categories. (114-chart-sota convergence \u2014 12 ITER cycles, 47 rows \u2705)",
       "version": "0.3.0",
+      "latest_version": "0.3.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.chart/0.3.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.chart/0.3.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "39440fd3d7236d22f3818b7d5ea5fb9a9beb4accc0ee4d6b75b0aa6b37eecfeb",
+          "size_bytes": 223180264
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Real-time price ticks and OHLCV history required for chart rendering \u2014 Chart subscribes to deskmodal.prices channel + GetHistory intent."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.chart/0.3.0/darwin-arm64/icons/chart.svg"
+      },
+      "icon_url": "plugins/deskmodal.chart/0.3.0/darwin-arm64/icons/chart.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.chart/0.3.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.chart/0.3.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.depth",
-      "name": "DeskModal Depth",
-      "tagline": "",
+      "name": "TradeSurface Depth",
+      "tagline": "Aggregated order book and depth visualization",
+      "description": "Order book display with aggregation controls, depth chart, and trade history",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.depth/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.depth/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "7bff6f91bee6f4f5af5459e91b0d2e32092283be6060a103b7fc5a5d11e5ef1e",
+          "size_bytes": 88597129
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Order-book depth-of-market data \u2014 subscribes to deskmodal.orderbook channel published by the price-feed service."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.depth/0.2.0/darwin-arm64/icons/depth.svg"
+      },
+      "icon_url": "plugins/deskmodal.depth/0.2.0/darwin-arm64/icons/depth.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.depth/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.depth/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.feeds",
-      "name": "DeskModal Feeds",
-      "tagline": "",
+      "name": "TradeSurface Feeds",
+      "tagline": "Exchange connections, credentials, and live price monitoring",
+      "description": "Monitor and control exchange connections managed by the price-feed service. View live prices, set API credentials, and manage subscriptions.",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "a745524331a0874683d89076a5e43ee86561e36dc399b11bf79a3d6e923a881e",
+          "size_bytes": 89769092
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Exchange connectivity + tick normalization \u2014 Feeds app reads subscriptions/quotes from this service via FDC3 intents and the deskmodal.prices channel."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/icons/feeds.svg"
+      },
+      "icon_url": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/icons/feeds.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.order-ticket",
-      "name": "DeskModal Order Ticket",
-      "tagline": "",
+      "name": "TradeSurface Order Ticket",
+      "tagline": "Enter working orders \u2014 limits, stops, OCO, if-done",
+      "description": "Order entry widget for placing limit, stop, OCO, and if-done orders linked to watchlist and chart instruments via FDC3.",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "fc6bed804381ea7c1360bdd9f3b1f467bc4b2ae43d67ed172a76bf8d79f2503f",
+          "size_bytes": 85554045
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.paper-trading",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Paper trading simulation engine \u2014 order routing, fills, position tracking. Order Ticket / Blotter / Positions apps subscribe to its FDC3 intents."
+        },
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Live price quotes on deskmodal.prices channel \u2014 Order Ticket needs them for limit-price reference, Positions for mark-to-market."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/icons/order-ticket.svg"
+      },
+      "icon_url": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/icons/order-ticket.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.paper-trading",
-      "name": "DeskModal Paper Trading",
-      "tagline": "",
+      "name": "Paper Trading Service",
+      "tagline": "Simulated order execution with per-exchange balance isolation, OCO, if-done, trailing stops, and performance analytics",
+      "description": "Simulated order execution with per-exchange balance isolation, OCO, if-done, trailing stops, and performance analytics",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": false,
+          "has_services": true,
+          "url": "plugins/deskmodal.paper-trading/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.paper-trading/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "e173ec3b028d2074baf1d31c83eeb062f14ea8b7acbd2ac483eadef9b09a98c4",
+          "size_bytes": 4249286
+        }
+      },
       "has_app": false,
       "has_services": true,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Live price quotes on deskmodal.prices channel \u2014 Order Ticket needs them for limit-price reference, Positions for mark-to-market."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.paper-trading/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.paper-trading/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.positions",
-      "name": "DeskModal Positions",
-      "tagline": "",
+      "name": "TradeSurface Positions",
+      "tagline": "Cross-exchange position viewer with risk management",
+      "description": "Track positions across all exchanges with real-time P&L, risk metrics, and one-click position management.",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.positions/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.positions/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "7c8d48a25efdf1718eba34085e05164a647b780679eae7f67075404c6c36a66b",
+          "size_bytes": 70392237
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.paper-trading",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Paper trading simulation engine \u2014 order routing, fills, position tracking. Order Ticket / Blotter / Positions apps subscribe to its FDC3 intents."
+        },
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Live price quotes on deskmodal.prices channel \u2014 Order Ticket needs them for limit-price reference, Positions for mark-to-market."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.positions/0.2.0/darwin-arm64/icons/positions.svg"
+      },
+      "icon_url": "plugins/deskmodal.positions/0.2.0/darwin-arm64/icons/positions.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.positions/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.positions/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.price-feed",
-      "name": "DeskModal Price Feed",
-      "tagline": "",
+      "name": "Price Feed Service",
+      "tagline": "Exchange connectivity, tick normalization, and FDC3 distribution",
+      "description": "Exchange connectivity, tick normalization, and FDC3 distribution",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": false,
+          "has_services": true,
+          "url": "plugins/deskmodal.price-feed/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.price-feed/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "32f4c4b1fc5cbbebccbb8b3dc0ee825e9e13a89a4ce1b6d2184b4389259088e6",
+          "size_bytes": 7348010
+        }
+      },
       "has_app": false,
       "has_services": true,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.price-feed/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.price-feed/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.screener",
-      "name": "DeskModal Screener",
-      "tagline": "",
+      "name": "TradeSurface Screener",
+      "tagline": "Crypto screener with filters",
+      "description": "Crypto screener with filter builder, sortable table, and chart grid view",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.screener/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.screener/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "d8630908477ef84a529ac8da29c43af67b2f52c4da5309e08e8e4eebc9ca355a",
+          "size_bytes": 73448241
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Live quote stream across watched symbols \u2014 subscribes to deskmodal.prices for screening criteria evaluation."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.screener/0.2.0/darwin-arm64/icons/screener.svg"
+      },
+      "icon_url": "plugins/deskmodal.screener/0.2.0/darwin-arm64/icons/screener.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.screener/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.screener/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal.watchlist",
-      "name": "DeskModal Watchlist",
-      "tagline": "",
+      "name": "TradeSurface Watchlist",
+      "tagline": "Symbol watchlist with real-time prices",
+      "description": "Watchlist with sections, sorting, drag-reorder, and real-time price streaming",
       "version": "0.2.0",
+      "latest_version": "0.2.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
         "trading"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": "TradeSurface",
       "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "696b35e78263faf00a165347feb678fc813a3b634337da35b66b23442c1dbbc8",
+          "size_bytes": 96876810
+        }
+      },
       "has_app": true,
       "has_services": false,
-      "published_at": "2026-05-07T11:35:52Z"
+      "dependencies": [
+        {
+          "plugin": "deskmodal.price-feed",
+          "version": "^0.2.0",
+          "optional": false,
+          "reason": "Real-time price streaming required for watchlist quote display \u2014 subscribes to deskmodal.prices channel."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/icons/watchlist.svg"
+      },
+      "icon_url": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/icons/watchlist.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/checksums.txt"
+      }
     },
     {
-      "id": "optiscript",
-      "name": "Optiscript",
-      "tagline": "",
+      "id": "optiscript.editor",
+      "name": "OptiScript Editor",
+      "tagline": "Write, debug, and backtest trading scripts",
+      "description": "Full IDE for OptiScript with syntax highlighting, debugger, and backtesting.",
       "version": "0.1.0",
+      "latest_version": "0.1.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -295,19 +682,86 @@
       ],
       "featured": true,
       "publisher": "DeskModal",
-      "verification_tier": "verified",
-      "platforms": [
-        "darwin-arm64"
-      ],
+      "verification_tier": "self_signed",
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/optiscript.editor/0.1.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/optiscript.editor/0.1.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "0e4d7864824d40a23b3bd7ad08c591f83ce5bc2eeec1b3b4b628a869f15c2b6e",
+          "size_bytes": 5100181
+        }
+      },
       "has_app": true,
+      "has_services": false,
+      "dependencies": [
+        {
+          "plugin": "optiscript.engine",
+          "version": "^0.1.0",
+          "optional": false,
+          "reason": "OptiScript Editor raises optiscript.Run / Debug / Compile / Backtest intents handled exclusively by the engine service; without it the IDE has no execution backend."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "icon": {
+        "market": "plugins/optiscript.editor/0.1.0/darwin-arm64/icons/optiscript.svg"
+      },
+      "icon_url": "plugins/optiscript.editor/0.1.0/darwin-arm64/icons/optiscript.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/optiscript.editor/0.1.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/optiscript.editor/0.1.0/darwin-arm64/checksums.txt"
+      }
+    },
+    {
+      "id": "optiscript.engine",
+      "name": "OptiScript Engine",
+      "tagline": "Compilation, execution, and backtesting engine",
+      "description": "Compilation, execution, and backtesting engine",
+      "version": "0.1.0",
+      "latest_version": "0.1.0",
+      "type": "plugin",
+      "content_type": "service",
+      "categories": [
+        "scripting"
+      ],
+      "featured": true,
+      "publisher": "DeskModal",
+      "verification_tier": "self_signed",
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": false,
+          "has_services": true,
+          "url": "plugins/optiscript.engine/0.1.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/optiscript.engine/0.1.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "c4e3d13673e96e6724311e89d50a072f448d2f2e71dedc9fb85331e33955a76a",
+          "size_bytes": 2078391
+        }
+      },
+      "has_app": false,
       "has_services": true,
-      "published_at": "2026-05-07T01:57:13Z"
+      "dependencies": [],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-11T22:15:16Z",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/optiscript.engine/0.1.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/optiscript.engine/0.1.0/darwin-arm64/checksums.txt"
+      }
     },
     {
       "id": "deskmodal-default",
       "name": "DeskModal Default",
       "tagline": "The original DeskModal brand \u2014 dark navy + brand red-orange",
+      "description": "The original DeskModal brand pack: dark navy + brand red-orange accent. Apple-school glass, OKLCH-aligned, 4px grid. Ships pre-installed with DeskModal.",
       "version": "1.0.0",
+      "latest_version": "1.0.0",
       "type": "theme",
       "content_type": "theme",
       "categories": [
@@ -315,12 +769,13 @@
       ],
       "featured": true,
       "publisher": "DeskModal Technologies",
-      "platforms": [
-        "win-x64",
-        "darwin-arm64",
-        "linux-x64"
-      ],
-      "published_at": "2026-05-07T01:57:13Z",
+      "platforms": {
+        "win-x64": {},
+        "darwin-arm64": {},
+        "linux-x64": {}
+      },
+      "dependencies": [],
+      "published_at": "2026-05-11T22:15:16Z",
       "license": "Proprietary",
       "tags": [
         "theme",
