@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-13T09:05:08Z",
+  "generated_at": "2026-05-13T09:48:41Z",
   "generator": {
     "name": "build_appmarket_catalog.py",
     "version": "1.0.0"
@@ -27,7 +27,7 @@
         }
       },
       "dependencies": [],
-      "published_at": "2026-05-13T08:59:36Z"
+      "published_at": "2026-05-13T09:48:41Z"
     },
     {
       "id": "deskmodal.alerts",
@@ -66,7 +66,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/icons/alerts.svg"
       },
@@ -80,7 +80,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 173643390
         },
         {
@@ -133,7 +133,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/icons/analytics.svg"
       },
@@ -147,7 +147,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 131335987
         },
         {
@@ -200,7 +200,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/icons/blotter.svg"
       },
@@ -214,7 +214,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 134487113
         }
       ]
@@ -249,7 +249,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/icons/brand-editor.svg"
       },
@@ -263,7 +263,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 859235
         }
       ]
@@ -305,7 +305,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.chart/0.3.0/darwin-arm64/icons/chart.svg"
       },
@@ -319,7 +319,7 @@
       "versions": [
         {
           "version": "0.3.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 389168794
         },
         {
@@ -371,7 +371,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.depth/0.2.0/darwin-arm64/icons/depth.svg"
       },
@@ -385,7 +385,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 153587142
         },
         {
@@ -430,7 +430,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.earnings/0.1.0/darwin-arm64/icons/earnings.svg"
       },
@@ -444,20 +444,20 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 15206702
         }
       ]
     },
     {
       "id": "deskmodal.earnings-feed",
-      "name": "DeskModal Earnings Feed",
+      "name": "Earnings Feed Service",
       "tagline": "Multi-source earnings calendar aggregator + FDC3 broadcaster for the DeskModal earnings app",
       "description": "Multi-source earnings calendar aggregator + FDC3 broadcaster for the DeskModal earnings app",
       "version": "0.1.0",
       "latest_version": "0.1.0",
       "type": "plugin",
-      "content_type": "plugin",
+      "content_type": "service",
       "categories": [],
       "featured": true,
       "publisher": "DeskModal",
@@ -465,24 +465,30 @@
       "platforms": {
         "darwin-arm64": {
           "has_app": false,
-          "has_services": false,
+          "has_services": true,
           "url": "plugins/deskmodal.earnings-feed/0.1.0/darwin-arm64/plugin.toml",
           "asset_manifest_url": "plugins/deskmodal.earnings-feed/0.1.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "34b5cce27b3862aef2667d2eac47c019ae7d7060b730c6f0bc5db165c2582aa5",
-          "size_bytes": 8327454
+          "sha256": "d87c7939ddb3b9a4d00da9b6141b45ba2e39f61e833aeaffc6981d0390d5364d",
+          "size_bytes": 26002502
         }
       },
       "has_app": false,
-      "has_services": false,
+      "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.earnings-feed/0.1.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.earnings-feed/0.1.0/darwin-arm64/checksums.txt"
+      },
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:05:08Z",
-          "size_bytes": 8327454
+          "published_at": "2026-05-13T09:48:41Z",
+          "size_bytes": 26002502
         }
       ]
     },
@@ -509,7 +515,7 @@
           "asset_manifest_url": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "a745524331a0874683d89076a5e43ee86561e36dc399b11bf79a3d6e923a881e",
-          "size_bytes": 155879283
+          "size_bytes": 155879305
         }
       },
       "has_app": true,
@@ -523,7 +529,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/icons/feeds.svg"
       },
@@ -537,8 +543,8 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:05:08Z",
-          "size_bytes": 155879283
+          "published_at": "2026-05-13T09:48:41Z",
+          "size_bytes": 155879305
         },
         {
           "version": "0.1.0",
@@ -582,7 +588,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.news/0.1.0/darwin-arm64/icons/news.svg"
       },
@@ -596,20 +602,20 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 15273331
         }
       ]
     },
     {
       "id": "deskmodal.news-feed",
-      "name": "DeskModal News Feed",
+      "name": "News Feed Service",
       "tagline": "Multi-source news aggregator + FDC3 broadcaster for the DeskModal news app",
       "description": "Multi-source news aggregator + FDC3 broadcaster for the DeskModal news app",
       "version": "0.1.0",
       "latest_version": "0.1.0",
       "type": "plugin",
-      "content_type": "plugin",
+      "content_type": "service",
       "categories": [],
       "featured": true,
       "publisher": "DeskModal",
@@ -617,24 +623,30 @@
       "platforms": {
         "darwin-arm64": {
           "has_app": false,
-          "has_services": false,
+          "has_services": true,
           "url": "plugins/deskmodal.news-feed/0.1.0/darwin-arm64/plugin.toml",
           "asset_manifest_url": "plugins/deskmodal.news-feed/0.1.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "575de90f163c3c405ee33527e5c31afc3e0ecf3c761a3402e1e8d5fcfb68b9e7",
-          "size_bytes": 9551200
+          "sha256": "9111f2493e99f92d62dbca41ba4bcf148a9fdea2250fff76acd4d57d79c3e1a0",
+          "size_bytes": 29379215
         }
       },
       "has_app": false,
-      "has_services": false,
+      "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.news-feed/0.1.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.news-feed/0.1.0/darwin-arm64/checksums.txt"
+      },
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:05:08Z",
-          "size_bytes": 9551200
+          "published_at": "2026-05-13T09:48:41Z",
+          "size_bytes": 29379215
         }
       ]
     },
@@ -681,7 +693,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/icons/order-ticket.svg"
       },
@@ -695,7 +707,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 148546936
         }
       ]
@@ -723,7 +735,7 @@
           "asset_manifest_url": "plugins/deskmodal.paper-trading/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "e173ec3b028d2074baf1d31c83eeb062f14ea8b7acbd2ac483eadef9b09a98c4",
-          "size_bytes": 4249286
+          "size_bytes": 12740262
         }
       },
       "has_app": false,
@@ -737,7 +749,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
@@ -747,8 +759,8 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:05:08Z",
-          "size_bytes": 4249286
+          "published_at": "2026-05-13T09:48:41Z",
+          "size_bytes": 12740262
         },
         {
           "version": "0.1.0",
@@ -800,7 +812,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.positions/0.2.0/darwin-arm64/icons/positions.svg"
       },
@@ -814,7 +826,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 131763580
         }
       ]
@@ -842,14 +854,14 @@
           "asset_manifest_url": "plugins/deskmodal.price-feed/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "32f4c4b1fc5cbbebccbb8b3dc0ee825e9e13a89a4ce1b6d2184b4389259088e6",
-          "size_bytes": 7348010
+          "size_bytes": 23260234
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
@@ -859,8 +871,8 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:05:08Z",
-          "size_bytes": 7348010
+          "published_at": "2026-05-13T09:48:41Z",
+          "size_bytes": 23260234
         },
         {
           "version": "0.1.0",
@@ -906,7 +918,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.screener/0.3.0/darwin-arm64/icons/screener.svg"
       },
@@ -920,7 +932,7 @@
       "versions": [
         {
           "version": "0.3.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 154482277
         },
         {
@@ -972,7 +984,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/icons/watchlist.svg"
       },
@@ -986,7 +998,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 183003733
         },
         {
@@ -1033,7 +1045,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "icon": {
         "market": "plugins/optiscript.editor/0.1.0/darwin-arm64/icons/optiscript.svg"
       },
@@ -1047,7 +1059,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 5100181
         }
       ]
@@ -1082,7 +1094,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
@@ -1092,7 +1104,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:05:08Z",
+          "published_at": "2026-05-13T09:48:41Z",
           "size_bytes": 2078391
         }
       ]
@@ -1117,7 +1129,7 @@
         "linux-x64": {}
       },
       "dependencies": [],
-      "published_at": "2026-05-13T09:05:08Z",
+      "published_at": "2026-05-13T09:48:41Z",
       "license": "Proprietary",
       "tags": [
         "theme",

@@ -15,3 +15,10 @@ releases/
 *.pem
 *.key
 DESKMODAL_SIGNING_KEY
+
+# Catalog signing key — Ed25519 secret never committed.
+# Public hex lives in CATALOG_PUBKEY.md (committed) for clients to set
+# DESKMODAL_CATALOG_PUBKEY_HEX env var; the private key stays local /
+# in GitHub Actions secrets.
+.signing-key.hex
+.signing-key.bin
