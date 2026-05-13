@@ -1,0 +1,32 @@
+<!-- desk-modal.earnings-feed-service — market -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="efs-base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <radialGradient id="efs-glow" cx="0.5" cy="0.5" r="0.65">
+      <stop offset="0" stop-color="#34d399" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#34d399" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#efs-base)"/>
+  <rect width="128" height="128" rx="28" fill="url(#efs-glow)" opacity="0.4"/>
+
+  <!-- broadcast antenna source (top-left) -->
+  <circle cx="34" cy="42" r="5" fill="#34d399"/>
+  <path d="M 26 30 A 12 12 0 0 1 42 30" fill="none" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+  <path d="M 22 26 A 16 16 0 0 1 46 26" fill="none" stroke="#34d399" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- event timeline with EPS-print spikes (calendar slots) -->
+  <line x1="22" y1="80" x2="108" y2="80" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- 4 calendar slots: BMO / Open / Close / AMC (varying spike heights = surprise magnitude) -->
+  <line x1="40" y1="80" x2="40" y2="68" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
+  <line x1="58" y1="80" x2="58" y2="50" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
+  <line x1="76" y1="80" x2="76" y2="58" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
+  <line x1="94" y1="80" x2="94" y2="62" stroke="#34d399" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- positive-surprise marker on tallest spike -->
+  <circle cx="58" cy="50" r="6" fill="#22d3ee"/>
+</svg>

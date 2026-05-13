@@ -1,0 +1,28 @@
+<!-- desk-modal.news-feed-service — market -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="nfs-base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1120"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <radialGradient id="nfs-glow" cx="0.5" cy="0.5" r="0.65">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#nfs-base)"/>
+  <rect width="128" height="128" rx="28" fill="url(#nfs-glow)" opacity="0.4"/>
+
+  <!-- broadcast antenna source (top-left) -->
+  <circle cx="34" cy="42" r="5" fill="#22d3ee"/>
+  <path d="M 26 30 A 12 12 0 0 1 42 30" fill="none" stroke="#22d3ee" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+  <path d="M 22 26 A 16 16 0 0 1 46 26" fill="none" stroke="#22d3ee" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- news flow lines (3 headlines streaming right) -->
+  <line x1="48" y1="42" x2="106" y2="42" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+  <line x1="34" y1="68" x2="106" y2="68" stroke="#22d3ee" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
+  <line x1="34" y1="92" x2="92" y2="92" stroke="#22d3ee" stroke-width="5" stroke-linecap="round" opacity="0.55"/>
+
+  <!-- breaking-news dot on the top headline -->
+  <circle cx="100" cy="42" r="6" fill="#ef4444"/>
+</svg>
