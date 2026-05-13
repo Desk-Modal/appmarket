@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11T22:15:16Z",
+  "generated_at": "2026-05-13T09:05:08Z",
   "generator": {
     "name": "build_appmarket_catalog.py",
     "version": "1.0.0"
@@ -27,7 +27,7 @@
         }
       },
       "dependencies": [],
-      "published_at": "2026-05-11T22:15:16Z"
+      "published_at": "2026-05-13T08:59:36Z"
     },
     {
       "id": "deskmodal.alerts",
@@ -51,8 +51,8 @@
           "url": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/plugin.toml",
           "asset_manifest_url": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "fe878a576ab18377d3183cea852b0bb91828000e9a961257dc63139823ec7399",
-          "size_bytes": 95983025
+          "sha256": "3a6878def5fa1ab27c5360eedb6715b0f1ae8b869d26d3799f390d2127f2223d",
+          "size_bytes": 173643390
         }
       },
       "has_app": true,
@@ -66,7 +66,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/icons/alerts.svg"
       },
@@ -76,7 +76,19 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 173643390
+        },
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-07T11:30:26Z",
+          "size_bytes": null
+        }
+      ]
     },
     {
       "id": "deskmodal.analytics",
@@ -101,7 +113,7 @@
           "asset_manifest_url": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "5cab75ebc65a4c6cd9a31be9b9557df768c3f00135f46c5be82590ff4744ca09",
-          "size_bytes": 68186570
+          "size_bytes": 131335987
         }
       },
       "has_app": true,
@@ -121,7 +133,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/icons/analytics.svg"
       },
@@ -131,7 +143,19 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 131335987
+        },
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-07T11:30:26Z",
+          "size_bytes": null
+        }
+      ]
     },
     {
       "id": "deskmodal.blotter",
@@ -156,7 +180,7 @@
           "asset_manifest_url": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "ff25525a28057c9128f4ba7defec1f5ff3013f037143c43d1f07dbcbf7fac9b3",
-          "size_bytes": 71849480
+          "size_bytes": 134487113
         }
       },
       "has_app": true,
@@ -176,7 +200,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/icons/blotter.svg"
       },
@@ -186,7 +210,14 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 134487113
+        }
+      ]
     },
     {
       "id": "deskmodal.brand-editor",
@@ -211,14 +242,14 @@
           "asset_manifest_url": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "fa4d9f1b51aca5cd92390106692ed461681e01ca640e69a8a44f6361239bbf2d",
-          "size_bytes": 662840
+          "size_bytes": 859235
         }
       },
       "has_app": true,
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/icons/brand-editor.svg"
       },
@@ -228,7 +259,14 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 859235
+        }
+      ]
     },
     {
       "id": "deskmodal.chart",
@@ -253,7 +291,7 @@
           "asset_manifest_url": "plugins/deskmodal.chart/0.3.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "39440fd3d7236d22f3818b7d5ea5fb9a9beb4accc0ee4d6b75b0aa6b37eecfeb",
-          "size_bytes": 223180264
+          "size_bytes": 389168794
         }
       },
       "has_app": true,
@@ -267,7 +305,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/deskmodal.chart/0.3.0/darwin-arm64/icons/chart.svg"
       },
@@ -277,7 +315,24 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.chart/0.3.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.chart/0.3.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.3.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 389168794
+        },
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-07T11:30:26Z",
+          "size_bytes": null
+        },
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-07T07:26:35Z",
+          "size_bytes": null
+        }
+      ]
     },
     {
       "id": "deskmodal.depth",
@@ -302,7 +357,7 @@
           "asset_manifest_url": "plugins/deskmodal.depth/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "7bff6f91bee6f4f5af5459e91b0d2e32092283be6060a103b7fc5a5d11e5ef1e",
-          "size_bytes": 88597129
+          "size_bytes": 153587142
         }
       },
       "has_app": true,
@@ -316,7 +371,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/deskmodal.depth/0.2.0/darwin-arm64/icons/depth.svg"
       },
@@ -326,7 +381,110 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.depth/0.2.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.depth/0.2.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 153587142
+        },
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-07T11:30:26Z",
+          "size_bytes": null
+        }
+      ]
+    },
+    {
+      "id": "deskmodal.earnings",
+      "name": "TradeSurface Earnings",
+      "tagline": "Earnings calendar: week grid, EPS detail strip, implied-move band, drag-to-chart",
+      "description": "Week-grid earnings calendar with EPS detail strip, implied-move band, reaction tracker, and FDC3 cross-app integration",
+      "version": "0.1.0",
+      "latest_version": "0.1.0",
+      "type": "plugin",
+      "content_type": "app",
+      "categories": [],
+      "featured": true,
+      "publisher": "TradeSurface",
+      "verification_tier": "verified",
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.earnings/0.1.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.earnings/0.1.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "80eb7d5a6f474f571421c7aa96ec0d8981d1cd088d8cbdb63d25d727d3fa1dd1",
+          "size_bytes": 15206702
+        }
+      },
+      "has_app": true,
+      "has_services": false,
+      "dependencies": [
+        {
+          "plugin": "deskmodal.earnings-feed",
+          "version": "^0.1.0",
+          "optional": false,
+          "reason": "Earnings tile is a pure consumer of the earnings-feed service broadcasts on CHANNELS.EARNINGS \u2014 without the service installed, the tile shows an offline state and the settings popover is hidden per S-10."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-13T09:05:08Z",
+      "icon": {
+        "market": "plugins/deskmodal.earnings/0.1.0/darwin-arm64/icons/earnings.svg"
+      },
+      "icon_url": "plugins/deskmodal.earnings/0.1.0/darwin-arm64/icons/earnings.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.earnings/0.1.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.earnings/0.1.0/darwin-arm64/checksums.txt"
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 15206702
+        }
+      ]
+    },
+    {
+      "id": "deskmodal.earnings-feed",
+      "name": "DeskModal Earnings Feed",
+      "tagline": "Multi-source earnings calendar aggregator + FDC3 broadcaster for the DeskModal earnings app",
+      "description": "Multi-source earnings calendar aggregator + FDC3 broadcaster for the DeskModal earnings app",
+      "version": "0.1.0",
+      "latest_version": "0.1.0",
+      "type": "plugin",
+      "content_type": "plugin",
+      "categories": [],
+      "featured": true,
+      "publisher": "DeskModal",
+      "verification_tier": "verified",
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": false,
+          "has_services": false,
+          "url": "plugins/deskmodal.earnings-feed/0.1.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.earnings-feed/0.1.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "34b5cce27b3862aef2667d2eac47c019ae7d7060b730c6f0bc5db165c2582aa5",
+          "size_bytes": 8327454
+        }
+      },
+      "has_app": false,
+      "has_services": false,
+      "dependencies": [],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-13T09:05:08Z",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 8327454
+        }
+      ]
     },
     {
       "id": "deskmodal.feeds",
@@ -351,7 +509,7 @@
           "asset_manifest_url": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "a745524331a0874683d89076a5e43ee86561e36dc399b11bf79a3d6e923a881e",
-          "size_bytes": 89769092
+          "size_bytes": 155879283
         }
       },
       "has_app": true,
@@ -365,7 +523,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/icons/feeds.svg"
       },
@@ -375,7 +533,110 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 155879283
+        },
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-07T11:30:26Z",
+          "size_bytes": null
+        }
+      ]
+    },
+    {
+      "id": "deskmodal.news",
+      "name": "TradeSurface News",
+      "tagline": "News wire: severity-ranked headlines, source filters, drag to chart",
+      "description": "Real-time news wire with multi-source aggregation, severity ranking, and cross-app drag-to-chart",
+      "version": "0.1.0",
+      "latest_version": "0.1.0",
+      "type": "plugin",
+      "content_type": "app",
+      "categories": [],
+      "featured": true,
+      "publisher": "TradeSurface",
+      "verification_tier": "verified",
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": true,
+          "has_services": false,
+          "url": "plugins/deskmodal.news/0.1.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.news/0.1.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "87afada380e320f8ad6bae6407dba7e3c25aff56b6793b41bd930c83675d0df8",
+          "size_bytes": 15273331
+        }
+      },
+      "has_app": true,
+      "has_services": false,
+      "dependencies": [
+        {
+          "plugin": "deskmodal.news-feed",
+          "version": "^0.1.0",
+          "optional": false,
+          "reason": "News tile is a pure consumer of the news-feed service broadcasts on CHANNELS.NEWS \u2014 without the service installed, the tile shows an empty state and the settings popover is hidden per S-10."
+        }
+      ],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-13T09:05:08Z",
+      "icon": {
+        "market": "plugins/deskmodal.news/0.1.0/darwin-arm64/icons/news.svg"
+      },
+      "icon_url": "plugins/deskmodal.news/0.1.0/darwin-arm64/icons/news.svg",
+      "signature": {
+        "algorithm": "ed25519",
+        "publisher_key_id": "1c44bd0e9cf34e36",
+        "signature_url": "plugins/deskmodal.news/0.1.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.news/0.1.0/darwin-arm64/checksums.txt"
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 15273331
+        }
+      ]
+    },
+    {
+      "id": "deskmodal.news-feed",
+      "name": "DeskModal News Feed",
+      "tagline": "Multi-source news aggregator + FDC3 broadcaster for the DeskModal news app",
+      "description": "Multi-source news aggregator + FDC3 broadcaster for the DeskModal news app",
+      "version": "0.1.0",
+      "latest_version": "0.1.0",
+      "type": "plugin",
+      "content_type": "plugin",
+      "categories": [],
+      "featured": true,
+      "publisher": "DeskModal",
+      "verification_tier": "verified",
+      "platforms": {
+        "darwin-arm64": {
+          "has_app": false,
+          "has_services": false,
+          "url": "plugins/deskmodal.news-feed/0.1.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.news-feed/0.1.0/darwin-arm64/plugin.toml",
+          "checksums": "darwin-arm64/checksums.txt",
+          "sha256": "575de90f163c3c405ee33527e5c31afc3e0ecf3c761a3402e1e8d5fcfb68b9e7",
+          "size_bytes": 9551200
+        }
+      },
+      "has_app": false,
+      "has_services": false,
+      "dependencies": [],
+      "min_deskmodal_version": "",
+      "published_at": "2026-05-13T09:05:08Z",
+      "versions": [
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 9551200
+        }
+      ]
     },
     {
       "id": "deskmodal.order-ticket",
@@ -400,7 +661,7 @@
           "asset_manifest_url": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "fc6bed804381ea7c1360bdd9f3b1f467bc4b2ae43d67ed172a76bf8d79f2503f",
-          "size_bytes": 85554045
+          "size_bytes": 148546936
         }
       },
       "has_app": true,
@@ -420,7 +681,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/icons/order-ticket.svg"
       },
@@ -430,7 +691,14 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 148546936
+        }
+      ]
     },
     {
       "id": "deskmodal.paper-trading",
@@ -469,13 +737,25 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.paper-trading/0.2.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.paper-trading/0.2.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 4249286
+        },
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-07T11:30:26Z",
+          "size_bytes": null
+        }
+      ]
     },
     {
       "id": "deskmodal.positions",
@@ -500,7 +780,7 @@
           "asset_manifest_url": "plugins/deskmodal.positions/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "7c8d48a25efdf1718eba34085e05164a647b780679eae7f67075404c6c36a66b",
-          "size_bytes": 70392237
+          "size_bytes": 131763580
         }
       },
       "has_app": true,
@@ -520,7 +800,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/deskmodal.positions/0.2.0/darwin-arm64/icons/positions.svg"
       },
@@ -530,7 +810,14 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.positions/0.2.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.positions/0.2.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 131763580
+        }
+      ]
     },
     {
       "id": "deskmodal.price-feed",
@@ -562,21 +849,33 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.price-feed/0.2.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.price-feed/0.2.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 7348010
+        },
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-07T11:30:26Z",
+          "size_bytes": null
+        }
+      ]
     },
     {
       "id": "deskmodal.screener",
       "name": "TradeSurface Screener",
       "tagline": "Crypto screener with filters",
       "description": "Crypto screener with filter builder, sortable table, and chart grid view",
-      "version": "0.2.0",
-      "latest_version": "0.2.0",
+      "version": "0.3.0",
+      "latest_version": "0.3.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -589,11 +888,11 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.screener/0.2.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.screener/0.2.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.screener/0.3.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.screener/0.3.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "d8630908477ef84a529ac8da29c43af67b2f52c4da5309e08e8e4eebc9ca355a",
-          "size_bytes": 73448241
+          "sha256": "9c3bebf2d8bf1efea9adee8eaee8928a42aa62d33fff509a4f1dd1bf1dff9888",
+          "size_bytes": 154482277
         }
       },
       "has_app": true,
@@ -607,17 +906,34 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
-        "market": "plugins/deskmodal.screener/0.2.0/darwin-arm64/icons/screener.svg"
+        "market": "plugins/deskmodal.screener/0.3.0/darwin-arm64/icons/screener.svg"
       },
-      "icon_url": "plugins/deskmodal.screener/0.2.0/darwin-arm64/icons/screener.svg",
+      "icon_url": "plugins/deskmodal.screener/0.3.0/darwin-arm64/icons/screener.svg",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.screener/0.2.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.screener/0.2.0/darwin-arm64/checksums.txt"
-      }
+        "signature_url": "plugins/deskmodal.screener/0.3.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.screener/0.3.0/darwin-arm64/checksums.txt"
+      },
+      "versions": [
+        {
+          "version": "0.3.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 154482277
+        },
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-11T22:15:16Z",
+          "size_bytes": 73448241
+        },
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-07T11:30:26Z",
+          "size_bytes": null
+        }
+      ]
     },
     {
       "id": "deskmodal.watchlist",
@@ -642,7 +958,7 @@
           "asset_manifest_url": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "696b35e78263faf00a165347feb678fc813a3b634337da35b66b23442c1dbbc8",
-          "size_bytes": 96876810
+          "size_bytes": 183003733
         }
       },
       "has_app": true,
@@ -656,7 +972,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/icons/watchlist.svg"
       },
@@ -666,7 +982,19 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.2.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 183003733
+        },
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-07T11:30:26Z",
+          "size_bytes": null
+        }
+      ]
     },
     {
       "id": "optiscript.editor",
@@ -705,7 +1033,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "icon": {
         "market": "plugins/optiscript.editor/0.1.0/darwin-arm64/icons/optiscript.svg"
       },
@@ -715,7 +1043,14 @@
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/optiscript.editor/0.1.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/optiscript.editor/0.1.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 5100181
+        }
+      ]
     },
     {
       "id": "optiscript.engine",
@@ -747,13 +1082,20 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
         "signature_url": "plugins/optiscript.engine/0.1.0/darwin-arm64/plugin.toml.sig",
         "checksums_url": "plugins/optiscript.engine/0.1.0/darwin-arm64/checksums.txt"
-      }
+      },
+      "versions": [
+        {
+          "version": "0.1.0",
+          "published_at": "2026-05-13T09:05:08Z",
+          "size_bytes": 2078391
+        }
+      ]
     },
     {
       "id": "deskmodal-default",
@@ -775,7 +1117,7 @@
         "linux-x64": {}
       },
       "dependencies": [],
-      "published_at": "2026-05-11T22:15:16Z",
+      "published_at": "2026-05-13T09:05:08Z",
       "license": "Proprietary",
       "tags": [
         "theme",
