@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-13T09:48:41Z",
+  "generated_at": "2026-05-13T10:26:43Z",
   "generator": {
     "name": "build_appmarket_catalog.py",
     "version": "1.0.0"
@@ -18,7 +18,11 @@
         "platform"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": {
+        "display_name": "DeskModal",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -42,7 +46,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -66,7 +74,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.alerts/0.2.0/darwin-arm64/icons/alerts.svg"
       },
@@ -80,7 +88,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 173643390
         },
         {
@@ -103,7 +111,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -133,7 +145,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.analytics/0.2.0/darwin-arm64/icons/analytics.svg"
       },
@@ -147,7 +159,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 131335987
         },
         {
@@ -170,7 +182,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -200,7 +216,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.blotter/0.2.0/darwin-arm64/icons/blotter.svg"
       },
@@ -214,7 +230,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 134487113
         }
       ]
@@ -232,7 +248,11 @@
         "branding"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": {
+        "display_name": "DeskModal",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -249,7 +269,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.brand-editor/0.1.0/darwin-arm64/icons/brand-editor.svg"
       },
@@ -263,7 +283,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 859235
         }
       ]
@@ -281,7 +301,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -305,7 +329,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.chart/0.3.0/darwin-arm64/icons/chart.svg"
       },
@@ -319,7 +343,7 @@
       "versions": [
         {
           "version": "0.3.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 389168794
         },
         {
@@ -347,7 +371,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -371,7 +399,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.depth/0.2.0/darwin-arm64/icons/depth.svg"
       },
@@ -385,7 +413,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 153587142
         },
         {
@@ -406,7 +434,11 @@
       "content_type": "app",
       "categories": [],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -430,7 +462,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.earnings/0.1.0/darwin-arm64/icons/earnings.svg"
       },
@@ -444,7 +476,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 15206702
         }
       ]
@@ -460,7 +492,11 @@
       "content_type": "service",
       "categories": [],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": {
+        "display_name": "DeskModal",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -477,7 +513,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
@@ -487,7 +523,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 26002502
         }
       ]
@@ -505,7 +541,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -529,7 +569,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.feeds/0.2.0/darwin-arm64/icons/feeds.svg"
       },
@@ -543,7 +583,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 155879305
         },
         {
@@ -564,7 +604,11 @@
       "content_type": "app",
       "categories": [],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -588,7 +632,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.news/0.1.0/darwin-arm64/icons/news.svg"
       },
@@ -602,7 +646,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 15273331
         }
       ]
@@ -618,7 +662,11 @@
       "content_type": "service",
       "categories": [],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": {
+        "display_name": "DeskModal",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -635,7 +683,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
@@ -645,7 +693,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 29379215
         }
       ]
@@ -663,7 +711,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -693,7 +745,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.order-ticket/0.2.0/darwin-arm64/icons/order-ticket.svg"
       },
@@ -707,7 +759,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 148546936
         }
       ]
@@ -725,7 +777,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -749,7 +805,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
@@ -759,7 +815,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 12740262
         },
         {
@@ -782,7 +838,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -812,7 +872,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.positions/0.2.0/darwin-arm64/icons/positions.svg"
       },
@@ -826,7 +886,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 131763580
         }
       ]
@@ -844,7 +904,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -861,7 +925,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
@@ -871,7 +935,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 23260234
         },
         {
@@ -894,7 +958,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -918,7 +986,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.screener/0.3.0/darwin-arm64/icons/screener.svg"
       },
@@ -932,7 +1000,7 @@
       "versions": [
         {
           "version": "0.3.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 154482277
         },
         {
@@ -960,7 +1028,11 @@
         "trading"
       ],
       "featured": true,
-      "publisher": "TradeSurface",
+      "publisher": {
+        "display_name": "TradeSurface",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "verified",
       "platforms": {
         "darwin-arm64": {
@@ -984,7 +1056,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/deskmodal.watchlist/0.2.0/darwin-arm64/icons/watchlist.svg"
       },
@@ -998,7 +1070,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 183003733
         },
         {
@@ -1021,7 +1093,11 @@
         "scripting"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": {
+        "display_name": "DeskModal",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "self_signed",
       "platforms": {
         "darwin-arm64": {
@@ -1045,7 +1121,7 @@
         }
       ],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "icon": {
         "market": "plugins/optiscript.editor/0.1.0/darwin-arm64/icons/optiscript.svg"
       },
@@ -1059,7 +1135,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 5100181
         }
       ]
@@ -1077,7 +1153,11 @@
         "scripting"
       ],
       "featured": true,
-      "publisher": "DeskModal",
+      "publisher": {
+        "display_name": "DeskModal",
+        "verified": true,
+        "key_id": null
+      },
       "verification_tier": "self_signed",
       "platforms": {
         "darwin-arm64": {
@@ -1094,7 +1174,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
@@ -1104,7 +1184,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-13T09:48:41Z",
+          "published_at": "2026-05-13T10:26:43Z",
           "size_bytes": 2078391
         }
       ]
@@ -1122,14 +1202,18 @@
         "branding"
       ],
       "featured": true,
-      "publisher": "DeskModal Technologies",
+      "publisher": {
+        "display_name": "DeskModal Technologies",
+        "verified": true,
+        "key_id": "deskmodal"
+      },
       "platforms": {
         "win-x64": {},
         "darwin-arm64": {},
         "linux-x64": {}
       },
       "dependencies": [],
-      "published_at": "2026-05-13T09:48:41Z",
+      "published_at": "2026-05-13T10:26:43Z",
       "license": "Proprietary",
       "tags": [
         "theme",
