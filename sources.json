@@ -61,11 +61,15 @@
         { "slug": "alerts",       "id": "deskmodal.alerts",       "display_name": "Alerts",              "tagline": "Price alerts and condition monitoring",          "categories": ["trading"],     "featured": false },
         { "slug": "order-ticket", "id": "deskmodal.order-ticket", "display_name": "Order Ticket",        "tagline": "Order entry widget",                             "categories": ["trading"],     "featured": true  },
         { "slug": "blotter",      "id": "deskmodal.blotter",      "display_name": "Order Blotter",       "tagline": "Working and filled orders log",                  "categories": ["trading"],     "featured": false },
-        { "slug": "positions",    "id": "deskmodal.positions",    "display_name": "Positions",           "tagline": "Cross-exchange position viewer",                 "categories": ["trading"],     "featured": false }
+        { "slug": "positions",    "id": "deskmodal.positions",    "display_name": "Positions",           "tagline": "Cross-exchange position viewer",                 "categories": ["trading"],     "featured": false },
+        { "slug": "news",         "id": "deskmodal.news",         "display_name": "News Wire",           "tagline": "Real-time news with 4-state severity ribbon, multi-source aggregation, drag-to-chart annotations", "categories": ["data"],        "featured": true  },
+        { "slug": "earnings",     "id": "deskmodal.earnings",     "display_name": "Earnings Calendar",   "tagline": "Week-grid earnings + crypto unlocks with implied-move, consensus blend, post-event reaction tracker", "categories": ["data", "trading"], "featured": true }
       ],
       "services": [
         { "id": "deskmodal.price-feed",     "display_name": "Price Feed Service",     "tagline": "Multi-exchange WebSocket streaming",     "categories": ["data"],       "featured": true  },
-        { "id": "deskmodal.paper-trading",  "display_name": "Paper Trading Service",  "tagline": "Risk-free order simulation with realistic fills", "categories": ["trading", "simulation"], "featured": true  }
+        { "id": "deskmodal.paper-trading",  "display_name": "Paper Trading Service",  "tagline": "Risk-free order simulation with realistic fills", "categories": ["trading", "simulation"], "featured": true  },
+        { "id": "deskmodal.news-feed",      "display_name": "News Feed Service",      "tagline": "Multi-source news aggregation: Cryptopanic, NewsAPI, RSS, Coinbase, Binance", "categories": ["data"], "featured": false },
+        { "id": "deskmodal.earnings-feed",  "display_name": "Earnings Feed Service",  "tagline": "Multi-source earnings + crypto-events: FMP, Polygon, CryptoRank, EarningsWhispers", "categories": ["data"], "featured": false }
       ],
       "asset_name_template": "tradesurface-{slug}-{version}-{platform}.dmpkg"
     },
