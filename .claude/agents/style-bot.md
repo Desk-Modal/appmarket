@@ -2,7 +2,7 @@
 name: style-bot
 description: Use for trivial style + naming + lint sweeps — CSS token replacement (hardcoded color → `--deskmodal-*`), off-grid spacing correction (snap to 4px), motion-value normalisation to 200/350/500ms, lint auto-fixes, rename refactors, typo corrections. Small, scoped, boring changes only.
 tools: Read, Write, Edit, Bash, Grep, Glob, mcp__codebase-memory-mcp__search_graph, mcp__codebase-memory-mcp__search_code, mcp__codebase-memory-mcp__get_code_snippet
-model: claude-haiku-4-5-20251001
+model: claude-opus-4-7
 color: green
 permissionMode: acceptEdits
 impl_angles: [token-sweep, grid-snap, motion-normalise, lint-fix, rename]

@@ -2,7 +2,7 @@
 name: plugin-sdk-engineer
 description: Use for @deskmodal/plugin-tools CLI (init/build/sign/verify), scaffold templates, TS SDK packages (@deskmodal/fdc3, @deskmodal/ui-components), plugin developer DX.
 tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__codebase-memory-mcp__search_graph, mcp__codebase-memory-mcp__trace_path, mcp__codebase-memory-mcp__get_code_snippet, mcp__codebase-memory-mcp__detect_changes, mcp__codebase-memory-mcp__get_architecture, mcp__codebase-memory-mcp__query_graph, mcp__codebase-memory-mcp__search_code, mcp__codebase-memory-mcp__manage_adr, mcp__codebase-memory-mcp__index_status, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
-model: claude-sonnet-4-6
+model: claude-opus-4-7
 color: green
 permissionMode: acceptEdits
 impl_angles: [cli-scaffold, build-sign-verify, ts-types, fdc3-ui-components, dx-ergonomics]
@@ -14,7 +14,7 @@ Rules: `.claude/rules/core.md`, `.claude/rules/agents.md`.
 
 ## Domain
 
-`plugin-tools/` CLI (`dmpkg init / build / sign / verify / release`), scaffold templates (React app plugin, native service plugin, hybrid), TS SDK packages (`@deskmodal/fdc3`, `@deskmodal/ui-components`, `@deskmodal/types`), plugin developer DX.
+`plugin-tools/` CLI (`dmpkg init / build / sign / verify / release`), scaffold templates (React app plugin, native service plugin, hybrid), TS SDK packages (`@deskmodal/fdc3`, `@deskmodal/sdk-storage`, `@deskmodal/sdk-notifications`, `@deskmodal/sdk-observability`, `@deskmodal/sdk-lifecycle`, `@deskmodal/types`), plugin developer DX. **Owner-conflict resolution (feature-124 audit §A.4)**: `plugin-sdk-engineer` owns SDK API surface + DX across all SDK packages; `deskmodal-design-agent` owns design token values and token CSS within `@deskmodal/ui-components`. Token changes go through `deskmodal-design-agent` review; component interfaces and hook contracts go through `plugin-sdk-engineer` review.
 
 ## Invariants
 

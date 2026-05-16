@@ -2,7 +2,7 @@
 name: verification-gateway-engineer
 description: Use for the automated compliance pipeline watching @deskmodal/plugins npm publishes — 10-step verification, Meilisearch index, marketplace REST API, publisher management, quality-tier badges.
 tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__codebase-memory-mcp__search_graph, mcp__codebase-memory-mcp__trace_path, mcp__codebase-memory-mcp__get_code_snippet, mcp__codebase-memory-mcp__detect_changes, mcp__codebase-memory-mcp__get_architecture, mcp__codebase-memory-mcp__query_graph, mcp__codebase-memory-mcp__search_code, mcp__codebase-memory-mcp__manage_adr, mcp__codebase-memory-mcp__index_status, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
-model: claude-sonnet-4-6
+model: claude-opus-4-7
 color: orange
 permissionMode: acceptEdits
 impl_angles: [compliance-pipeline, meilisearch-index, marketplace-api, publisher-mgmt, quality-badges]

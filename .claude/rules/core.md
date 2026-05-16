@@ -61,6 +61,14 @@ Not a pod case: anything with Rust↔TS crossing, anything touching a Tauri comm
 
 **Reviewers are ALWAYS parallel** — dispatched in one `Agent` batch per §7. They're read-only; no race risk; the parallelism is pure wall-clock win.
 
+**Speculative next-wave dispatch (default ON, 2026-05-16):** while reviewers run on wave N, dispatch wave N+1's impl agent against the CURRENT HEAD (post-impl, pre-review). If wave N reviewer returns APPROVE/APPROVE_WITH_COMMENTS, rebase N+1's diff onto post-integration tip and keep. If REWORK with overlapping write-set, discard N+1 (log to `.session-state/speculation-log.md`) and re-dispatch after integration. If BLOCK/ESCALATED, discard unconditionally. Saves 10–20 min per wave; reviewer-cost-only when N+1 is discarded. Opt-out: `DESKMODAL_SPECULATIVE=0`.
+
+**Pod ceiling (2026-05-16):** when write-sets are PROVEN pairwise-disjoint (audited via `scripts/audit-wave-write-sets.sh`), dispatch up to `N = min(7, count_of_disjoint_tasks)` impl agents in parallel. Hard cost ceiling: 7 concurrent. Default (no audit): conservative 3-cap. The 7-cap unlocks linear wall-clock scaling on mechanical sweeps; correctness preserved by disjointness audit.
+
+**Dispatch hygiene — audit by path, never by quote (2026-05-16):** when an agent's prompt references an audit/spec/finding, pass the **file path** for it to read once at start. Inline-quoting full audit excerpts in every parallel dispatch burns ~30–80K tokens per agent. The agent reads the source once; you save token cost linearly with N agents.
+
+**Warm-agent reuse via SendMessage (2026-05-16):** when wave N+1 is a follow-up that depends on wave N's loaded context (e.g. plugin-sdk-engineer already has the SDK contract in conversation), continue it via `SendMessage(to: <agent-id>)` instead of `Agent()`. Saves the ~30–50K cold-start re-read. Only valid when wave N+1 is genuinely a continuation, not a fresh task.
+
 Every task spec declares:
 
 ```markdown
@@ -79,6 +87,8 @@ Invariants:
 
 No worktree mandate. Claude picks per-dispatch execution isolation.
 
+Determinism preserved by: declared write-sets per task, task-number-ascending merge-train, mandatory parallel reviewer batch, single-writer state files. None of the above amendments touch these invariants.
+
 ## 5. Production code
 
 No TODO, FIXME, HACK, placeholder, demo mode, stub, commented-out dead code in shipped code.
@@ -88,6 +98,13 @@ No new locks — `ArcSwap`, `DashMap`, `flume`, atomics, or actors.
 Error handling on every async op; loading state for every async UI.
 Zero hardcoded absolute paths — use `${CLAUDE_PROJECT_DIR}` or computed relative.
 Zero hardcoded colors in CSS/TSX — use `--deskmodal-*` / `--ts-*` tokens.
+
+**No pre-existing drift survives a wave.** Every wave's verification covers the **whole workspace**, not just the declared write-set:
+- `cargo fmt --all --check` rc=0 across every workspace member.
+- `cargo clippy --workspace --all-targets -- -D warnings` rc=0.
+- `pnpm nx run-many -t lint,typecheck` rc=0 across the affected Nx graph.
+- Any workspace member with a compile error, fmt drift, or clippy warning at wave-integration time is fixed as part of the wave — even if the file is outside the declared write-set. "Pre-existing on origin/main" is not a valid handwave; if `local-ci.sh --fast` shows red, the wave is not done. The fix lands in the same wave commit (or a sibling cleanup commit with `chore:` prefix); never deferred.
+- Exception: if a workspace-wide fix is genuinely too large to land in the current wave (>200 LOC unrelated to the wave's intent), scope-transfer to a named cleanup task per §8 and block integration until that task lands. Never carry a `[expected pre-existing failure]` note forward.
 
 ## 6. Naming
 
@@ -201,10 +218,11 @@ Claude Code default output style for this workspace is `concise`. Prefer:
 
 7. **Contract-edge serialization.** When the wave has persona-to-persona contract edges, serialise — never dispatch in parallel. Each step commits before the next Agent dispatches.
 
-**Verification cadence (batching discipline):**
-- `scripts/local-ci.sh --fast` runs once per wave (at integration gate) and once per rework cycle (after follow-up commits land).
-- `scripts/launch.sh --verify` runs once per wave (only when wave touches GUI/FDC3/dist), after all rework closes.
-- Never per-row. Never per-persona.
+**Verification cadence (batching discipline, tightened 2026-05-16):**
+- `scripts/local-ci.sh --fast` runs ONCE PER PHASE (at impl-wave integration gate; after all wave-rework follow-ups land — not per agent, not per row, not per intermediate commit).
+- `scripts/launch.sh --verify` runs ONCE PER PHASE (only when the phase touches GUI/FDC3/dist), after all reviewer findings close.
+- `scripts/local-ci.sh --full` runs ONLY pre-push (or pre-PR), never per-wave.
+- Never per-row. Never per-persona. Never per-agent. Per-agent verification adds 2–5 min per dispatch × N agents per phase = 10–30 min wasted wall-clock; the agent's own type-check + the integration `--fast` cover correctness.
 
 **What this rule forbids:**
 - `git reset --hard <any-prior-sha>` as a wave-mechanic response to reviewer findings.
@@ -215,3 +233,157 @@ Claude Code default output style for this workspace is `concise`. Prefer:
 **What this rule requires:**
 - Every reviewer BLOCKING / HIGH finding has a named close-out commit (or scope-transfer / escalation ledger entry) BEFORE the benchmark row is marked green.
 - The post-commit-handoff hook records each close-out commit with its finding ID so future sessions see the fix-forward trail.
+
+## 16. Service & I/O discipline — non-blocking, service-owns-data
+
+The DeskModal agent is a single Tauri process hosting N in-process cdylib services + N webview-hosted apps. The agent main thread, the Tauri event loop, and the React render loop must never block waiting on I/O. Services own canonical state; apps subscribe.
+
+**Invariants:**
+
+1. **Every long-lived service loop runs in its own `tokio::spawn` task.** Stream readers, poll loops, persistence flushers, hydration restorers — one task per concern. Never co-host a stream loop and a UI handler on the same task.
+
+2. **Per-cdylib runtime is `tokio::runtime::Builder::new_current_thread`** (not multi_thread). Workspace `panic="abort"` would otherwise abort the agent when a worker panics; current_thread keeps the panic on the caller thread where `catch_unwind` traps it. Enforced by `deskmodal_service_main!` macro at platform/crates/deskmodal-service-sdk/src/macros.rs.
+
+3. **Bounded channels everywhere with drop-on-overflow** (mirror price-feed's 4096-capacity ctx channel). Never `mpsc::unbounded_channel` on a hot path. When the consumer is slow, drop oldest — never block the producer. `flume` + `try_send` is the preferred pattern.
+
+4. **No `Mutex` / `RwLock` across `.await` boundaries on hot paths.** Use `ArcSwap`, `DashMap`, atomics, or actor channels (per §5). Cold-path caches (e.g. `next_scheduled_event` background lookup) may use `RwLock` only if the lock is never held across an `await`.
+
+5. **Storage is debounced + non-blocking.** `deskmodal_service_sdk::spawn_persistence` (dirty-flag debounce, default 60s) handles all sdk-storage writes — never write synchronously per-message. `spawn_hydration` handles startup restoration with a merge-closure to absorb schema evolution.
+
+6. **No `std::thread::sleep` / `std::sync::Mutex::lock()` blocking-on-poison** inside tokio tasks. Use `tokio::time::sleep` and `tokio::sync::Mutex` (when a lock is truly needed). `block_on` inside a cdylib service is a deadlock vector — forbidden.
+
+7. **No synchronous HTTP / synchronous WebSocket** in service code. `reqwest` async + `tokio_tungstenite::connect_async` only. Apps never make their own HTTP requests for data the service owns.
+
+**Service-owns-data architecture:**
+
+- Service connects to upstream sources (HTTP poll OR WSS stream) on instantiation, regardless of whether any app tile is mounted.
+- Service maintains an in-memory ring (`HeadlineHistory`, `EventHistory`, etc.) — bounded, indexed, dedup'd.
+- Service persists the ring to sdk-storage via `spawn_persistence` (dirty-debounced).
+- Service rehydrates the ring on startup via `spawn_hydration` (schema-merge closure).
+- Service broadcasts new items to all connected apps via FDC3 channels.
+- Service exposes history-bootstrap intents (`GetRecentHeadlines`, `GetRecentEarningsEvents`, etc.) for apps mounting after the service is already running.
+
+**App-side discipline:**
+
+- Apps NEVER make their own HTTP fetches for service-owned data. The only fetch a tile makes on mount is the history-bootstrap FDC3 intent.
+- Apps subscribe via `useChannel.addContextListener` for live broadcasts.
+- App-local state (Zustand store) is a UI projection of service state, not a source of truth.
+- App tiles use React state batching; never block the render loop on FDC3 message handling.
+
+**No fallbacks (durable rule, was memory-only):**
+
+- Never ship "or X if Y" alternate paths. If a precondition is unmet, hard-fail with `rc ≠ 0` (Rust) / throw (TS) and surface the failure. Runtime status surfaces ("Reconnecting…", "Source unavailable") are not fallbacks — they're user-visible state, which is fine.
+- A fallback hides the actual failure mode and prevents diagnosis. Hard-fail forces the operator to fix the root cause.
+
+**Scalable, non-blocking, ultra-low-latency (durable, 2026-05-16 directive):**
+
+DeskModal is a trading-terminal platform. Every fix must demonstrably preserve or improve three properties simultaneously: SCALABLE (handles N tiles + N services + N user sources without quadratic cost), NON-BLOCKING (no `.await` on a hot path holds a lock; no main-thread I/O; no synchronous syscalls on a tokio worker for blocking primitives), ULTRA-LOW-LATENCY (sub-100ms perceptible UI response; sub-10ms FDC3 intent dispatch; sub-1ms broadcast fan-out per subscriber).
+
+Concrete checklist for every Rust impl wave:
+- Hot-path channel: bounded mpsc/flume with `try_send` (drop-on-overflow), capacity ≥ 4096 (price-feed precedent). NEVER `unbounded_channel`.
+- Hot-path data structure: `ArcSwap` for read-mostly, `DashMap` for many-writer, `AtomicU64`/`AtomicBool` for flags. NEVER `Mutex<T>` if reads dominate. NEVER `RwLock` across `.await`.
+- Blocking syscalls (file I/O, dlopen, blocking sockets) ALWAYS through `tokio::task::spawn_blocking` (delegates to the blocking thread pool, never a tokio worker). For OS-level resources with single-thread requirements (dlopen on macOS, GPU contexts), use a dedicated `std::thread` with a flume channel actor — not a tokio task.
+- App-side: virtualisation for any list > 100 rows (no N² re-render). React 19 transitions / Suspense for any state-update-driven fetch. Zustand stores split per concern so unrelated updates don't re-render the world.
+- FDC3 channel broadcast: O(N subscribers) maximum per publish; never per-subscriber lock acquisition. ACL check is a single dashmap lookup.
+- Service startup: parallel where safe, serialised only when the OS demands it (dlopen on macOS). Document any serialisation point + measure cost.
+
+For every fix wave: state which of the three properties the fix preserves or improves, and cite the measurement (test, bench, or trace). "It works" is insufficient; "it serves N concurrent ___ at < Yms p99 with rc=0" is the standard.
+
+**No hardcoded data-source URLs (durable rule, was memory-only):**
+
+- All service-plugin URLs (news, earnings, price, all exchanges) live in `plugin.toml` `[default_config]` and may be overridden by user-configurable sdk-storage keys.
+- Settings UI surfaces the keys only when the corresponding service is installed + enabled.
+- A URL string in a `.rs` / `.ts` source file outside `_test.rs` / `*.test.ts` / fixtures is a defect.
+
+## 17. Plugin architecture invariants — ServiceSDK + PluginSDK only
+
+**Cardinal rule (durable, was memory-only): every plugin (app + service) consumes platform capabilities via `@deskmodal/sdk-*` + `@deskmodal/fdc3` hooks; NEVER roll bespoke FDC3 bridges or custom `init*Service()` modules.**
+
+**The 8 SDKs:**
+
+1. `@deskmodal/sdk-storage` — kv_store namespaced `service:<id>` / `app:<id>`, SQLite-backed
+2. `@deskmodal/sdk-notifications` — toasts + history + intent routing (replaces ad-hoc notification systems)
+3. `@deskmodal/sdk-fdc3` — FDC3 2.2 hooks (`useChannel`, `useIntent`, `useContext`)
+4. `@deskmodal/sdk-services` — service lifecycle (start/stop/drain/reload) — apps subscribe, never spawn
+5. `@deskmodal/sdk-window` — Tauri window orchestration
+6. `@deskmodal/sdk-theme` — design tokens + theme switching
+7. `@deskmodal/sdk-telemetry` — structured logging + perf marks
+8. `@deskmodal/sdk-update` — plugin self-update via marketplace
+
+Service side: `deskmodal_service_sdk` (Rust) — `deskmodal_service_main!` macro emits the byte-stable `deskmodal_service_entry` FFI symbol; `spawn_hydration` / `spawn_persistence` handle storage; `ServiceClient` exposes channel broadcast + intent raise + storage I/O.
+
+**App `main.tsx` shape (minimum, maximum):**
+
+```tsx
+checkAppVersion();
+initTheme();
+createRoot(document.getElementById('root')!).render(<App />);
+```
+
+That's it. No `initFdc3Bridge()`, no `initPriceService()`, no `initStorageBackend()`. Those are SDK responsibilities, initialised lazily on hook usage.
+
+**Dist plugin directory shape (enforced):**
+
+```
+dist/plugins/<id>/
+├── plugin.toml
+├── app/             (TS/TSX apps only — React bundle output)
+├── icons/           (PNG/SVG icons referenced from manifest)
+├── services/        (Rust cdylib only — present when plugin has service)
+├── publisher.pub    (Ed25519 verify key)
+└── *.sig            (signature manifest)
+```
+
+Anything else under `dist/plugins/<id>/` is a defect — file the deviation as a HIGH finding.
+
+**User-authored data-source handlers (durable, F127-introduced):**
+
+End-users may extend data-feed services (news-feed, earnings-feed, etc.) without authoring a signed L2 plugin via *declarative* `UserSourceDescriptor` entries persisted to sdk-storage under the target service's namespace (`news-feed.user-sources`, `earnings-feed.user-sources`). Descriptors carry `base_url`, `mode = "poll"|"stream"`, response-shape (`json_field_map` JSONPath / `rss` XPath / `stream.text_field_path`), and a `provenance` block. They run inside the *existing* service crate's source loop — NO foreign code execution, NO new sandbox, NO new runtime. AI-assisted authoring lives in a dedicated platform service (`discovery-feed`) that synthesises candidate descriptors via the Anthropic API; candidates broadcast on `deskmodal.discovery` and install ONLY on explicit user click via `deskmodal.InstallUserSource`. Defence-in-depth: TLS-only (`https://` / `wss://`), private-CIDR rejection, response-size cap, poll-cadence floor, user-added sources clamped to `SourceTierConfig::Community`. Manifest-shipped source ids cannot be overridden. The AI never auto-installs. Full plugin authoring (L2) remains the path for adapters needing bespoke logic — those declare `intents_raise = ["deskmodal.PublishNewsHeadline" | "deskmodal.PublishEarningsRealtime"]` and broadcast through the canonical FDC3 channels.
+
+**Tauri-native window decorations (durable, 2026-05-16 directive):**
+
+DeskModal uses Tauri's NATIVE window decorations on every WebviewWindowBuilder: `decorations(true)` (default). macOS draws native traffic lights; Windows draws native min/max/close; Linux draws native GTK window controls. We do NOT render custom React-side traffic-light controls. Custom controls (DarwinControls / StandardControls in any package) create the "two sets of buttons" defect — observed on Market window 2026-05-16.
+
+**Vocabulary rule (user clarification 2026-05-16: "we are not using chrome it is all tauri"):** do not call DeskModal's window-decoration layer "chrome" in commit messages, docs, file names, variable names, or conversation. The runtime is Tauri; the decoration is native OS chrome (a vendor term). Use "Tauri-native window decorations", "OS-native title bar", "native traffic lights" (macOS), or "native min/max/close buttons" (Windows). The word "chrome" is overloaded with Chromium-browser connotation and conceals the architectural decision. Files / scripts that still contain the word (AppShellChrome.tsx, audit-no-custom-chrome.sh) carry it for now; rename in a follow-up wave when consumer migration is cheap.
+
+What `@deskmodal/sdk-window`'s `<TitleBar>` is allowed to do:
+- Set the OS window title via `getCurrentWindow().setTitle(title)` in a single useEffect — the native title bar renders this string.
+- Render `data-tauri-drag-region` over the title-bar area so Tauri's native drag works.
+- Render an in-content subtitle / right-slot for app-specific actions BELOW the native title bar.
+
+What `<TitleBar>` MUST NOT do:
+- Render close / minimize / maximize / fullscreen buttons in React. Tauri's native chrome already provides them. Two sets = defect.
+- Set `decorations(false)` on its WebviewWindowBuilder. The only exceptions are presets `Toast` and `NotificationCenter` where no chrome is intentional.
+
+Uniformity rule: every DeskModal window — agent shell, Spaces, Market, Settings, About, Copilot, Tearout, every TradeSurface tile pop-out, every plugin window — uses the same chrome treatment (native decorations + optional in-content header below). One source of truth, no exceptions.
+
+This reverses parts of F128's W1/W2 custom-controls design. The historical justification (cross-platform consistency) is achieved instead through `decorations(true)` everywhere — macOS / Windows / Linux each show their own native conventions, which is the correct cross-platform behaviour for a desktop app.
+
+**Sharper restatement (user clarification 2026-05-16: "the apps use tauri, we should not use chrome anywhere, it's all tauri"):**
+
+ZERO custom window-chrome rendering anywhere in DeskModal. No DarwinControls. No StandardControls. No traffic-light SVGs. No CSS `app-region: drag` regions (Tauri's native title bar handles drag). Every window relies on Tauri-native chrome end-to-end. `@deskmodal/sdk-window`'s `<TitleBar>` and `<WindowFrame>` are either deleted or become no-op pass-throughs; the only legitimate API is `useWindowTitle(title)` (a hook that sets the OS title via `getCurrentWindow().setTitle`). `useWindowControls()` is allowed to provide `.close()`/`.minimize()` for programmatic flows (e.g. "are you sure?" dialogs) but is never used to render controls in React.
+
+Forbidden patterns (would fail review):
+- Any `<DarwinControls>` / `<StandardControls>` / `<WindowControls>` / `<TrafficLights>` JSX element.
+- Any CSS rule containing `app-region: drag` (custom-chrome drag-region declarations).
+- Any `setDecorations(false)` outside the explicit Toast / NotificationCenter exception list.
+- Any imported close/min/max SVG icon used as a window control.
+
+**SDK boundary (architectural clarification 2026-05-16):**
+
+`@deskmodal/sdk-window` IS the abstraction boundary that owns ALL Tauri window APIs. Plugin/app developers consume sdk-window hooks; they never import `@tauri-apps/api/window` directly. Enforced by `scripts/audit-window-sdk.sh`.
+
+Required SDK surface:
+- `useWindowTitle(title: string)` — sets OS native title bar via `getCurrentWindow().setTitle` in a useEffect.
+- `useWindowState() → { isMaximized, isFullscreen, isMinimized }` — observation for app logic.
+- `closeWindow()`, `minimizeWindow()`, `toggleMaximize()`, `toggleFullscreen()` — action functions for programmatic flows ("are you sure?" close, app-driven window state).
+- `usePlatform() → { os, arch }` — Tauri plugin-os wrapper.
+- `<WindowFrame>` — opaque layout pass-through; renders nothing chrome-related (native Tauri chrome handles controls).
+
+User directive 2026-05-16: "we should not uniform to chrome, we must ensure we're only ever using tauri, which the SDKs should be applying, so the app/plugin developers only worry about functionality and all window handling is done by the sdks." The SDK is the contract; Tauri is the runtime; custom React chrome doesn't exist.
+
+User directive 2026-05-16 (port rule): "we must ensure we port any functionalities onto tauri if currently on any other window style." When deleting any custom-chrome code, FIRST inventory the BEHAVIORS that code implements (close handlers, close-confirm dialogs, isMaximized state tracking, focus listeners, etc.) and PORT each behavior to a Tauri-native equivalent via sdk-window hooks (`useCloseConfirm`, `useWindowResized`, `useWindowFocused`, etc.). NO functional regression. Document the port-map in the migration commit body.
+
+**Instrumentation discipline (durable, was memory-only):**
+
+When N silent chain points + 1 observable failure point exist (e.g. "service started, app mounted, no data appears"), add tracing at EVERY point BEFORE attempting any fix. Speculative fixes burn cycles. Per-cdylib `tracing_appender::non_blocking` writer to `{install_root}/data/logs/svc.<service-id>.log` (wired by `deskmodal_service_main!`) is the canonical instrumentation point for services. Programmatic spawn (AppleScript / WebDriver / Tauri-cmd / DB-seed) is REQUIRED to reproduce — never ask the user to click and report.

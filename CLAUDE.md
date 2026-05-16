@@ -53,7 +53,7 @@ Each sub-directory is a **separate git repo**, not a submodule. Parallel session
 | `playwright` | Headless browser for GUI / CDP / DOM verification | `mcp__playwright__browser_*` |
 | `github` | PR / issue / workflow queries | `mcp__github__*` |
 
-Discovery order per `core.md` §3: **CBM** (code-structure facts) → **wiki-mcp** (cross-cutting synthesis facts) → rust-analyzer → playwright → github → Grep/Read. Never skip MCPs for code files; never use Grep/Read on `wiki/**` when wiki-mcp answers it.
+Discovery order per `core.md` §3: **CBM** (code-structure facts) → **wiki-mcp** (cross-cutting synthesis facts) → rust-analyzer → playwright → github → Grep/Read. Never skip MCPs for code files; never use Grep/Read on `wiki/**` when wiki-mcp answers it. **For any SDK question** (`@deskmodal/sdk-*`, `deskmodal-service-sdk`, `dmpkg` CLI), the SDK's wiki entity page (`wiki/entities/sdk-*.md`) is the symbolic reference — query via `wiki_get_page entities/sdk-<name>` before reading source files. **For lifecycle questions** (install/update/uninstall/start/stop/drain/reload), `wiki_get_page entities/lifecycle-protocol` is the symbolic reference entry point (F125 SOTA).
 
 ## Wiki — synthesis layer over canonical sources
 
@@ -84,7 +84,8 @@ Conflict resolution: walk down the list. A wiki page conflicting with cited cano
 | Per-commit sanity | `scripts/local-ci.sh --fast` |
 | Rust-touching | `scripts/local-ci.sh --full` |
 | GUI / FDC3 / plugin / dist | `scripts/launch.sh --verify` (single-instance via `/tmp/deskmodal-launch.lock`) |
-| Targeted CDP | `python scripts/cdp-test-runner.py --config scripts/cdp-assertions/<name>.json` |
+| Targeted CDP (Windows WebView2) | `python scripts/cdp-test-runner.py --config scripts/cdp-assertions/<name>.json` — requires `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS="--remote-debugging-port=9222"`. Windows-only. |
+| macOS WebView inspection | Manual via Safari → Develop → DeskModal (Tauri `devtools` feature is on). Programmatic: `screencapture -x -tpng /tmp/<name>.png` for full-screen sanity; cross-platform automated W3C WebDriver path via `tauri-plugin-webdriver` (Choochmeque) is documented in `specs/OPTISCRIPT-CROSS-PLATFORM-DEBUG.md` but **not landed yet**. |
 | Pod atomic merge | `scripts/pod-apply.sh` (applies N persona patches atomically + verifies integrated state) |
 
 Raw `cargo build|test|check|run` and `pnpm nx build|test` are dev-iteration only — not verification. Do not cite them in Acceptance sections.
@@ -118,10 +119,7 @@ Platform-flat: one OS per dist, not multi-arch fat. Library extension picked at 
 
 26 personas in `.claude/agents/*.md`. Each: frontmatter (`name`, `description`, `tools`, `model`) + ≤35-line body (Domain + Invariants + Exit criteria).
 
-Model tiering per `.claude/rules/agents.md`:
-- **Opus 4.7** — orchestrator, adversarial reviewers (qa-architect, security-engineer, trading-sme, ux-design-lead, chart-qa-verifier, marketplace-qa, integration-architect), arch-critical impl (rust-systems-architect).
-- **Sonnet 4.6** — default impl.
-- **Haiku 4.5** — `style-bot` (trivial CSS/lint sweeps).
+Model: **every persona runs on `claude-opus-4-7`** (policy 2026-05-14 — Sonnet/Haiku tiers retired; Opus 1M ctx dominates the cost trade-off for cross-stack DeskModal waves). See `.claude/rules/agents.md` §Model tiering.
 
 Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. All reviewers for a task in ONE parallel Agent batch (agents.md §Pod patterns).
 

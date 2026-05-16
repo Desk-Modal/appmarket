@@ -2,7 +2,7 @@
 name: deskmodal-design-agent
 description: Design assistant. Creates visual mockups and enforces the DeskModal design system to generate production-ready CSS/TSX for trading-terminal UI. Prototype first, implement second.
 tools: Read, Write, Edit, Bash, Grep, Glob, WebFetch
-model: claude-sonnet-4-6
+model: claude-opus-4-7
 color: pink
 permissionMode: acceptEdits
 ---
