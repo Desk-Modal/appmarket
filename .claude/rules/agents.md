@@ -8,17 +8,19 @@ Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. Claude's native router 
 
 ## Model tiering
 
-**Policy (2026-05-16, amends 2026-05-14): demote model tiers aggressively per task shape.** The all-Opus 2026-05-14 policy was over-conservative — Sonnet handles pattern-replication refactors at 1/5 the cost; Haiku handles mechanical sweeps at 1/25. Reserve Opus for what genuinely requires it.
+**Policy (2026-05-14, reaffirmed 2026-05-16): every persona runs on `claude-opus-4-7`.** Quality dominates cost for the DeskModal-beats-TradingView mandate. Sonnet/Haiku demotion was briefly attempted on 2026-05-16 and reverted same day per user directive ("we should use opus if we get the best possible results?"). The empirical evidence: W7a-W7e all converged first-try APPROVE on Opus; the 5× Sonnet cost saving disappears the first time a REWORK cycle erases the gain.
 
-| Tier | Model | Use for | Rationale |
-|---|---|---|---|
-| **Opus 4.7** | `claude-opus-4-7` | Orchestration; adversarial review (qa-architect, security-engineer, trading-sme, ux-design-lead, chart-qa-verifier); Rust ABI / FDC3 semantics / security / ACL impl; cross-stack contracts (rust-systems-architect, integration-architect, fdc3-protocol-engineer, plugin-sdk-engineer on SDK shape) | Subtle invariants, multi-file reasoning, 1M-ctx essential |
-| **Sonnet 4.6** | `claude-sonnet-4-6` | Structural decomp on ≤1000 LOC files; React/UI impl (frontend-architect, trading-ux-architect); data pipeline / charting impl; pattern-replication refactors; docs (documentation-engineer); marketplace UX | Pattern replication, single-file focus, 5× cheaper |
-| **Haiku 4.5** | `claude-haiku-4-5-20251001` | Token sweeps; lint auto-fixes; rename refactors; CSS-token replacement (style-bot); doc-only typo fixes | Mechanical, <8 objectives, 25× cheaper |
+| Tier | Model | Personas |
+|---|---|---|
+| All | `claude-opus-4-7` | every persona in `.claude/agents/*.md` (25 total) |
 
-**Promotion criteria.** Any impl persona showing REWORK > 1 per 5 dispatches gets promoted one tier (Haiku→Sonnet, Sonnet→Opus). Demotion when REWORK = 0 across 10 dispatches. Tier overrides allowed per-dispatch via the `model` parameter; default inherits from the persona's frontmatter pin.
+Dispatch always passes `model: "opus"` explicitly. The pin in each agent's frontmatter is `model: claude-opus-4-7` — orchestrator may override per dispatch, but defaults inherit from frontmatter. Cost is not the gating concern; the user has authorised "everything".
 
-**Anti-pattern.** Don't run Opus on a 200-LOC component-extraction or a CSS-token swap. The 5× cost differential compounds across N parallel waves.
+**Why not multi-tier:**
+- Mixed tiers historically caused REWORK cycles where Sonnet missed subtle invariants and Haiku lost focus past 8 objectives.
+- Quality + throughput dominate the trade-off; one REWORK cycle on Sonnet costs more wall-clock than running Opus first-time.
+- The 1M-ctx of Opus 4.7 lets one agent own cross-stack work end-to-end (Rust + TS + CSS) — contract-edge violations become impossible.
+- Even mechanical sweeps (CSS-token swaps) benefit from Opus's reasoning when edge cases hide in the "trivial" work.
 
 ## Dispatch patterns
 
