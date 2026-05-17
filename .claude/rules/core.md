@@ -126,7 +126,7 @@ DeskModal is a domain-agnostic plugin platform. Reviewers are dispatched by capa
 |---|---|
 | Universal (every task) | `qa-architect` |
 | Rust / Tauri / platform core | `rust-systems-architect` |
-| React / TSX / UI chrome | `frontend-architect` |
+| React / TSX / agent-shell surface | `frontend-architect` |
 | Script runtime / editor / plugin SDK | `plugin-sdk-engineer` |
 | Signing / ACL / auth / supply-chain / secrets | `security-engineer` |
 | Plugin↔platform IPC / channels / loader | `integration-architect` |
@@ -136,7 +136,7 @@ DeskModal is a domain-agnostic plugin platform. Reviewers are dispatched by capa
 | Chart plugin fixture / chart engine | `charting-expert` |
 | Marketplace aggregator / catalog / storefront | `marketplace-qa` |
 
-`trading-sme` is never universal. Non-financial tasks (tile chrome, FDC3 bridge, docs) do not dispatch it.
+`trading-sme` is never universal. Non-financial tasks (tile-container shell, FDC3 bridge, docs) do not dispatch it.
 
 All reviewers for a task dispatch in **one parallel `Agent` batch** (one assistant message, N tool calls). Sequential reviewer dispatch is a defect.
 
@@ -299,18 +299,66 @@ For every fix wave: state which of the three properties the fix preserves or imp
 
 **Cardinal rule (durable, was memory-only): every plugin (app + service) consumes platform capabilities via `@deskmodal/sdk-*` + `@deskmodal/fdc3` hooks; NEVER roll bespoke FDC3 bridges or custom `init*Service()` modules.**
 
-**The 8 SDKs:**
+**The 9 SDKs (TS — `@deskmodal/*` scope):**
 
-1. `@deskmodal/sdk-storage` — kv_store namespaced `service:<id>` / `app:<id>`, SQLite-backed
-2. `@deskmodal/sdk-notifications` — toasts + history + intent routing (replaces ad-hoc notification systems)
-3. `@deskmodal/sdk-fdc3` — FDC3 2.2 hooks (`useChannel`, `useIntent`, `useContext`)
-4. `@deskmodal/sdk-services` — service lifecycle (start/stop/drain/reload) — apps subscribe, never spawn
-5. `@deskmodal/sdk-window` — Tauri window orchestration
-6. `@deskmodal/sdk-theme` — design tokens + theme switching
-7. `@deskmodal/sdk-telemetry` — structured logging + perf marks
-8. `@deskmodal/sdk-update` — plugin self-update via marketplace
+| # | Package | Concern | Audit gate |
+|---|---|---|---|
+| 1 | `@deskmodal/sdk-storage` (`plugin-tools/typescript/packages/sdk-storage/`) | kv_store namespaced `service:<id>` / `app:<id>`, SQLite-backed | `sdk:discipline` (`no-localstorage` rule) — `scripts/audit-sdk-discipline.sh` |
+| 2 | `@deskmodal/sdk-notifications` (`plugin-tools/typescript/packages/sdk-notifications/`) | toasts + history + intent routing; thread / form / deep-link primitives | `sdk:discipline` |
+| 3 | `@deskmodal/fdc3` (`plugins/tradesurface/packages/fdc3/`) | FDC3 2.2 desktop-agent hooks (`useChannel`, `useIntent`, `useContext`, `useCommandPalette`, `useServiceStatus`) — the platform-side desktop-agent client; spec-mandated bare package name `@deskmodal/fdc3` (not `sdk-fdc3`) | `sdk:discipline` (`no-raw-window-fdc3` rule) — BLOCKING |
+| 4 | `@deskmodal/sdk-services` (`plugins/tradesurface/packages/sdk-services/`) | service lifecycle (`startService` / `stopService` / `drainService` / `reloadService` / `useService` / `useServiceLifecycle` / `useServiceList`) — apps subscribe, never spawn | `sdk:discipline` |
+| 5 | `@deskmodal/sdk-window` (`plugins/tradesurface/packages/sdk-window/`) | Tauri window orchestration — ALL Tauri window APIs flow through this SDK; plugin code never imports `@tauri-apps/api/window` directly | `quality:window-sdk` — `scripts/audit-window-sdk.sh` |
+| 6 | `@deskmodal/sdk-observability` (`plugin-tools/typescript/packages/sdk-observability/`) | structured logging + perf marks via `getLogger()`; replaces ad-hoc `console.log` | `sdk:discipline` (`no-console` rule — formerly proposed `sdk-telemetry`; observability is the realised package) |
+| 7 | `@deskmodal/sdk-update` (`plugins/tradesurface/packages/sdk-update/`) | plugin self-update via marketplace (`checkForUpdates`, `installUpdate`, `getReleaseNotes`, `subscribeToUpdateChannel`, `listInstalledPlugins`, `useUpdateStatus`, `usePluginUpdates`) | `sdk:discipline` |
+| 8 | `@deskmodal/sdk-lifecycle` (`plugin-tools/typescript/packages/sdk-lifecycle/`) | install / update / uninstall / start / stop / drain / reload lifecycle protocol — F125 SOTA reference | `sdk:discipline` |
+| 9 | `@deskmodal/sdk-symbology` (`plugins/tradesurface/packages/sdk-symbology/`) — added F132 W14-D 2026-05-17 | OpenFIGI ticker → canonical metadata (FIGI / asset class / exchange) lookup + `useSymbology` hook | `quality:sdk-package-coverage` (full publishable-package shape) |
+
+There is no standalone `sdk-theme` package on disk — design-token consumption flows through `@deskmodal/design-system` (`plugin-tools/typescript/packages/design-system/`) plus per-app token CSS layers; theming is a CSS-token contract, not an SDK module. Future ratification: either lift `design-system` into the `sdk-*` cohort or extract a thin `sdk-theme` runtime; tracked separately.
+
+**Workspace-wide audit gates that cross-reference the SDK contract** (every gate's exit-1 message cites this section):
+
+| Audit gate | Scope | Path |
+|---|---|---|
+| `sdk:discipline` (BLOCKING) | no-localstorage, no-console, no-raw-window-fdc3 | `scripts/audit-sdk-discipline.sh` |
+| `quality:sdk-package-coverage` (BLOCKING) | every `plugins/tradesurface/packages/sdk-*` ships `package.json` + `src/index.ts` + `vite.config.lib.ts` + `tsconfig.json` + `vitest.config.ts` + ≥1 `*.test.ts` | `scripts/audit-sdk-package-coverage.sh` |
+| `quality:window-sdk` (BLOCKING) | plugin/app code never imports `@tauri-apps/api/window` directly — sdk-window is the only consumer | `scripts/audit-window-sdk.sh` |
+| `quality:dist-signed` (BLOCKING) | every `dist/plugins/<id>/` carries `publisher.pub` + signed `.sig` | `scripts/audit-dist-signed.sh` |
+| `quality:broadcast-grants` (BLOCKING) | every channel broadcast cites an explicit grant in plugin manifest | `scripts/audit-broadcast-grants.sh` |
+| `quality:app-token-imports` (BLOCKING) | apps import `--ts-*` tokens via design-system; no hardcoded hex | `scripts/audit-app-token-imports.sh` |
+| `quality:brand-subscription` (BLOCKING) | brand pulls flow via `@deskmodal/fdc3` brand channel | `scripts/audit-brand-subscription.sh` |
+| `quality:fdc3-targetapp-shape` (BLOCKING) | `targetApp` payloads conform to FDC3 2.2 spec shape | `scripts/audit-fdc3-targetapp-shape.sh` |
 
 Service side: `deskmodal_service_sdk` (Rust) — `deskmodal_service_main!` macro emits the byte-stable `deskmodal_service_entry` FFI symbol; `spawn_hydration` / `spawn_persistence` handle storage; `ServiceClient` exposes channel broadcast + intent raise + storage I/O.
+
+**Expanded SDK surfaces (landed waves cited):**
+
+`@deskmodal/sdk-window` (tradesurface commit `61f8ef4` W22, `bafd359` F134-W11b, `d67c7c1` F134-W6b — verified via `plugins/tradesurface/packages/sdk-window/src/index.ts`):
+- `useWindowTitle(title)` — sets OS native title bar via `getCurrentWindow().setTitle` in a useEffect.
+- `useWindowState() → { isMaximized, isFullscreen, isMinimized }` — observation for app logic.
+- `useWindowControls()` / `useWindowGroup()` — programmatic action / group access.
+- `usePlatform() → { os, arch }` — Tauri plugin-os wrapper.
+- `closeWindow()`, `minimizeWindow()`, `toggleMaximize()`, `toggleFullscreen()` — action functions for programmatic flows.
+- `<TitleBar>`, `<WindowFrame>`, `<AppTitleBar>`, `<TileChannelSlot>` — pass-through components (NO custom controls; Tauri-native decorations handle min/max/close).
+- Forward declarations (planned, not yet exported on origin/main): `useCloseConfirm`, `useWindowResized`, `useWindowFocused` — referenced in `window-frame.tsx` comments as the target port-rule surface for any future custom-decoration migration. Tracked separately; not yet a contract.
+
+`@deskmodal/sdk-notifications` (plugin-tools commit `8049769` wave-6 + earlier W21-B work — verified via `plugin-tools/typescript/packages/sdk-notifications/src/index.ts`):
+- Core: `notifications` SDK + `useNotifications` hook.
+- Thread / form / deep-link primitives (W21-B): `useThreadedNotifications`, `useDeepLink`, `<NotificationForm>` component, `NotificationFormSpec` / `NotificationFormField` / `Thread` / `DeepLink` / `DeepLinkContext` envelopes, `resolveFormIntent` / `submitNotificationForm` helpers.
+- Three new intents (W21-B): `deskmodal.AppendToThread` / `deskmodal.GetThread` / `deskmodal.OpenDeepLink`.
+
+`@deskmodal/fdc3` (tradesurface commit `0a8cfa5` W15-C + `627883e` W21-D — verified via `plugins/tradesurface/packages/fdc3/src/hooks/use-command-palette.ts` and `use-service-status.ts`):
+- Command-palette registration (W15-C): `useCommandPalette(appId, commands[])` hook; two CUSTOM_INTENTS — `deskmodal.RegisterCommands` and `deskmodal.UnregisterCommands` — broadcast on mount / unmount.
+- Service-state degraded-pill (W21-D): `useServiceStatus(serviceId) → { status: 'healthy'|'degraded'|'unhealthy'|'unknown', reason?, since? }`; 30s polling fallback gated by `lastBroadcastAtRef`; raises `deskmodal.GetStatus` intent on retry. Consumed by `<DegradedStatePill>` in `@deskmodal/ui-components`.
+- Full hook inventory (50+): `useChannel`, `useIntent`, `useContext`, `useChannelStatus`, `useAuditTrail`, `useAutoJoinFirstUserChannel`, `useBroadcast`, `useCrossAppDragSource`, `useCrossAppDropTarget`, `useDeskExtensions`, `useDeskmodalA11y`, `useDeskmodalNotifications`, `useDeskmodalShortcuts`, `useDeskmodalSound`, `useDeskmodalStateSync`, `useDeskmodalStorage`, `useDlp`, `useFdc3`, `useFindIntent`, `useFindIntentsByContext`, `useFindService`, `useInstrument`, `useInstrumentBroadcast`, `useIntentAvailability`, `useIntentListener`, `usePreloadedContext`, `usePriceFeed`, `usePrivateChannel`, `useRaiseIntent`, `useStreamingBroadcast`, `useStreamingContext`, `useViewIntent` — full listing in `plugins/tradesurface/packages/fdc3/src/hooks/`.
+
+`@deskmodal/sdk-update` (tradesurface commit `bafd359` F132-W2 wave-3 + W19-C — verified via `plugins/tradesurface/packages/sdk-update/src/index.ts`):
+- Consumer hooks: `useUpdateStatus`, `usePluginUpdates`.
+- Delivery surface: `checkForUpdates(pluginId)`, `installUpdate(pluginId)`, `getReleaseNotes(pluginId, version)`, `subscribeToUpdateChannel(callback)`, `listInstalledPlugins()`.
+
+`@deskmodal/sdk-symbology` (tradesurface commit `4b3e435` W14-D — verified via `plugins/tradesurface/packages/sdk-symbology/src/index.ts`):
+- Hook: `useSymbology(ticker)` — async OpenFIGI lookup with cache.
+- Error: `SymbologyError` class.
+- Types: canonical metadata shape (FIGI, asset class, exchange).
 
 **App `main.tsx` shape (minimum, maximum):**
 
@@ -344,7 +392,7 @@ End-users may extend data-feed services (news-feed, earnings-feed, etc.) without
 
 DeskModal uses Tauri's NATIVE window decorations on every WebviewWindowBuilder: `decorations(true)` (default). macOS draws native traffic lights; Windows draws native min/max/close; Linux draws native GTK window controls. We do NOT render custom React-side traffic-light controls. Custom controls (DarwinControls / StandardControls in any package) create the "two sets of buttons" defect — observed on Market window 2026-05-16.
 
-**Vocabulary rule (user clarification 2026-05-16: "we are not using chrome it is all tauri"):** do not call DeskModal's window-decoration layer "chrome" in commit messages, docs, file names, variable names, or conversation. The runtime is Tauri; the decoration is native OS chrome (a vendor term). Use "Tauri-native window decorations", "OS-native title bar", "native traffic lights" (macOS), or "native min/max/close buttons" (Windows). The word "chrome" is overloaded with Chromium-browser connotation and conceals the architectural decision. Files / scripts that still contain the word (AppShellChrome.tsx, audit-no-custom-chrome.sh) carry it for now; rename in a follow-up wave when consumer migration is cheap.
+**Vocabulary rule (user clarification 2026-05-16, verbatim quote — preserved per §1 honesty rule):** <!-- audit:allow-naming-tauri-not-decoration: quoting user directive verbatim per core.md §1 honesty rule --> "we are not using chrome it is all tauri". Do NOT use the browser-derived decoration term in commit messages, docs, file names, variable names, or conversation. The runtime is Tauri; the layer being named is the native OS window decoration. Use "Tauri-native window decorations", "OS-native title bar", "native traffic lights" (macOS), or "native min/max/close buttons" (Windows). The deprecated term is overloaded with Chromium-browser connotation and conceals the architectural decision. Legacy carry-overs in source (`AppShellChrome.tsx`, `audit-no-custom-chrome.sh`) are tracked for rename in a follow-up wave and were already renamed to `AppShellFrame.tsx` / `audit-no-custom-window-decorations.sh` in the F-rename-tauri-decoration wave; see `scripts/audit-naming-tauri-not-decoration.sh` for the canonical detector.
 
 What `@deskmodal/sdk-window`'s `<TitleBar>` is allowed to do:
 - Set the OS window title via `getCurrentWindow().setTitle(title)` in a single useEffect — the native title bar renders this string.
@@ -352,20 +400,20 @@ What `@deskmodal/sdk-window`'s `<TitleBar>` is allowed to do:
 - Render an in-content subtitle / right-slot for app-specific actions BELOW the native title bar.
 
 What `<TitleBar>` MUST NOT do:
-- Render close / minimize / maximize / fullscreen buttons in React. Tauri's native chrome already provides them. Two sets = defect.
-- Set `decorations(false)` on its WebviewWindowBuilder. The only exceptions are presets `Toast` and `NotificationCenter` where no chrome is intentional.
+- Render close / minimize / maximize / fullscreen buttons in React. Tauri's native decorations already provide them. Two sets = defect.
+- Set `decorations(false)` on its WebviewWindowBuilder. The only exceptions are presets `Toast` and `NotificationCenter` where no decoration is intentional.
 
-Uniformity rule: every DeskModal window — agent shell, Spaces, Market, Settings, About, Copilot, Tearout, every TradeSurface tile pop-out, every plugin window — uses the same chrome treatment (native decorations + optional in-content header below). One source of truth, no exceptions.
+Uniformity rule: every DeskModal window — agent shell, Spaces, Market, Settings, About, Copilot, Tearout, every TradeSurface tile pop-out, every plugin window — uses the same Tauri-native decoration treatment (native window decorations + optional in-content header below). One source of truth, no exceptions.
 
 This reverses parts of F128's W1/W2 custom-controls design. The historical justification (cross-platform consistency) is achieved instead through `decorations(true)` everywhere — macOS / Windows / Linux each show their own native conventions, which is the correct cross-platform behaviour for a desktop app.
 
-**Sharper restatement (user clarification 2026-05-16: "the apps use tauri, we should not use chrome anywhere, it's all tauri"):**
+**Sharper restatement (user clarification 2026-05-16, verbatim quote — preserved per §1 honesty rule):** <!-- audit:allow-naming-tauri-not-decoration: quoting user directive verbatim per core.md §1 honesty rule --> "the apps use tauri, we should not use chrome anywhere, it's all tauri".
 
-ZERO custom window-chrome rendering anywhere in DeskModal. No DarwinControls. No StandardControls. No traffic-light SVGs. No CSS `app-region: drag` regions (Tauri's native title bar handles drag). Every window relies on Tauri-native chrome end-to-end. `@deskmodal/sdk-window`'s `<TitleBar>` and `<WindowFrame>` are either deleted or become no-op pass-throughs; the only legitimate API is `useWindowTitle(title)` (a hook that sets the OS title via `getCurrentWindow().setTitle`). `useWindowControls()` is allowed to provide `.close()`/`.minimize()` for programmatic flows (e.g. "are you sure?" dialogs) but is never used to render controls in React.
+ZERO custom window-decoration rendering anywhere in DeskModal. No DarwinControls. No StandardControls. No traffic-light SVGs. No CSS `app-region: drag` regions (Tauri's native title bar handles drag). Every window relies on Tauri-native decorations end-to-end. `@deskmodal/sdk-window`'s `<TitleBar>` and `<WindowFrame>` are either deleted or become no-op pass-throughs; the only legitimate API is `useWindowTitle(title)` (a hook that sets the OS title via `getCurrentWindow().setTitle`). `useWindowControls()` is allowed to provide `.close()`/`.minimize()` for programmatic flows (e.g. "are you sure?" dialogs) but is never used to render controls in React.
 
 Forbidden patterns (would fail review):
 - Any `<DarwinControls>` / `<StandardControls>` / `<WindowControls>` / `<TrafficLights>` JSX element.
-- Any CSS rule containing `app-region: drag` (custom-chrome drag-region declarations).
+- Any CSS rule containing `app-region: drag` (custom-decoration drag-region declarations).
 - Any `setDecorations(false)` outside the explicit Toast / NotificationCenter exception list.
 - Any imported close/min/max SVG icon used as a window control.
 
@@ -378,11 +426,11 @@ Required SDK surface:
 - `useWindowState() → { isMaximized, isFullscreen, isMinimized }` — observation for app logic.
 - `closeWindow()`, `minimizeWindow()`, `toggleMaximize()`, `toggleFullscreen()` — action functions for programmatic flows ("are you sure?" close, app-driven window state).
 - `usePlatform() → { os, arch }` — Tauri plugin-os wrapper.
-- `<WindowFrame>` — opaque layout pass-through; renders nothing chrome-related (native Tauri chrome handles controls).
+- `<WindowFrame>` — opaque layout pass-through; renders nothing decoration-related (Tauri-native decorations handle controls).
 
-User directive 2026-05-16: "we should not uniform to chrome, we must ensure we're only ever using tauri, which the SDKs should be applying, so the app/plugin developers only worry about functionality and all window handling is done by the sdks." The SDK is the contract; Tauri is the runtime; custom React chrome doesn't exist.
+User directive 2026-05-16 (verbatim quote — preserved per §1 honesty rule): <!-- audit:allow-naming-tauri-not-decoration: quoting user directive verbatim per core.md §1 honesty rule --> "we should not uniform to chrome, we must ensure we're only ever using tauri, which the SDKs should be applying, so the app/plugin developers only worry about functionality and all window handling is done by the sdks." The SDK is the contract; Tauri is the runtime; custom React decorations don't exist.
 
-User directive 2026-05-16 (port rule): "we must ensure we port any functionalities onto tauri if currently on any other window style." When deleting any custom-chrome code, FIRST inventory the BEHAVIORS that code implements (close handlers, close-confirm dialogs, isMaximized state tracking, focus listeners, etc.) and PORT each behavior to a Tauri-native equivalent via sdk-window hooks (`useCloseConfirm`, `useWindowResized`, `useWindowFocused`, etc.). NO functional regression. Document the port-map in the migration commit body.
+User directive 2026-05-16 (port rule, verbatim quote — preserved per §1 honesty rule): <!-- audit:allow-naming-tauri-not-decoration: quoting user directive verbatim per core.md §1 honesty rule --> "we must ensure we port any functionalities onto tauri if currently on any other window style." When deleting any custom-decoration code, FIRST inventory the BEHAVIORS that code implements (close handlers, close-confirm dialogs, isMaximized state tracking, focus listeners, etc.) and PORT each behavior to a Tauri-native equivalent via sdk-window hooks (`useCloseConfirm`, `useWindowResized`, `useWindowFocused`, etc.). NO functional regression. Document the port-map in the migration commit body.
 
 **Instrumentation discipline (durable, was memory-only):**
 

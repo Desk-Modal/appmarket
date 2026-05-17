@@ -52,7 +52,28 @@ except: sys.exit(0)
     [ -n "$summary" ] && print_section "gate state ($(basename $(dirname $st)))" "$summary"
 done
 
-# 4. Active handoff — show path + last 2 entries of "What this iteration closed"
+# 4. CBM index health — flag stale/missing project indices so the orchestrator
+#    can call index_repository before code-discovery queries fan out.
+CBM_BIN="$ROOT/tools/codebase-memory-mcp"
+if [ -x "$CBM_BIN" ]; then
+    # 100ms budget — quick stat-only call against each sub-repo's cache db.
+    stale=$(python3 - <<'PY' 2>/dev/null
+import os, glob, time
+cache=os.path.expanduser("~/.cache/codebase-memory-mcp")
+if not os.path.isdir(cache): exit(0)
+now=time.time()
+out=[]
+for db in sorted(glob.glob(os.path.join(cache, "Users-adrian-deskmodal*.db"))):
+    age_h=(now-os.path.getmtime(db))/3600
+    name=os.path.basename(db).removesuffix(".db")
+    if age_h>168: out.append(f"{name} ({age_h:.0f}h old)")
+print(" | ".join(out))
+PY
+)
+    [ -n "$stale" ] && print_section "cbm: stale indices (>7 days)" "$stale  — call index_repository before code queries"
+fi
+
+# 5. Active handoff — show path + last 2 entries of "What this iteration closed"
 for hf in "$STATE/handoffs/tile-experience-sota.md" "$STATE/handoff.md"; do
     [ -f "$hf" ] || continue
     # Surface handoff path + most recent iteration entry (single line)

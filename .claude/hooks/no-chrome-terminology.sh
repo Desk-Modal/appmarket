@@ -14,9 +14,9 @@
 # something else):
 #   - `Chrome DevTools Protocol` / `CDP` references.
 #   - References to Google Chrome the browser (rare, but legitimate).
-#   - Legacy file names like `AppShellChrome.tsx` cited as such (path-like
-#     references on the same line are allowed via the
-#     "AppShellChrome" / "audit-no-custom-chrome" allowlist).
+#   - Legacy file names cited in rename/history commits — the allowlist
+#     below sanitises historical references to `AppShellChrome.tsx` and
+#     `audit-no-custom-chrome.sh` so rename commits don't false-fail.
 #
 # Wired via .claude/settings.json hooks block as a `commit-msg` matcher.
 # Bypass: `DESKMODAL_LAX=1 git commit` (audit-logged per core.md §11).
