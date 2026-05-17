@@ -14,6 +14,7 @@
     { "id": "analytics",  "name": "Analytics",  "description": "Cross-instrument analysis and metrics" },
     { "id": "simulation", "name": "Simulation", "description": "Paper trading, backtesting, replay" },
     { "id": "scripting",  "name": "Scripting",  "description": "Indicator and strategy scripting" },
+    { "id": "indicator-pack", "name": "Indicator Packs", "description": "Third-party indicator bundles for the chart engine — OptiScript / WASM cdylib, registered via the indicator registry on install" },
     { "id": "branding",   "name": "Branding",   "description": "Brand themes and white-label packs" },
     { "id": "platform",   "name": "Platform",   "description": "DeskModal agent and core components" }
   ],
