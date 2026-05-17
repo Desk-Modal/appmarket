@@ -1,0 +1,125 @@
+# DeskModal Marketplace — Chart-Template content schema (G009 / F133-W10)
+#
+# Declarative content-type descriptor for the marketplace aggregator. A
+# `chart-template` is a shareable JSON envelope (version 1) that captures a
+# chart's series-type, indicator stack, drawing instances, view range, and
+# theme. Apps consume the canonical JSON shape declared in this schema; the
+# aggregator passes the catalog entry through to plugin-index without
+# unpacking the payload.
+#
+# This file declares the SCHEMA only — there is no signed cdylib. Templates
+# are user-content artefacts that ride the same Ed25519-signed catalog
+# manifest as indicator-packs (see `indicator-pack.md`), but the payload is a
+# JSON file rather than a runtime library.
+
+[content_type]
+id = "chart-template"
+display_name = "Chart Template"
+description = "A reusable chart configuration: chart type, indicators, drawings, view range, theme."
+mime = "application/json"
+file_extension = "deskmodal-template.json"
+# The template payload's `version` field — increment only on a breaking
+# change to the JSON shape, never on additive fields.
+schema_version = 1
+
+# The canonical JSON shape ChartTemplateExport in
+# plugins/tradesurface/apps/chart/src/templates/types.ts (G009 / S-CH-13).
+[content_type.payload_shape]
+type = "object"
+required = ["version", "name", "chartType", "indicators", "drawingTools", "viewRange", "style"]
+
+[content_type.payload_shape.fields.version]
+type = "integer"
+const = 1
+description = "Forward-compat schema version; only `1` is accepted today."
+
+[content_type.payload_shape.fields.name]
+type = "string"
+min_length = 1
+max_length = 64
+description = "User-supplied template name; trimmed; ≤64 chars."
+
+[content_type.payload_shape.fields.description]
+type = "string"
+max_length = 256
+required = false
+description = "Optional free-form description; ≤256 chars."
+
+[content_type.payload_shape.fields.chartType]
+type = "string"
+enum = ["Candlestick", "Line", "Area", "Bar", "Heikin-Ashi"]
+description = "Series type recognised by the chart-engine SeriesType enum."
+
+[content_type.payload_shape.fields.indicators]
+type = "array"
+description = "IndicatorConfig snapshots from @deskmodal/core types/indicators."
+item_type = "IndicatorConfig"
+
+[content_type.payload_shape.fields.drawingTools]
+type = "array"
+description = "DrawingInstance snapshots from @deskmodal/core types/drawings."
+item_type = "DrawingInstance"
+
+[content_type.payload_shape.fields.viewRange]
+type = "union"
+description = "Either the literal `\"auto\"` or `{from: number, to: number}` epoch-ms boundaries."
+union_of = ["string-literal-auto", "view-range-object"]
+
+[content_type.payload_shape.fields.style]
+type = "object"
+description = "Optional style overrides."
+
+[content_type.payload_shape.fields.style.theme]
+type = "string"
+required = false
+description = "Optional theme id resolved against the active sdk-theme palette."
+
+# -- Marketplace tile preview ------------------------------------------------
+#
+# The marketplace renders a card per chart-template content entry. The card
+# shows the template name + description, the indicator count, the drawing
+# count, and an "Install" button that raises the
+# `deskmodal.InstallChartTemplate` intent. The intent's payload is the
+# canonical envelope above; the receiving chart app validates with the same
+# `isValidExport` guard the in-app importer uses.
+
+[tile_preview]
+fields_shown = ["name", "description", "chartType", "indicators_count", "drawings_count"]
+install_intent = "deskmodal.InstallChartTemplate"
+
+# -- Aggregator + Verification Gateway behaviour ----------------------------
+#
+# A content entry is APPROVED when:
+# 1. `version == 1`.
+# 2. `name`, `chartType`, `indicators`, `drawingTools`, `viewRange`, `style`
+#    parse against the field declarations above.
+# 3. The aggregator's host-allowlist policy passes (no foreign URLs in the
+#    payload — chart templates are pure data).
+# 4. The publisher's catalog manifest is Ed25519-signed.
+#
+# The aggregator REJECTS a chart-template entry whose payload fails any of
+# the above. There is no runtime cdylib to verify — the contract is the JSON
+# shape end-to-end.
+
+[verification]
+hard_requirements = [
+  "payload.version == 1",
+  "payload.name.length >= 1",
+  "payload.chartType in [Candlestick, Line, Area, Bar, Heikin-Ashi]",
+  "payload.indicators is array",
+  "payload.drawingTools is array",
+  "payload.viewRange == 'auto' OR (payload.viewRange.from is number AND payload.viewRange.to is number)",
+  "payload.style is object",
+]
+
+# -- Dependency resolution ---------------------------------------------------
+#
+# Chart-template content depends on the chart app at the schema-version pin
+# declared above. The marketplace's dependency resolver refuses install when
+# the user's installed chart-app reports a different schema version.
+
+[requires]
+plugin_id = "deskmodal.chart"
+min_schema_version = 1
+max_schema_version = 1
+reason = "ChartTemplate envelope shape is consumed by deskmodal.chart's templates importer."
