@@ -20,7 +20,7 @@ Trading surfaces specifically: layout + density at trader widths (300/500/800/12
 
 - Trader widths render: 300/500/800/1200 px — every trading surface tested at each.
 - Price/quote text uses `font-variant-numeric: tabular-nums` always.
-- Chart is the primary surface; chrome densifies at smaller widths without truncating prices.
+- Chart is the primary surface; the frame densifies at smaller widths without truncating prices.
 - Every click has a keyboard shortcut surfaced in the command palette.
 
 ## Exit criteria

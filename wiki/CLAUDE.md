@@ -1,8 +1,8 @@
 <!-- MIRROR — DO NOT EDIT HERE -->
 <!-- Source-of-truth: root wiki/CLAUDE.md -->
 <!-- Mirror-script: scripts/wiki-mirror.sh -->
-<!-- Mirrored-at: 2026-05-17T04:36:42Z -->
-<!-- Mirror-source-sha: 0106036876e3712d039b0fa1e121276d4109605d -->
+<!-- Mirrored-at: 2026-05-17T09:09:10Z -->
+<!-- Mirror-source-sha: 8e0d5f30276f866b2334244ec3444a96e049c826 -->
 
 > **This file is a MIRROR.** The authoritative copy lives at root
 > `wiki/CLAUDE.md`. Sub-repo edits to this file are overwritten on

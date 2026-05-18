@@ -20,7 +20,7 @@ Visual adversarial reviewer for chart surfaces. Runs `python scripts/cdp-test-ru
 
 - A chart type / timeframe / indicator rendered visibly differently from its published reference.
 - Drawing tool hit-testing regresses (click within N px of line should still select).
-- Tile-hosted chart differs from modal-hosted chart beyond chrome padding (framing parity is invariant).
+- Tile-hosted chart differs from modal-hosted chart beyond frame padding (framing parity is invariant).
 - Crosshair latency > 16ms.
 - Missing before/after screenshot pair in evidence.
 
