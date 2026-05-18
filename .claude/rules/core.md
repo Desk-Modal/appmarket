@@ -60,6 +60,38 @@ Specs and rules are *cited from*, not *discovered through*. Use the active featu
 
 Stop when: the task converges, the user says stop, or a blocker requires human input. Never stop because "I can't verify visually" — find another path (logs, DOM inspection, source read). Never stop without stating what verified vs what didn't.
 
+For **autonomous /goal-driven sessions**: `/goal`'s supervisor evaluator (Haiku-default small fast model per Claude Code v2.1.139) judges each turn against the declared terminal condition; auto-clears on met. Don't stop manually inside an active /goal unless the evaluator says yes or the user intervenes. Per F157 spec at `specs/157-autonomous-delivery-operating-model/spec.md`.
+
+## 11. Persistent autonomous-delivery operating model (F157)
+
+`specs/157-autonomous-delivery-operating-model/spec.md` codifies the 12-layer persistent operating model:
+
+1. **Settings** — `.claude/settings.json` with `effort: xhigh` + 14 hook events wired + 3 concurrency env vars
+2. **Skills** — 11 custom DeskModal skills under `.claude/skills/deskmodal-*/`
+3. **Agents** — 25 personas with `effort` + `skills` + `hooks` + `disallowedTools` frontmatter
+4. **Hooks** — 12 new scripts (stop-canonical-committed / stop-tier-a-verify / SubagentStart-Stop / TaskCreated-Completed / Pre-PostCompact / StopFailure / InstructionsLoaded / FileChanged / SessionEnd)
+5. **Slash-command discipline** — /goal for terminal-condition, /loop for time-paced, /effort xhigh default, /ultrareview at phase boundary
+6. **MCPs + plugins** — 7 MCPs + frontend-design + plugin-dev + perf-debug-mcp
+7. **Cloud orchestration** — Routines on web for nightly tasks
+8. **Memory** — 8 persistence tiers
+9. **Self-orchestration** — autonomous SOTA delivery loop per session
+10. **Honesty + persistence** — never lose effort, never hallucinate
+11. **Session Mesh** — filesystem-backed cross-session coordination at `.session-state/mesh/`
+12. **Cost control** — concurrency caps + routine-vs-on-demand routing
+
+Memory mirror: `~/.claude/projects/-Users-adrian-deskmodal/memory/feedback_f157_autonomous_delivery.md`.
+
+**Discipline matrix for autonomous primitives (Layer 5):**
+
+| When | Use | When NOT to use |
+|---|---|---|
+| Verifiable terminal condition | `/goal <condition>` (one per session) | Routine impl where Tier A verifies |
+| Time-paced re-check | `/loop <interval> <prompt>` | When `/goal` fits |
+| Cross-stack DeskModal impl | `/effort xhigh` (default) | Mechanical sweeps — use `medium` |
+| Phase-boundary review | `/ultrareview` (cloud fleet) | Per-wave — use local reviewer pod |
+| Cloud research / markdown | `RemoteTrigger` / `/schedule` | Source edits (.rs/.ts/.tsx/.py/.toml) |
+| Multi-session work | F157 Layer 11 Session Mesh | Agent-teams (high cost; experimental) |
+
 ## Topic-file index (load on relevance)
 
 Section numbers are **stable anchors** — `core.md §17` and `architecture.md §17` resolve to the same content. The split is structural; numbering is preserved so existing citations across `specs/`, agent prompts, hooks, and memory continue to work.

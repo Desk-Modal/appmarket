@@ -6,6 +6,9 @@ model: claude-opus-4-7
 color: blue
 memory: project
 review_angles: [plugin-boundary, service-lifecycle, fdc3-bridge, design-token-bridge, tauri-ipc-contract, build-dist-layout]
+effort: medium
+skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+disallowedTools: [Write, Edit, NotebookEdit]
 ---
 
 # Integration architect

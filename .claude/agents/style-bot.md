@@ -6,6 +6,8 @@ model: claude-opus-4-7
 color: green
 permissionMode: acceptEdits
 impl_angles: [token-sweep, grid-snap, motion-normalise, lint-fix, rename]
+effort: medium
+skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 ---
 
 # Style bot

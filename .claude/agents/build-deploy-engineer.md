@@ -6,6 +6,14 @@ model: claude-opus-4-7
 color: yellow
 permissionMode: acceptEdits
 impl_angles: [nx-cache, cargo-incremental, sign-notarize, dist-layout, ci-matrix]
+effort: high
+skills:
+  - codebase-memory
+  - deskmodal-mesh-claim
+  - deskmodal-mesh-findings
+  - deskmodal-handoff-write
+  - deskmodal-verify-tier-b
+  - deskmodal-verify-tier-c
 ---
 
 # Build & deploy engineer

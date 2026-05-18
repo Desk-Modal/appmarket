@@ -6,6 +6,8 @@ model: claude-opus-4-7
 color: purple
 permissionMode: acceptEdits
 impl_angles: [conformance-spec, channels-broadcast, intents-routing, appd-bridge, dab-wcp-dacp]
+effort: xhigh
+skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 ---
 
 # FDC3 protocol engineer

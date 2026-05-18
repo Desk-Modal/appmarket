@@ -6,6 +6,14 @@ model: claude-opus-4-7
 color: orange
 permissionMode: acceptEdits
 impl_angles: [compliance-pipeline, meilisearch-index, marketplace-api, publisher-mgmt, quality-badges]
+effort: high
+skills:
+  - codebase-memory
+  - deskmodal-mesh-claim
+  - deskmodal-mesh-findings
+  - deskmodal-handoff-write
+  - deskmodal-verify-tier-b
+  - deskmodal-verify-tier-c
 ---
 
 # Verification Gateway engineer

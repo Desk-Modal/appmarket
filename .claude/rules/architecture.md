@@ -1474,3 +1474,141 @@ Routing every cross-app proposal through the aggregator preserves the per-app la
 - `architecture.md §25` (branding single capability — visual-critique cross-checks brand-token consumption per mode)
 
 **Memory mirror:** `~/.claude/projects/-Users-adrian-deskmodal/memory/feedback_cloud_lane_cohesion_monitoring.md` (durable; cross-session per `feedback_no_versioned_interfaces_pre_public` persistence pattern).
+
+---
+
+## 33. Session Mesh — multi-session coordination (F157 Layer 11)
+
+**Cardinal directive (user 2026-05-18 verbatim):** "evolve this so we can run multiple parallel claude sessions across deskmodal so they do not create loss, interrupt, or ideally they somehow learn and collaborate, it's critical we're not creating too much expense, unnecessary replication, and we want to deliver code and outcomes fast"
+
+The **Session Mesh** at `.session-state/mesh/` is the filesystem-backed coordination layer for parallel Claude sessions on the same machine. Sessions don't directly message each other (that's `agent-teams` and it's high-cost); instead they **share a ledger** of claims + findings + heartbeats.
+
+**8 mesh scripts** at `scripts/session-mesh/`:
+- `claim-write-set.sh <feature> <program> <write-set-csv>` — declare bounds + check conflicts
+- `release-write-set.sh` — release this session's claim
+- `heartbeat.sh` — touch last_seen + extend claim expiry (called per Stop hook)
+- `share-finding.sh <topic> <summary> [<evidence>]` — write to findings bus
+- `list-findings.sh [--since N] [--from-others]` — read findings from other sessions
+- `find-conflicts.sh` — pairwise overlap check
+- `check-concurrency.sh` — report active sessions vs cap
+
+**Discipline:**
+- SessionStart hook calls `claim-write-set.sh` + `list-findings.sh --since 24` and injects into context
+- Stop hook calls `heartbeat.sh` (renews claim every turn)
+- PreCompact hook releases claim; PostCompact re-claims
+- SessionEnd hook releases claim
+- Other sessions' SessionStart sees yours via heartbeat; respects your write-set
+
+**This is the SESSION-scoped twin of §32 cross-session continuous-lane orchestration.** §32 owns cross-session work coordination (cloud lanes, audit gates); §33 owns local-session coordination (work-claim, findings bus, heartbeat).
+
+**Pairs with §32 + F157 spec at `specs/157-autonomous-delivery-operating-model/spec.md` + `feedback_api_load_concurrent_agents` + `feedback_f157_autonomous_delivery`.**
+
+## 32. Continuous lane orchestration — zero-idle invariant + conflict-free dispatch + sync-to-targets
+
+**Cardinal directive (user 2026-05-18 verbatim — preserved per `core.md §1` honesty rule):** "we should ensure all lanes are used at all times, so we must have an orchestrator planning optimally ahead, so the lanes don't conflict and we have full synchronisation with our targets, and then building and testing all" + "we should be using our local lanes and agents too optimally for tasks which suit running on the desktop" + "we should only allocate tasks to the cloud in which it can be useful and high quality, otherwise we should continuously ensure our local lanes are utilised, with /loop".
+
+F155 (`specs/155-continuous-lane-orchestrator-sota/spec.md`) codifies the continuous lane orchestrator. §32 here is the CANONICAL operational rule the orchestrator follows on every /loop wake + every event.
+
+### 32.1 Zero-idle invariant
+
+The orchestrator MUST NOT leave LOCAL lane capacity idle while dispatchable backlog items exist. At every event (agent return / git push / cron fire / failed gate / human directive / timeout) the orchestrator runs `scripts/orchestrator-replan.sh` + dispatches to fill empty local lanes per priority.
+
+Cloud lane idleness is ACCEPTABLE (per F155 spec §4.8.8) — cloud lanes have cron cadence, not zero-idle invariant. Local lane idleness is the only banned state.
+
+Verified by `scripts/audit-no-idle-with-dispatchable.sh` (BLOCKING in `local-ci --fast` post-F155 W6).
+
+### 32.2 Conflict-free dispatch contract
+
+No agent dispatch happens without passing through the replan algorithm's conflict-matrix gate (per F155 conflict-matrix.md). Pairwise-disjoint write-set requirement from `parallelism.md §4` enforced PRE-DISPATCH, not post-failure.
+
+Verified by `scripts/audit-conflict-matrix-checked.sh` (BLOCKING post-F155 W6).
+
+### 32.3 Auto-replan on every event
+
+Six trigger events (per F155 spec §5):
+1. Agent return.
+2. Git push (local OR cloud lane).
+3. Cron fire (cloud lane scheduled firing).
+4. Failed gate (Tier-A/B/C verification rc != 0).
+5. Human directive (user message changes priority).
+6. Timeout (in-flight item exceeds estimated wall-clock × 2).
+
+Each event triggers `bash scripts/orchestrator-replan.sh` → dispatchable set recomputed → next dispatches issued.
+
+Verified by `scripts/audit-replan-on-event.sh` (ADVISORY post-F155 W6).
+
+### 32.4 Sync-to-targets ledger
+
+Every dispatch advances ≥ 1 F-spec milestone. The orchestrator maintains `.session-state/sync-to-targets-ledger.json` per F155 sync-to-targets-ledger.md.
+
+Daily roll-up at 06:00 UTC + on demand. Surfaces target stalls (>24h) + trajectory deviations (>5%).
+
+Verified by `scripts/audit-sync-targets-current.sh` (BLOCKING post-F155 W6).
+
+### 32.5 Anti-patterns banned
+
+Per F155 spec §11:
+- "I'll plan when this returns" (when capacity > 1 + dispatchable items exist).
+- "Let me wait and see" (when zero-idle invariant violated).
+- Single-lane-blocking on user-confirmation when ≥ 2 lanes could fire in parallel on disjoint work.
+- Dispatching without conflict-matrix check.
+- SCOPE-TRANSFER to non-existent receiver (per `quality.md §18.1`; F155 spec §10).
+- Ignoring failed Tier-A/B/C gates (per `quality.md §18.1`).
+- Cloud lane impl-tasking (cloud is RESEARCH only per §31.1; impl is LOCAL per F155 §4.5).
+- Workspace-wide verification per wave (per `quality.md §18.7.1` + F155 §21).
+- Dispatching Rust impl to cloud (no CBM/rust-analyzer/cargo; F155 §11.9).
+- Dispatching `launch.sh --verify` to cloud (no Tauri runtime; F155 §11.10).
+- Local lane sitting idle while cloud runs research that could parallelise.
+- "Use cloud because lane is idle" (per F155 §4.8.8).
+
+### 32.6 Cascading amendments (queued F155 waves)
+
+- `scripts/orchestrator-replan.sh` (W0 skeleton; W2 full algorithm; W3 conflict-matrix verifier; W5 monitor integration).
+- `scripts/sync-to-targets-update.sh` (W4).
+- `scripts/check-repo-states.sh` (W5).
+- `scripts/audit-no-orphan-scope-transfers.sh` (W6).
+- `scripts/audit-no-idle-with-dispatchable.sh` (W6).
+- `scripts/audit-conflict-matrix-checked.sh` (W6).
+- `scripts/audit-sync-targets-current.sh` (W6).
+- `scripts/audit-backlog-current.sh` (W6).
+- `scripts/audit-replan-on-event.sh` (W6).
+- `wiki/playbooks/continuous-lane-orchestration.md` (W7).
+- `wiki/inventory/orchestration.md` (W7).
+- `discipline.md §13` amendment (W2 — autonomy protocol wake-step 3 + 4 codifying replan reads).
+
+### 32.7 Local-lane /loop saturation (FIRST-priority operational rule)
+
+Local lane utilisation is the FIRST priority. Cloud lanes are SECOND priority and only when value-quality gate (F155 spec §4.8) passes all 5 tests.
+
+`/loop` self-pacing pattern per `discipline.md §13` autonomy protocol — on every wake (every harness notification + every ScheduleWakeup):
+
+1. **Check local lane utilisation FIRST.** Count in-flight local agents.
+2. **If < 3 local in-flight and dispatchable backlog exists:** dispatch up to 4 more (cap 7 per §28.3) per replan algorithm (F155 spec §6).
+3. **Only after local lanes are saturated to ≥ 5/7:** consider firing additional cloud lanes manually (the existing 22-24 cloud lanes already run on cron per §31; no need to manually fire each cycle).
+4. **If local cap reached + no more dispatchable local backlog:** schedule next ScheduleWakeup 1200-1800s per §28.9 cache-aware delay; do NOT idle-wait.
+
+Backlog refill discipline: every wave that completes spawns potential follow-up waves into the backlog (closure pods for SCOPE-TRANSFERRED concerns, cleanup waves, decomp pre-impl per §24, audit-gate authoring per §27.13/§28.11). The orchestrator's job: KEEP THE BACKLOG OVERFULL so local lanes never go idle.
+
+Anti-pattern banned: waiting on user-confirmation for ONE non-blocking question while N ≥ 2 local lanes sit idle on independent work. Dispatch the parallel work first; ask the question concurrently.
+
+**Pairs with:**
+- `core.md §1` (honesty — every replan decision cites evidence)
+- `core.md §4` (parallelism — F155 is the META layer above)
+- `parallelism.md §4` (pods + speculation + audit-by-path + warm-agent reuse — F155 selects per-event)
+- `parallelism.md §15` (wave discipline — F155 honours evolve-and-fix-forward)
+- `parallel-sessions.md` (canonical-file ownership — F155 backlog written by orchestrator only)
+- `quality.md §7` (reviewer matrix — F155 backlog declares reviewer pod shape)
+- `quality.md §18.1` (zero tolerance — F155 materialises SCOPE-TRANSFERRED receivers)
+- `quality.md §18.7` + `§18.7.1` + `§18.7.2` + `§18.7.3` + `§18.8` (always-parallel-always-verify + tier-cadence + never-block + scoped-tests + world-class-verification)
+- `discipline.md §9` (handoff protocol — F155 supersedes free-form handoff for active backlog state)
+- `discipline.md §13` (autonomy protocol — F155 IS the autonomy mechanism between /loop wakes)
+- `discipline.md §26` (context discipline — backlog is tier-1 CANONICAL git via daily snapshots)
+- `architecture.md §16` (non-blocking — replan runs in main agent loop; never daemon)
+- `architecture.md §21` (spec hygiene — backlog items cite spec receivers)
+- `architecture.md §27` (per-capability repo — backlog declares target repo per item)
+- `architecture.md §28` (deterministic+accelerated — F155 IS the planning layer)
+- `architecture.md §29` (incremental verification — F155 budgets per logical impact batch)
+- `architecture.md §30` (aggregate MCP capabilities — replan reads CBM + wiki-mcp)
+- `architecture.md §31` (cloud-lane operational rules — F155 schedules lanes per §31 catalogue alongside local)
+
+**Memory mirror:** `~/.claude/projects/-Users-adrian-deskmodal/memory/feedback_continuous_lane_orchestrator.md` (durable; cross-session per `feedback_no_versioned_interfaces_pre_public` persistence pattern).

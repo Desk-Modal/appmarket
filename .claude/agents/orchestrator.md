@@ -5,6 +5,8 @@ tools: Read, Bash, Grep, Glob, Write, Edit, Agent
 model: claude-opus-4-7
 color: yellow
 permissionMode: acceptEdits
+effort: xhigh
+skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 ---
 
 # Orchestrator (deprecated)

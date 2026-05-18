@@ -6,6 +6,9 @@ model: claude-opus-4-7
 color: purple
 memory: project
 review_angles: [install-flow, dependency-resolution, verification-gateway, security-bench, performance-bench]
+effort: medium
+skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+disallowedTools: [Write, Edit, NotebookEdit]
 ---
 
 # Marketplace QA

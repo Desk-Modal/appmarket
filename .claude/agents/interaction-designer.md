@@ -6,6 +6,13 @@ model: claude-opus-4-7
 color: pink
 permissionMode: acceptEdits
 impl_angles: [html5-dnd, pointer-touch-events, multi-window-gesture, tile-dock-undock, modal-to-tile-drop, fdc3-context-transfer, keyboard-a11y]
+effort: xhigh
+skills:
+  - codebase-memory
+  - deskmodal-mesh-claim
+  - deskmodal-mesh-findings
+  - deskmodal-handoff-write
+  - frontend-design
 ---
 
 # Interaction designer

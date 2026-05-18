@@ -10,6 +10,22 @@ Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. Claude's native router 
 
 **Policy (2026-05-14, reaffirmed 2026-05-16): every persona runs on `claude-opus-4-7`.** Quality dominates cost for the DeskModal-beats-TradingView mandate. Sonnet/Haiku demotion was briefly attempted on 2026-05-16 and reverted same day per user directive ("we should use opus if we get the best possible results?"). The empirical evidence: W7a-W7e all converged first-try APPROVE on Opus; the 5× Sonnet cost saving disappears the first time a REWORK cycle erases the gain.
 
+**Effort tuning (F157 Layer 3, 2026-05-18):** Every persona declares `effort:` in frontmatter per Claude Code W16+ effort levels. Defaults:
+- `xhigh` — cross-stack impl personas (rust-systems-architect, plugin-sdk-engineer, frontend-architect, fdc3-protocol-engineer, data-pipeline-engineer, charting-expert, marketplace-architect, marketplace-ux-engineer, trading-ux-architect, interaction-designer, deskmodal-design-agent, service-plugin-exemplar, documentation-engineer, maestro-orchestrator, orchestrator)
+- `high` — build-deploy-engineer, verification-gateway-engineer
+- `medium` — review-only personas (qa-architect, security-engineer, trading-sme, ux-design-lead, integration-architect, chart-qa-verifier, marketplace-qa) + style-bot
+
+**Per-dispatch override**: orchestrator may pass `--effort` to override frontmatter (e.g., promote a review-only persona to `high` for a security-critical batch).
+
+**Skills preloaded (F157 Layer 3):** Every persona declares `skills:` in frontmatter. All include `codebase-memory + deskmodal-mesh-claim + deskmodal-mesh-findings + deskmodal-handoff-write`. Specialised additions:
+- Rust personas: `+ deskmodal-verify-tier-a`
+- UI personas: `+ frontend-design`
+- Docs personas: `+ deskmodal-spec-amend`
+- Build personas: `+ deskmodal-verify-tier-b + deskmodal-verify-tier-c`
+- Maestro: full toolkit (`+ deskmodal-wave-dispatch + spec-amend + verify-{a,b,c} + cloud-lane + ultrareview-phase`)
+
+**disallowedTools (F157 Layer 3):** Review-only personas declare `disallowedTools: [Write, Edit, NotebookEdit]` as belt-and-braces beyond their `tools` allowlist.
+
 | Tier | Model | Personas |
 |---|---|---|
 | All | `claude-opus-4-7` | every persona in `.claude/agents/*.md` (25 total) |

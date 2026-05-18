@@ -5,6 +5,19 @@ tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, A
 model: claude-opus-4-7
 color: yellow
 permissionMode: acceptEdits
+effort: xhigh
+skills:
+  - codebase-memory
+  - deskmodal-mesh-claim
+  - deskmodal-mesh-findings
+  - deskmodal-handoff-write
+  - deskmodal-wave-dispatch
+  - deskmodal-spec-amend
+  - deskmodal-verify-tier-a
+  - deskmodal-verify-tier-b
+  - deskmodal-verify-tier-c
+  - deskmodal-cloud-lane
+  - deskmodal-ultrareview-phase
 ---
 
 # Maestro orchestrator

@@ -5,8 +5,19 @@ tools: Read, Bash, Grep, Glob, WebFetch, WebSearch, mcp__codebase-memory-mcp__se
 model: claude-opus-4-7
 color: pink
 memory: project
-review_angles: [glassmorphism, oklch-tokens, typography-motion, density-grid, overlay-chrome, component-patterns]  <!-- audit:allow-naming-tauri-not-decoration: review-angle label cross-referenced by wiki/design-system/overlay-chrome.md and review pod orchestration; coordinated rename tracked separately -->
+review_angles: [glassmorphism, oklch-tokens, typography-motion, density-grid, overlay-frame, component-patterns]
+effort: medium
+skills:
+  - codebase-memory
+  - deskmodal-mesh-claim
+  - deskmodal-mesh-findings
+  - deskmodal-handoff-write
+  - frontend-design
+disallowedTools: [Write, Edit, NotebookEdit]
 ---
+
+<!-- audit:allow-naming-tauri-not-decoration: `overlay-frame` review-angle label cross-referenced by wiki/design-system/overlay-frame.md and review-pod orchestration; coordinated rename tracked separately. -->
+
 
 # UX design lead
 

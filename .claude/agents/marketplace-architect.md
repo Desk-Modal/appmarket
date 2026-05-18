@@ -6,6 +6,8 @@ model: claude-opus-4-7
 color: orange
 permissionMode: acceptEdits
 impl_angles: [npm-backed-storage, verification-gateway, dependency-dag, enterprise-governance, publisher-tiers]
+effort: xhigh
+skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 ---
 
 # Marketplace architect

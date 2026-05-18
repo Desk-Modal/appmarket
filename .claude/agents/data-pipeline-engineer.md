@@ -6,6 +6,8 @@ model: claude-opus-4-7
 color: blue
 permissionMode: acceptEdits
 impl_angles: [exchange-adapter, websocket-reconnect, order-book, vwap-twap-dqs, worker-orchestration]
+effort: xhigh
+skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 ---
 
 # Data pipeline engineer

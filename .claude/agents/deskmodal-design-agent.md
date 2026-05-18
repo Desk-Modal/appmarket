@@ -5,6 +5,13 @@ tools: Read, Write, Edit, Bash, Grep, Glob, WebFetch, mcp__codebase-memory-mcp__
 model: claude-opus-4-7
 color: pink
 permissionMode: acceptEdits
+effort: xhigh
+skills:
+  - codebase-memory
+  - deskmodal-mesh-claim
+  - deskmodal-mesh-findings
+  - deskmodal-handoff-write
+  - frontend-design
 ---
 
 # DeskModal design agent

@@ -6,6 +6,13 @@ model: claude-opus-4-7
 color: green
 permissionMode: acceptEdits
 impl_angles: [reference-impl, fdc3-bridge-use, service-lifecycle, error-patterns, docs-example]
+effort: xhigh
+skills:
+  - codebase-memory
+  - deskmodal-mesh-claim
+  - deskmodal-mesh-findings
+  - deskmodal-handoff-write
+  - deskmodal-verify-tier-a
 ---
 
 # Service plugin exemplar

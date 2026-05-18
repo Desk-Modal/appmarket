@@ -107,11 +107,17 @@ Goal: user never re-pastes prompts or re-explains context. State lives in git + 
 
 On session start, the `context-load` SessionStart hook prints: active feature, branch + ahead/behind, gate state, latest handoff entry. Read that before asking the user anything.
 
-When resuming a task:
+When resuming a task per F157 Layer 9 autonomous-SOTA-delivery loop:
 1. Read `.session-state/handoff.md` (workspace) or `.session-state/handoffs/<feature>.md` (per-feature). Skip any hypothesis in the "Dead-ends" section.
 2. Read the active feature's `spec.md` + `benchmark.md` (if applicable).
-3. Re-verify live state — gates, branch, dirty files — don't trust the handoff as ground truth. Handoff is a SNAPSHOT; the gate file is LIVE.
-4. Continue. Do not ask the user to re-state the goal unless you have hit a BLOCK.
+3. **F157 Layer 11**: Invoke `/deskmodal-mesh-claim <feature> <program> <write-set-globs>` to declare write-set bounds + check for cross-session conflicts. If conflict, resolve before proceeding.
+4. **F157 Layer 11**: Invoke `/deskmodal-mesh-findings` to surface findings from other parallel sessions in the last 24h.
+5. Re-verify live state — gates, branch, dirty files — don't trust the handoff as ground truth. Handoff is a SNAPSHOT; the gate file is LIVE.
+6. Declare `/effort xhigh` unless the task is mechanical (then `medium`).
+7. Declare `/goal <terminal-condition>` if the work has a verifiable end-state.
+8. Continue. Do not ask the user to re-state the goal unless you have hit a BLOCK.
+
+When `--resume` or `--continue`: a goal that was active when the session ended is restored. Mesh claim is recreated by SessionStart hook.
 
 Between sessions:
 - A commit is the durable checkpoint. Post-commit hook appends to the handoff automatically.

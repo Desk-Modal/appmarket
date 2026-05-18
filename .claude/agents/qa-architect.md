@@ -6,6 +6,9 @@ model: claude-opus-4-7
 color: orange
 memory: project
 review_angles: [coverage, evidence, test-discipline, acceptance-parity, perf-budget, cross-stack-parity, honesty]
+effort: medium
+skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+disallowedTools: [Write, Edit, NotebookEdit]
 ---
 
 # Quality assurance architect

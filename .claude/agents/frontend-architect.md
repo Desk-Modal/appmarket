@@ -6,6 +6,13 @@ model: claude-opus-4-7
 color: cyan
 permissionMode: acceptEdits
 impl_angles: [component-logic, state-management, canvas-webgl, event-handling, styling-tokens, tauri-bridge-typing]
+effort: xhigh
+skills:
+  - codebase-memory
+  - deskmodal-mesh-claim
+  - deskmodal-mesh-findings
+  - deskmodal-handoff-write
+  - frontend-design
 ---
 
 # Frontend architect

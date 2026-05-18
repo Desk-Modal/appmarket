@@ -6,6 +6,13 @@ model: claude-opus-4-7
 color: blue
 permissionMode: acceptEdits
 impl_angles: [claude-md, memory-index, spec-docs, adrs, cross-repo-sync]
+effort: xhigh
+skills:
+  - codebase-memory
+  - deskmodal-mesh-claim
+  - deskmodal-mesh-findings
+  - deskmodal-handoff-write
+  - deskmodal-spec-amend
 ---
 
 # Documentation engineer

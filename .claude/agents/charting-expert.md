@@ -6,6 +6,8 @@ model: claude-opus-4-7
 color: cyan
 permissionMode: acceptEdits
 impl_angles: [rendering-math, indicator-algorithms, drawing-tools, scales-crosshair, chart-types]
+effort: xhigh
+skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 ---
 
 # Charting expert
