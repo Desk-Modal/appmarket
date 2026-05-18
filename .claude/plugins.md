@@ -4,16 +4,15 @@ Declared in `.claude/settings.json` under `enabledPlugins` with the format `"<pl
 
 Auto-installed on every fresh `git clone` + first Claude Code session via the `bootstrap-plugins.sh` SessionStart hook — zero manual step required.
 
-## Installed (6)
+## Installed (5)
 
 | Plugin | Purpose for DeskModal |
 |---|---|
 | **context7** | Live version-specific docs for Tauri 2, React 19, FDC3 2.2, tokio, serde, flume, DashMap, ArcSwap. Anti-hallucination when authoring against these surfaces. |
 | **typescript-lsp** | TS symbol refs, diagnostics, hover across 8 TradeSurface apps, marketplace/, plugin-tools/, core-server-api/. Complements `codebase-memory-mcp`. |
-| **semgrep** | Real-time scanning for command injection, XSS, unsafe eval, hardcoded secrets. Fires inline as code is authored. **Requires `semgrep` CLI on PATH** — installed automatically by `scripts/setup.sh` (macOS: Homebrew; Linux: pip); if missing at session start the plugin's own hook emits a non-blocking warning. |
 | **plugin-dev** | Seven skills for authoring Claude Code hooks, MCP servers, commands, agents. Correctness for our own `.claude/` configuration. |
 | **skill-creator** | Author and measure additional skills as workflow patterns emerge. |
-| **chrome-devtools-mcp** | Control and inspect live Chrome via CDP. Richer DOM + network + evaluation than our `scripts/cdp-test-runner.py`. |
+| **chrome-devtools-mcp** | Control and inspect live Chrome via CDP. Richer DOM + network + evaluation than our `scripts/cdp-test-runner.py`. | <!-- audit:allow-naming-tauri-not-decoration: proper-name reference to chrome-devtools-mcp package and the Chrome browser -->
 
 ## Auto-installation mechanism
 
@@ -35,6 +34,7 @@ Marketplace `claude-plugins-official` (sourced from `anthropics/claude-plugins-o
 
 | Plugin | Overlap |
 |---|---|
+| `semgrep` | Paid tier (requires `SEMGREP_APP_TOKEN`); its rule surface overlaps codebase-memory-mcp's `search_code` + graph-aware pattern matching for our own codebases. Not worth the licence spend. |
 | `serena`, `sourcegraph`, `greptile` | All overlap `codebase-memory-mcp` semantic search. |
 | `remember` | Overlaps commit-driven handoff protocol in `.claude/rules/core.md` §13 + `.session-state/handoffs/`. |
 | `feature-dev`, `ralph-loop` | Overlap the `/loop` skill + `maestro-orchestrator` persona. |

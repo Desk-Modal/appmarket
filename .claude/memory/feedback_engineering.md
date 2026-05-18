@@ -13,7 +13,7 @@ type: feedback
 7. Always verify implementations against specs before considering a phase complete
 8. Use /verify skill to validate packages against acceptance criteria
 9. Code must be organized in the cleanest, optimal, best-practice manner
-10. Chart engine is framework-agnostic TypeScript + Canvas — React manages UI chrome only
+10. Chart engine is framework-agnostic TypeScript + Canvas — React manages UI frame only
 11. WASM acceleration path for indicators — TypeScript-first, Rust WASM when profiling shows need
 12. Knowledge lives in: CLAUDE.md (project context), .claude/rules/ (conventions), .claude/skills/ (workflows), memory/ (cross-session learning)
 13. On context clear or new session: read CLAUDE.md first, check memory, read relevant rules — never start blind

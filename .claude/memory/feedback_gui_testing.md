@@ -4,7 +4,7 @@ description: GUI testing uses CDP (port 9222) inside DeskModal WebViews — neve
 type: feedback
 ---
 
-GUI testing MUST use Chrome DevTools Protocol (CDP) to interact with DeskModal WebViews programmatically. This allows testing without taking control of the user's mouse/keyboard — they can continue working in other windows.
+GUI testing MUST use Chrome DevTools Protocol (CDP) to interact with DeskModal WebViews programmatically. <!-- audit:allow-naming-tauri-not-decoration: proper-name reference to the Chrome DevTools Protocol --> This allows testing without taking control of the user's mouse/keyboard — they can continue working in other windows.
 
 **Why:** The apps run inside DeskModal's WebView2 with FDC3 injection, custom URI schemes, and viewport CSS. Testing against standalone dev servers doesn't validate the real deployment path. And taking mouse/keyboard control blocks the user from doing other work.
 

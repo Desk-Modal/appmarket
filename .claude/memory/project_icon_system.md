@@ -9,7 +9,7 @@ DeskModal icons are delivered in two tiers, published on the public CDN at `http
 - **Market tier** (`<id>-market.svg`): fully colored product art with dark gradient base + radial inner glow + directional green/red where semantically earned + `tradesurface.*` family marker dot. Rendered on AppStore cards/hero at 48–128px.
 - **Glass toolbar tier** (`<id>-toolbar.svg`): translucent tile with NO base fill, subtle `rgba(120,150,255,0.18)` border, monochrome `#60a5fa` marks at ~0.9 opacity. Designed to sit on top of DeskModal's frosted-glass (`backdrop-filter: blur(14px) saturate(180%)`) panels. Rendered on the DeskModal native LaunchBar at 16–24px.
 
-**Why:** DeskModal's entire GUI uses glassmorphism. Opaque toolbar icons would fight the frosted surface. Translucent glass tiles blend in as part of the chrome. Market cards are their own product surface (a store), so they keep the full color treatment.
+**Why:** DeskModal's entire GUI uses glassmorphism. Opaque toolbar icons would fight the frosted surface. Translucent glass tiles blend in as part of the frame. Market cards are their own product surface (a store), so they keep the full color treatment.
 
 **How to apply:**
 - Catalog schema (aggregated by `appmarket/scripts/aggregate.py`): each entry carries `icon: { market, toolbar }` + a legacy flat `icon_url` alias pointing at the market variant.
