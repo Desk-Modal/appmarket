@@ -1,8 +1,8 @@
 <!-- MIRROR — DO NOT EDIT HERE -->
 <!-- Source-of-truth: root wiki/CLAUDE.md -->
 <!-- Mirror-script: scripts/wiki-mirror.sh -->
-<!-- Mirrored-at: 2026-05-17T09:09:10Z -->
-<!-- Mirror-source-sha: 8e0d5f30276f866b2334244ec3444a96e049c826 -->
+<!-- Mirrored-at: 2026-05-18T02:41:36Z -->
+<!-- Mirror-source-sha: 461e0ca41c3297e13d1c628f6182fb61c0120d86 -->
 
 > **This file is a MIRROR.** The authoritative copy lives at root
 > `wiki/CLAUDE.md`. Sub-repo edits to this file are overwritten on
@@ -136,7 +136,7 @@ When a wiki page exists primarily to synthesise an authoritative source, it
 MUST declare:
 
 ```yaml
-references_canonical: .claude/rules/core.md#6-naming
+references_canonical: .claude/rules/quality.md#6-naming
 last_canonical_sha: <SHA at which this synthesis was verified>
 synthesis_only: true
 adds: [rationale, exemplars]
