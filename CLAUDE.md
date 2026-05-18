@@ -21,7 +21,7 @@ Claude Code (April 2026) provides natively: `Agent` tool for sub-agents, hook ev
 - `.claude/rules/agents.md` — dispatch patterns (workflow policy on native `Agent`), return contract.
 - `.claude/rules/parallel-sessions.md` — multi-session isolation (`CLAUDE_PROJECT_DIR`, branch discipline, canonical-file ownership, launch-lockfile).
 
-Legacy 12 rule files + 8 redundant skills preserved under `_deprecated-2026-04-23/` for reference.
+Legacy 12 rule files preserved under `.claude/rules-archive/2026-04-23/` (NOT auto-loaded — reference only; restored 2026-05-19 to drop ~82K chars from SessionStart context).
 
 ## Structure
 
