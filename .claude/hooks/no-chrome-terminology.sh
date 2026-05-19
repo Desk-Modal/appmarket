@@ -18,7 +18,10 @@
 #     below sanitises historical references to `AppShellChrome.tsx` and
 #     `audit-no-custom-chrome.sh` so rename commits don't false-fail.
 #
-# Wired via .claude/settings.json hooks block as a `commit-msg` matcher.
+# Wired via git's `.git/hooks/commit-msg` (which `exec`s this script).
+# Claude Code's settings.json hook events (SessionStart/PreToolUse/Stop/etc.)
+# do NOT include commit-msg — that's a git-level event, not a Claude Code
+# event — so installation lives in `.git/hooks/commit-msg`, not settings.json.
 # Bypass: `DESKMODAL_LAX=1 git commit` (audit-logged per core.md §11).
 
 set -euo pipefail

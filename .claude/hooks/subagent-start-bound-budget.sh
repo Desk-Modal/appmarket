@@ -20,8 +20,14 @@ agent_type=$(printf '%s' "$input" | python3 -c "import json,sys; d=json.load(sys
 agent_id=$(printf '%s' "$input" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('agent_id','unknown'))" 2>/dev/null || echo unknown)
 ts=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
-# Count in-flight (IN-FLIGHT markers not yet matched by STOP)
-in_flight=$(grep -c '^- IN-FLIGHT' "$LOG_FILE" 2>/dev/null || echo 0)
+# Count in-flight (IN-FLIGHT markers not yet matched by STOP).
+# Note: bare `grep -c ... || echo 0` produces "0\n0" when grep finds zero
+# matches (grep -c outputs 0 + exits 1; the `|| echo 0` appends a SECOND 0).
+# That two-line result fails the integer test below ("integer expression
+# expected") and silently disables the cap. Use `wc -l` against grep's
+# match list so the final count is always a single integer.
+in_flight=$(grep -c '^- IN-FLIGHT' "$LOG_FILE" 2>/dev/null | head -1)
+[ -z "$in_flight" ] && in_flight=0
 
 if [ "$in_flight" -ge "$MAX_AGENTS" ]; then
   cat <<EOF
