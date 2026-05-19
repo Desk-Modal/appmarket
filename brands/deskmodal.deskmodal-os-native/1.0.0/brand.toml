@@ -1,0 +1,33 @@
+[brand]
+id = "deskmodal.deskmodal-os-native"
+name = "DeskModal OS Native"
+version = "1.0.0"
+author = "DeskModal"
+description = "Default brand — derives every conformable token from the host OS (accent / theme / motion / contrast). The closest DeskModal can feel to native macOS / Windows / Linux."
+license = "Apache-2.0"
+publisher_tier = "certified"
+default_mode = "auto"
+
+[brand.preview]
+swatch = [
+  "oklch(60% 0.20 250)",
+  "oklch(70% 0.15 220)",
+  "oklch(50% 0.10 280)",
+  "oklch(30% 0.05 240)",
+  "oklch(96% 0.01 200)",
+  "oklch(22% 0.01 240)",
+]
+screenshot = "assets/preview.png"
+
+[brand.compatibility]
+deskmodal_min_version = "1.0.0"
+schema_version = 1
+
+[brand.manifest]
+path = "manifest.json"
+
+[brand.assets]
+icons_dir = "assets/icons"
+logos_dir = "assets/logos"
+cursors_dir = "assets/cursors"
+brand_mark = "assets/brand-mark.svg"

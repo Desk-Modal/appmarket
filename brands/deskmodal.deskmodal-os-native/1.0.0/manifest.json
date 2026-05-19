@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "meta": {
+    "id": "deskmodal.deskmodal-os-native",
+    "name": "DeskModal OS Native",
+    "version": "1.0.0",
+    "author": "DeskModal",
+    "description": "Default brand — derives every conformable token from the host OS.",
+    "license": "Apache-2.0",
+    "publisher_tier": "certified",
+    "default_mode": "auto",
+    "preview": {
+      "swatch": [
+        "oklch(60% 0.20 250)",
+        "oklch(70% 0.15 220)",
+        "oklch(50% 0.10 280)",
+        "oklch(30% 0.05 240)",
+        "oklch(96% 0.01 200)",
+        "oklch(22% 0.01 240)"
+      ]
+    },
+    "compatibility": {
+      "deskmodal_min_version": "1.0.0",
+      "schema_version": 1
+    }
+  },
+  "os_overrides": {
+    "all_conform": true
+  },
+  "palette": {},
+  "typography": {},
+  "spacing": {},
+  "radii": {},
+  "motion": {},
+  "glassmorphism": {},
+  "iconography": {},
+  "window_decorations": {},
+  "chart_styling": {},
+  "trading_tokens": {},
+  "asset_overrides": {},
+  "brand_mark": {}
+}

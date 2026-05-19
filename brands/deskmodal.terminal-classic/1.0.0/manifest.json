@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "meta": {
+    "id": "deskmodal.terminal-classic",
+    "name": "Terminal Classic",
+    "version": "1.0.0",
+    "author": "DeskModal",
+    "description": "Bloomberg-orange-on-amber-black homage.",
+    "license": "Apache-2.0",
+    "publisher_tier": "verified",
+    "default_mode": "dark",
+    "preview": {
+      "swatch": [
+        "oklch(78% 0.18 60)",
+        "oklch(60% 0.15 50)",
+        "oklch(45% 0.12 40)",
+        "oklch(25% 0.04 60)",
+        "oklch(92% 0.04 80)",
+        "oklch(15% 0.01 60)"
+      ]
+    },
+    "compatibility": {
+      "deskmodal_min_version": "1.0.0",
+      "schema_version": 1
+    }
+  },
+  "os_overrides": {
+    "all_conform": false
+  },
+  "palette": {},
+  "typography": {},
+  "spacing": {},
+  "radii": {},
+  "motion": {},
+  "glassmorphism": {},
+  "iconography": {},
+  "window_decorations": {},
+  "chart_styling": {},
+  "trading_tokens": {},
+  "asset_overrides": {},
+  "brand_mark": {}
+}

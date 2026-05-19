@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "meta": {
+    "id": "deskmodal.aurora-dark",
+    "name": "Aurora Dark",
+    "version": "1.0.0",
+    "author": "DeskModal",
+    "description": "Cool-aurora palette inspired by Arctic skies.",
+    "license": "Apache-2.0",
+    "publisher_tier": "certified",
+    "default_mode": "dark",
+    "preview": {
+      "swatch": [
+        "oklch(82% 0.13 195)",
+        "oklch(67% 0.15 240)",
+        "oklch(54% 0.12 275)",
+        "oklch(40% 0.08 320)",
+        "oklch(95% 0.02 220)",
+        "oklch(20% 0.02 240)"
+      ]
+    },
+    "compatibility": {
+      "deskmodal_min_version": "1.0.0",
+      "schema_version": 1
+    }
+  },
+  "os_overrides": {
+    "all_conform": false
+  },
+  "palette": {},
+  "typography": {},
+  "spacing": {},
+  "radii": {},
+  "motion": {},
+  "glassmorphism": {},
+  "iconography": {},
+  "window_decorations": {},
+  "chart_styling": {},
+  "trading_tokens": {},
+  "asset_overrides": {},
+  "brand_mark": {}
+}

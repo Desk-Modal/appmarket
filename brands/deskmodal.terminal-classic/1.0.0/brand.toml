@@ -1,0 +1,33 @@
+[brand]
+id = "deskmodal.terminal-classic"
+name = "Terminal Classic"
+version = "1.0.0"
+author = "DeskModal"
+description = "Bloomberg-orange-on-amber-black homage. Tabular-nums everywhere; razor-tight 4px grid; ≤ 2.5 px chart strokes for max informational density."
+license = "Apache-2.0"
+publisher_tier = "verified"
+default_mode = "dark"
+
+[brand.preview]
+swatch = [
+  "oklch(78% 0.18 60)",
+  "oklch(60% 0.15 50)",
+  "oklch(45% 0.12 40)",
+  "oklch(25% 0.04 60)",
+  "oklch(92% 0.04 80)",
+  "oklch(15% 0.01 60)",
+]
+screenshot = "assets/preview.png"
+
+[brand.compatibility]
+deskmodal_min_version = "1.0.0"
+schema_version = 1
+
+[brand.manifest]
+path = "manifest.json"
+
+[brand.assets]
+icons_dir = "assets/icons"
+logos_dir = "assets/logos"
+cursors_dir = "assets/cursors"
+brand_mark = "assets/brand-mark.svg"

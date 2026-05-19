@@ -1,0 +1,33 @@
+[brand]
+id = "deskmodal.aurora-dark"
+name = "Aurora Dark"
+version = "1.0.0"
+author = "DeskModal"
+description = "Cool-aurora palette inspired by Arctic skies; OKLCH-tuned for high WCAG 2.2 AA contrast in dark-mode trading sessions."
+license = "Apache-2.0"
+publisher_tier = "certified"
+default_mode = "dark"
+
+[brand.preview]
+swatch = [
+  "oklch(82% 0.13 195)",
+  "oklch(67% 0.15 240)",
+  "oklch(54% 0.12 275)",
+  "oklch(40% 0.08 320)",
+  "oklch(95% 0.02 220)",
+  "oklch(20% 0.02 240)",
+]
+screenshot = "assets/preview.png"
+
+[brand.compatibility]
+deskmodal_min_version = "1.0.0"
+schema_version = 1
+
+[brand.manifest]
+path = "manifest.json"
+
+[brand.assets]
+icons_dir = "assets/icons"
+logos_dir = "assets/logos"
+cursors_dir = "assets/cursors"
+brand_mark = "assets/brand-mark.svg"
