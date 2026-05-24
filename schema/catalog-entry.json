@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Desk-Modal/appmarket/main/schema/catalog-entry.json",
+  "title": "DeskModal Catalog Entry",
+  "description": "Authoritative schema for a single PluginEntry inside marketplace/appmarket/index.json. Authored by F158-W3 (install/update SOTA — delta-first downloads). Aligned with the wire-format served by core-server-api/src/routes/packages/ (Phase 3 G5). The deltas[] array is the W3 contribution — it lets the update-orchestrator (F158-W2) pick the smallest applicable delta package + verify signature + apply without ever re-fetching a full bundle when an incremental path exists. Older clients that don't understand the deltas[] field ignore it transparently (per F158 §18.4 — additive extension; no V2 ladder per quality.md §5).",
+  "type": "object",
+  "required": [
+    "id",
+    "owner",
+    "repo",
+    "name",
+    "description",
+    "content_type",
+    "categories",
+    "publisher",
+    "latest_version",
+    "min_deskmodal_version",
+    "published_at",
+    "icon_url",
+    "license",
+    "platforms",
+    "signature"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[-.][a-z0-9]+)*$",
+      "description": "Globally unique dot-segmented capability id, e.g. `desk-modal.paper-trading`. Enforced unique by the aggregator (schema.md §Rules #1)."
+    },
+    "owner": { "type": "string", "description": "GitHub org owning the source repo." },
+    "repo": { "type": "string", "description": "GitHub repo name (the release source)." },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "tagline": { "type": "string", "maxLength": 80 },
+    "description": { "type": "string", "minLength": 1 },
+    "content_type": {
+      "enum": ["app", "service", "script", "bundle", "brand", "sdk"],
+      "description": "Coarse install-unit classifier. `brand` + `sdk` extend the original schema.md set so .dmbrand + .dmpkg-sdk bundles share the catalog surface (per architecture.md §25 + §18.4.1)."
+    },
+    "categories": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "featured": { "type": "boolean" },
+    "publisher": {
+      "type": "object",
+      "required": ["display_name", "verified", "key_id"],
+      "properties": {
+        "display_name": { "type": "string" },
+        "verified": { "type": "boolean" },
+        "key_id": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "latest_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+][A-Za-z0-9.-]+)?$",
+      "description": "SemVer of the newest non-pre-release version."
+    },
+    "min_deskmodal_version": { "type": "string" },
+    "published_at": { "type": "string", "format": "date-time" },
+    "release_url": { "type": "string", "format": "uri" },
+    "changelog_url": { "type": "string", "format": "uri" },
+    "icon_url": { "type": "string", "format": "uri" },
+    "screenshots": { "type": "array", "items": { "type": "string", "format": "uri" } },
+    "homepage": { "type": "string", "format": "uri" },
+    "license": { "type": "string" },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "version_req"],
+        "properties": {
+          "id": { "type": "string" },
+          "version_req": { "type": "string" },
+          "kind": { "enum": ["required", "recommended", "optional"] }
+        },
+        "additionalProperties": true
+      }
+    },
+    "bundle": {
+      "type": "object",
+      "description": "Mirror of `plugin.toml [bundle]` per architecture.md §27 (3-tier metadata). Aggregator copies fields verbatim so the storefront can render tier badges + footprint without re-fetching the manifest.",
+      "properties": {
+        "tier": { "enum": ["REQUIRED", "RECOMMENDED", "OPTIONAL"] },
+        "disk_mb": { "type": "number", "minimum": 0 },
+        "ram_mb_idle": { "type": "number", "minimum": 0 },
+        "ram_mb_peak": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "fdc3_intents_raised": { "type": "array", "items": { "type": "string" } },
+        "fdc3_intents_listened": { "type": "array", "items": { "type": "string" } },
+        "fdc3_channels": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "platforms": {
+      "type": "object",
+      "description": "Per-platform delivery descriptors. Keys MUST be of the form `<os>-<arch>` per the DeskModal platform matrix, or the literal `wasm` cross-platform fallback. `null` value means no asset for that platform.",
+      "patternProperties": {
+        "^(win32|darwin|linux|wasm)(-[a-z0-9]+)?$": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "required": ["url", "sha256", "size_bytes"],
+              "properties": {
+                "url": { "type": "string", "format": "uri" },
+                "asset_name": { "type": "string" },
+                "sha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+                "size_bytes": { "type": "integer", "minimum": 0 }
+              },
+              "additionalProperties": true
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "manifest": {
+      "type": "object",
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+      },
+      "additionalProperties": true
+    },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "publisher_key_id"],
+      "properties": {
+        "algorithm": { "const": "ed25519" },
+        "publisher_key_id": { "type": "string" },
+        "checksums_url": { "type": "string", "format": "uri" },
+        "signature_url": { "type": "string", "format": "uri" }
+      },
+      "additionalProperties": true
+    },
+    "deltas": {
+      "type": "array",
+      "description": "F158-W3 EXTENSION — array of incremental delta packages keyed by source-version. The update-orchestrator (F158-W2) selects the entry whose `from_version` matches the user's currently-installed version; if none matches it falls back to the full `platforms[*].url` download. Every entry is independently Ed25519-signed under the same `publisher.key_id` as the parent entry — the catalog only carries the digest + size; the raw delta tarball + detached sig live at `delta_url`. The aggregator publishes deltas opportunistically: by default the last N=3 prior versions + always the immediately-previous version (per F158 §8 OC-03). Older clients ignore this field; newer clients consult it first.",
+      "items": {
+        "type": "object",
+        "required": [
+          "from_version",
+          "to_version",
+          "delta_url",
+          "delta_sha256",
+          "delta_size_bytes",
+          "full_size_bytes",
+          "format"
+        ],
+        "properties": {
+          "from_version": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+][A-Za-z0-9.-]+)?$",
+            "description": "SemVer the delta patches FROM (the user's currently-installed version)."
+          },
+          "to_version": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+][A-Za-z0-9.-]+)?$",
+            "description": "SemVer the delta patches TO. MUST equal the entry's `latest_version` (the aggregator validates) — deltas always target the catalog row's published version."
+          },
+          "delta_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Absolute URL serving the raw delta bytes. Convention: `/p/<id>/<to_version>/from-<from_version>.dmpkg-delta`. core-server-api Content-Type: `application/x-deskmodal-package-delta`."
+          },
+          "delta_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{64}$",
+            "description": "SHA-256 of the raw delta bytes (before any HTTP transport encoding)."
+          },
+          "delta_size_bytes": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Size in bytes of the delta package. The update-orchestrator picks the smallest applicable delta when N>1 candidates resolve."
+          },
+          "full_size_bytes": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Size in bytes of the full `.dmpkg` this delta reconstructs to. Mirrored from `platforms[*].size_bytes` for client-side bandwidth-saving display ('30% of full download')."
+          },
+          "format": {
+            "enum": [
+              "deskmodal-chunk-cas-4kb",
+              "bsdiff-brotli",
+              "bsdiff",
+              "zsync"
+            ],
+            "description": "Algorithm + container the bytes are encoded in. `deskmodal-chunk-cas-4kb` is the current zero-dep 4 KB content-addressable chunking scheme implemented in core-server-api/src/store/packages/delta.rs (F156 G5-W2/W4). `bsdiff-brotli` is the queued production-grade upgrade once the bsdiff crate dep lands."
+          },
+          "signature": {
+            "type": "object",
+            "description": "Detached signature over the delta bytes. Optional in the catalog entry because the canonical signature is served via the `X-DeskModal-Signature` HTTP header at `delta_url`; clients that prefer in-catalog verification may use this field instead.",
+            "required": ["algorithm", "publisher_key_id", "value_hex"],
+            "properties": {
+              "algorithm": { "const": "ed25519" },
+              "publisher_key_id": { "type": "string" },
+              "value_hex": { "type": "string", "pattern": "^[0-9a-fA-F]{128}$" }
+            },
+            "additionalProperties": true
+          },
+          "prev_artifact_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{64}$",
+            "description": "Optional. SHA-256 of the previous-version full artifact this delta was computed against. Lets the client sanity-check it has the right reference bytes BEFORE attempting reconstruction (saves a wasted apply-and-fail cycle when the local `.dmpkg` cache is corrupt)."
+          },
+          "to_artifact_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{64}$",
+            "description": "Optional. SHA-256 of the reconstructed full artifact. Equals the entry's `platforms[<host>].sha256` for the matching platform; carried inline so the client can verify the reconstruction without a separate catalog round-trip."
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}
