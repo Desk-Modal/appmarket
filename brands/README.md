@@ -4,6 +4,23 @@ This directory hosts the catalog of signed `.dmbrand` bundles distributed
 via the DeskModal app market. Companion to `releases/plugins/` — same
 publishing model, different content type.
 
+## Distribution model (F-deploy-fresh-W8)
+
+Brands are NOT embedded in the DeskModal binary. Only the default brand
+(`deskmodal.deskmodal-os-native`) ships bundled with the agent as the
+fall-back when no installed brand is active — every other brand is
+discovered, signed, and downloaded via the appmarket catalog at install
+time, exactly like a plugin. The `deskmodal-os-native` bundle is ALSO
+published here for consistency: marketplace catalog browsers see a
+complete brand inventory; programmatic upgrade flows can swap the
+default like any other.
+
+Installed brands land at `<install_root>/data/brands/<id>/<version>/`
+per F125 lifecycle install-root convention. The brand-service hydrates
+the in-memory catalogue from that tree on every boot via
+[`crate::hydrate::hydrate_installed_brands_from_disk`] before announcing
+healthy.
+
 ## Scope
 
 `.dmbrand` bundles ship comprehensive brand definitions per F152 spec §4
