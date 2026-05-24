@@ -13,11 +13,11 @@ F157 Layer 2 helper — plans and dispatches a wave of parallel impl agents whil
 
 ## Current mesh state
 
-!`bash ${CLAUDE_SKILL_DIR}/../../../scripts/session-mesh/check-concurrency.sh`
+!`ROOT=$(bash "${CLAUDE_SKILL_DIR}/../_lib/dm-root.sh") && bash "$ROOT/scripts/session-mesh/check-concurrency.sh"`
 
 ## Recent findings from other sessions
 
-!`bash ${CLAUDE_SKILL_DIR}/../../../scripts/session-mesh/list-findings.sh --since 24 --from-others`
+!`ROOT=$(bash "${CLAUDE_SKILL_DIR}/../_lib/dm-root.sh") && bash "$ROOT/scripts/session-mesh/list-findings.sh" --since 24 --from-others`
 
 ## Git baseline
 

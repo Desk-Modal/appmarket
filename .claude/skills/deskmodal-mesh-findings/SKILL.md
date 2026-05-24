@@ -12,11 +12,11 @@ F157 Layer 11 — cross-session knowledge bus.
 
 ## Recent findings (last 24h, from other sessions)
 
-!`bash ${CLAUDE_SKILL_DIR}/../../../scripts/session-mesh/list-findings.sh --since 24 --from-others`
+!`ROOT=$(bash "${CLAUDE_SKILL_DIR}/../_lib/dm-root.sh") && bash "$ROOT/scripts/session-mesh/list-findings.sh" --since 24 --from-others`
 
 ## All recent findings (last 24h, all sessions)
 
-!`bash ${CLAUDE_SKILL_DIR}/../../../scripts/session-mesh/list-findings.sh --since 24`
+!`ROOT=$(bash "${CLAUDE_SKILL_DIR}/../_lib/dm-root.sh") && bash "$ROOT/scripts/session-mesh/list-findings.sh" --since 24`
 
 ## Instructions
 

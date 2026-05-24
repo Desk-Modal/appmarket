@@ -12,7 +12,7 @@ F157 Layer 11 — declare this session's write-set + check for conflicts.
 
 ## Mesh state
 
-!`bash ${CLAUDE_SKILL_DIR}/../../../scripts/session-mesh/check-concurrency.sh`
+!`ROOT=$(bash "${CLAUDE_SKILL_DIR}/../_lib/dm-root.sh") && bash "$ROOT/scripts/session-mesh/check-concurrency.sh"`
 
 ## Instructions
 

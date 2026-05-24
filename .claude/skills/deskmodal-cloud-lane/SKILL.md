@@ -13,7 +13,7 @@ F157 Layer 7 / Layer 12 — research offload to avoid local API saturation (per 
 
 ## Mesh state
 
-!`bash ${CLAUDE_SKILL_DIR}/../../../scripts/session-mesh/check-concurrency.sh`
+!`ROOT=$(bash "${CLAUDE_SKILL_DIR}/../_lib/dm-root.sh") && bash "$ROOT/scripts/session-mesh/check-concurrency.sh"`
 
 ## When to use cloud lanes (per architecture.md §31.1)
 

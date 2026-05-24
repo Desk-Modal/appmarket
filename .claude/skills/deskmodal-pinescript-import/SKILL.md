@@ -14,7 +14,7 @@ F157 Layer 2 — wraps F147 pinescript-import per `feedback_pinescript_superset_
 
 ## Pinescript v5 conformance baseline
 
-!`test -f ${CLAUDE_SKILL_DIR}/../../../specs/147-optiscript-everywhere/pinescript-compat-matrix.md && head -20 ${CLAUDE_SKILL_DIR}/../../../specs/147-optiscript-everywhere/pinescript-compat-matrix.md`
+!`ROOT=$(bash "${CLAUDE_SKILL_DIR}/../_lib/dm-root.sh") && test -f "$ROOT/specs/147-optiscript-everywhere/pinescript-compat-matrix.md" && head -20 "$ROOT/specs/147-optiscript-everywhere/pinescript-compat-matrix.md"`
 
 ## Instructions
 
