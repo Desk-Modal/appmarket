@@ -1,7 +1,7 @@
 ---
 title: Architecture
 authority: derives from `core.md`; topic-file for §16 + §17 + §19 + §20 + §21 + §23 + §24 + §25 + §27 + §28 + §29 + §30 + §31 + §32 + §33
-load_when: authoring services / plugins / SDKs / OptiScripts / branding / new repos / multi-agent dispatch / verification; deciding what goes in platform vs plugins; choosing settings IPC; verifying spec currency; deciding file-split vs cut; deciding repo boundaries + tier metadata + graceful degradation + licensing; ensuring no-edit-loss + accelerated parallel coding; choosing verification scope (only-what-changed); choosing MCP for Rust diagnostics / visual design / library docs / cross-stack discovery; running multi-session work
+load_when: authoring services / plugins / SDKs / OptiScript / branding / new repos / multi-agent dispatch / verification; deciding what goes in platform vs plugins; choosing settings IPC; verifying spec currency; deciding file-split vs cut; deciding repo boundaries + tier metadata + graceful degradation + licensing; ensuring no-edit-loss + accelerated parallel coding; choosing verification scope (only-what-changed); choosing MCP for Rust diagnostics / visual design / library docs / cross-stack discovery; running multi-session work
 optimized_at_sha: 52cf4da
 size_strategy: lean stubs in this file; verbose content in wiki/playbooks/architecture/*.md (queryable via wiki-mcp)
 ---

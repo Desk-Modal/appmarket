@@ -146,6 +146,11 @@ These are the durable optimization patterns that have shipped + the surface they
 | Per-file ≤300 LOC split-never-cut | architecture.md §24 | Every production source file |
 | Per-capability repo + tier metadata | architecture.md §27 | Every new capability |
 | Auto-load tree size ceiling (~150-200K chars total) | This rule 2026-05-19 | Every change to `.claude/rules/**` or CLAUDE.md |
+| Workspace task list size ceiling — ≤25 active items; aggressively `TaskUpdate status=deleted` completed-historical at every /loop wake; durable audit log lives in `.session-state/handoffs/<feature>.md`, NOT the task list | 2026-05-23 sweep (170→12 tasks; ~85% reminder bloat reduction) | Every /loop wake + session-start |
+| Agent dispatch hard caps — ≤3 files write-set, ≤300 LOC/file, ≤5 read paths pre-staged, ≤480s self-imposed budget (600s harness limit is failure not target), Tier-A scope only (no workspace tests, no workspace clippy fix) | F156 G1-W1 timeout 2026-05-19 (commit cycle 4a43cb6) | Every impl `Agent()` dispatch |
+| Reviewers ONLY at phase-boundary (read-only parallel pod); world-class verification batched per `quality.md §18.8`, NOT per-wave | F156 phase 1 BLOCK verdict 2026-05-19 | Every wave's APPROVE path |
+| Explicit `git stash` ban in every impl-persona prompt + use `git show HEAD:<path>` for baselines | F156 P1-F/G/H all violated stash ban 2026-05-19 | Every impl `Agent()` dispatch |
+| LSP/rust-analyzer diagnostics are advisory ONLY — `cargo check` is the verification truth (LSP cache flaps in hot sessions) | F156 multiple stale-LSP false-blocks 2026-05-19 | Every Rust agent return |
 
 **Banned posture:**
 - "We'll apply the optimization elsewhere later" — applies to the 7 surfaces NOW or scope-transfers per §18.1.

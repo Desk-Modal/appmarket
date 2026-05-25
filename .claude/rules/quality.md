@@ -37,6 +37,10 @@ Zero hardcoded colors in CSS/TSX — use `--deskmodal-*` / `--ts-*` tokens.
 | Constants | SCREAMING_SNAKE | `MAX_RECONNECT_ATTEMPTS` |
 | CSS tokens | `--ts-{category}-{property}` | `--ts-surface-primary` |
 | FDC3 app IDs | `deskmodal.{name}` | `deskmodal.feeds` |
+| **User-facing extension noun** | **"App"** (DeskModal-branded; matches App Market + appstore.html brand; OpenFin / Refinitiv Eikon / VS Code / Slack convergence) | "Install an App", "Apps panel", "Browse Apps" |
+| **Engineering plugin manifest** | **"plugin"** (engineering vocabulary; never user-displayed) | `plugin.toml`, `plugins/<id>/`, `plugin_install` Tauri command, `PluginLifecycleManager`, `dmpkg` CLI |
+
+**2-layer naming rule (canonical 2026-05-24 per F-naming-apps decision; pairs with F158 user-experience.md §22 Naming discipline):** Engineering layer = "plugin"; user-facing layer = "App". **NEVER introduce a 3rd layer ("Capability", "Extension", "Add-on", "Module") in user-visible copy.** "Capabilities" is permitted in ENGINEERING contexts only (architecture.md §27 "per-capability repo + tier + footprint + licensing" concept; `[bundle] tier` plugin.toml field; `audit-capability-*.sh` build gates; `CapabilityDescriptor` Rust/TS types; `lifecycle_capabilities_*` Tauri command IDs; `useCapabilities` React hook). User-visible surfaces (UI strings, toast text, dialog labels, README copy, button labels, story-table titles in user-experience docs) MUST use "Apps". Audit gate: `quality:apps-vocab-discipline` (queued; F158 §22.6). Forbidden user-visible patterns: "Capabilities panel" / "Install capabilities" / "Capability picker" / etc. — would fail review.
 
 
 ## 7. Reviewer matrix (conditional)
@@ -168,7 +172,7 @@ User directive 2026-05-17 (verbatim — preserved per §1 honesty rule): "you ne
 
 1. **NEVER hold a single-agent posture when parallel-safe work exists.** Inventory the DAG; if ≥ 2 waves have pairwise-disjoint write-sets and unmet dispatchable readiness, dispatch them as a parallel pod (≤ 7 concurrent agents per `core.md §4`).
 
-2. **Always fire cloud lanes when applicable.** `RemoteTrigger run trig_*` for research / docs / non-GUI / non-stateful work that can run in parallel with local impl. Cloud lanes don't compete for local resources; their pushes integrate via `git pull --rebase`. Existing cloud triggers: F141 open-questions framing + F143-D venue research + F142-C orderflow research; manual fire from orchestrator on demand.
+2. **LOCAL-ONLY delivery — cloud lanes DISABLED (user directive 2026-05-23 verbatim; preserved per §1 honesty rule):** "deliver all with local agents and not cloud". All implementation / docs / audit / spec / research work runs via local `Agent` dispatches on this machine. `RemoteTrigger` (cloud Routines) is NOT used for any F156+ wave. Cloud lanes that previously fired (F141 open-questions / F143-D venue research / F142-C orderflow research) STAY disabled until user reverses. Rationale: cloud lanes (a) cannot see Session Mesh claims so they collide with local work, (b) cannot access uncommitted parallel-session state, (c) burn separate cloud credits with no offsetting throughput gain vs the 3-agent local cap, (d) integrate via git which serializes against local pushes anyway. Local 3-agent pods per `feedback_api_load_concurrent_agents` empirical cap remain the SOLE delivery mechanism.
 
 3. **Always verify in parallel with dispatch.** `scripts/local-ci.sh --fast` runs in background (`run_in_background: true`) while impl agents work. Verifies workspace stays clean. Failures surface immediately, not at end-of-pod.
 

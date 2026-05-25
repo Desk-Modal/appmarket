@@ -1,4 +1,5 @@
 {
+  "skillListingBudgetFraction": 0.025,
   "env": {
     "DESKMODAL_WORKSPACE": "${CLAUDE_PROJECT_DIR}",
     "DESKMODAL_TOOLS": "${CLAUDE_PROJECT_DIR}/tools",
@@ -356,6 +357,5 @@
   },
   "outputStyle": "concise",
   "effort": "xhigh",
-  "skillListingBudgetFraction": 0.025,
   "maxSkillDescriptionChars": 1536
 }
