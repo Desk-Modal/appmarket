@@ -55,7 +55,7 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **User-authored data-sources (F127):** declarative `UserSourceDescriptor` entries in sdk-storage; AI-assisted authoring via `discovery-feed` service; clamped to `Community` tier.
 
-**Tauri-native window decorations (durable):** every DeskModal window uses `decorations(true)` — native traffic lights (macOS) / native min/max/close (Windows + Linux GTK). ZERO custom React-side window-control rendering. Vocabulary: NEVER call this "chrome" (overloaded with browser); use "Tauri-native window decorations" / "OS-native title bar". `@deskmodal/sdk-window` IS the abstraction boundary — plugins NEVER import `@tauri-apps/api/window` directly. Forbidden patterns flagged by `quality:window-sdk` audit.
+**Tauri-native window decorations (durable):** every DeskModal window uses `decorations(true)` — native traffic lights (macOS) / native min/max/close (Windows + Linux GTK). ZERO custom React-side window-control rendering. Vocabulary: NEVER call this "chrome" (overloaded with browser); use "Tauri-native window decorations" / "OS-native title bar". `@deskmodal/sdk-window` IS the abstraction boundary — plugins NEVER import `@tauri-apps/api/window` directly. Forbidden patterns flagged by `quality:window-sdk` audit. <!-- audit:allow-naming: rule-defines-banned-term -->
 
 **Instrumentation discipline:** when N silent chain points + 1 observable failure exist, add tracing at EVERY point BEFORE any fix. Programmatic spawn (AppleScript / WebDriver / Tauri-cmd / DB-seed) REQUIRED to reproduce — never ask user to click + report.
 
@@ -221,9 +221,9 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **The principle:** every code-discovery / diagnostic / library-docs / visual-verification question dispatches to the MCP whose latency × correctness × scope is optimal for that question shape. Per-question-shape routing, NOT one-MCP-rules-all.
 
-**7 registered MCP servers:** codebase-memory-mcp (50-500ms; symbol graph) / wiki-mcp (100-300ms; synthesis) / rust-analyzer (100-500ms; LSP) / playwright (1-3s; browser) / github (200-800ms; PR/CI) / context7 (500ms-2s; library docs) / chrome-devtools-mcp (5-15s; Lighthouse/perf/memory at Tier C only).
+**7 registered MCP servers:** codebase-memory-mcp (50-500ms; symbol graph) / wiki-mcp (100-300ms; synthesis) / rust-analyzer (100-500ms; LSP) / playwright (1-3s; browser) / github (200-800ms; PR/CI) / context7 (500ms-2s; library docs) / chrome-devtools-mcp (5-15s; Lighthouse/perf/memory at Tier C only). <!-- audit:allow-naming: product-name-chrome-devtools-mcp -->
 
-**Extended MCP discovery matrix (§30.2):** type/coercion/borrow-check → rust-analyzer; symbol/calls/impact → CBM; cross-cutting synthesis → wiki-mcp; library docs → context7; visual+a11y → playwright; Lighthouse/heap/perf → chrome-devtools-mcp; PR/CI → github; plain markdown/TOML/YAML → Grep/Read.
+**Extended MCP discovery matrix (§30.2):** type/coercion/borrow-check → rust-analyzer; symbol/calls/impact → CBM; cross-cutting synthesis → wiki-mcp; library docs → context7; visual+a11y → playwright; Lighthouse/heap/perf → chrome-devtools-mcp; PR/CI → github; plain markdown/TOML/YAML → Grep/Read. <!-- audit:allow-naming: product-name-chrome-devtools-mcp -->
 
 **3-tier Rust prevention discipline (§30.3):** Tier 1 pre-write `rust_analyzer_hover` (OPT-IN); Tier 2 `rust_analyzer_workspace_diagnostics` (MANDATORY in Rust agent return); Tier 3 `cargo check -p <crate>` (MANDATORY). Combined budget 5-30s per agent; saves minutes of compile retry.
 
