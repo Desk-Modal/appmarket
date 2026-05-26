@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-26T00:42:47Z",
+  "generated_at": "2026-05-26T02:24:20Z",
   "generator": {
     "name": "build_appmarket_catalog.py",
     "version": "1.0.0"
@@ -10,8 +10,8 @@
       "name": "Alt-Data On-Chain Service",
       "tagline": "On-chain alt-data \u2014 TVL, active addresses, hashrate, fees broadcast on deskmodal.altdata.",
       "description": "On-chain alt-data \u2014 TVL, active addresses, hashrate, fees broadcast on deskmodal.altdata.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [],
@@ -26,10 +26,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal-altdata-onchain/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-altdata-onchain/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-altdata-onchain/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-altdata-onchain/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "ca8cb625c7c1114bc36e9a5e2ae0b64a640e08b93a14dd106132481291215c75",
+          "sha256": "a7cd4850d99175c1104449c456d6b608b47fd815c3bb557bb02ab7cd2bba5e38",
           "size_bytes": 84263
         }
       },
@@ -37,7 +37,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-altdata-onchain/icon.svg"
       },
@@ -45,10 +45,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-altdata-onchain/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-altdata-onchain/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-altdata-onchain/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-altdata-onchain/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 84263
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -78,8 +83,8 @@
       "name": "Audit Explainer Service",
       "tagline": "Local audit-chain summarisation tool for the copilot \u2014 exposes summarize_audit via deskmodal.Copilot.RegisterTool federation.",
       "description": "Local audit-chain summarisation tool for the copilot \u2014 exposes summarize_audit via deskmodal.Copilot.RegisterTool federation.",
-      "version": "0.3.0",
-      "latest_version": "0.3.0",
+      "version": "0.5.0",
+      "latest_version": "0.5.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [],
@@ -94,10 +99,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal-audit-explainer/0.3.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-audit-explainer/0.3.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-audit-explainer/0.5.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-audit-explainer/0.5.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "9ba8824b2abe2505d3d29527130983e04749fd8248c8888c0cca686db818eb8a",
+          "sha256": "d20d3564dd5d5b45d84151972bfc10e73e8720e30ccb0df5d16c963957333db1",
           "size_bytes": 4131290
         }
       },
@@ -105,7 +110,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-audit-explainer/icon.svg"
       },
@@ -113,10 +118,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-audit-explainer/0.3.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-audit-explainer/0.3.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-audit-explainer/0.5.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-audit-explainer/0.5.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.5.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 4131290
+        },
         {
           "version": "0.3.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -141,8 +151,8 @@
       "name": "Brand Service",
       "tagline": "Brand-state broadcaster \u2014 canonical single-source theming for every DeskModal surface + plugin.",
       "description": "Brand-state broadcaster \u2014 canonical single-source theming for every DeskModal surface + plugin.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
@@ -159,18 +169,18 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal-brand-service/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-brand-service/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-brand-service/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-brand-service/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "5fefbd2e5c5c7eb77c675bff1ea2368fa794c71bdca836039d67b576c9c79e93",
-          "size_bytes": 5809544
+          "sha256": "937d197470b9d07eb76d329e3bb3bd8c1f80445f1f7110bfb626f1c35c818833",
+          "size_bytes": 5809576
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-brand-service/icon.svg"
       },
@@ -178,10 +188,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-brand-service/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-brand-service/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-brand-service/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-brand-service/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 5809576
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -201,8 +216,8 @@
       "name": "Chart Indicator Host",
       "tagline": "Shared host that executes OptiScript / Pinescript v5 chart-indicator scripts against chart-engine context.",
       "description": "Shared host that executes OptiScript / Pinescript v5 chart-indicator scripts against chart-engine context.",
-      "version": "0.3.0",
-      "latest_version": "0.3.0",
+      "version": "0.5.0",
+      "latest_version": "0.5.0",
       "type": "plugin",
       "content_type": "plugin",
       "categories": [
@@ -219,10 +234,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": false,
-          "url": "plugins/deskmodal-chart-indicator-host/0.3.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-chart-indicator-host/0.3.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-chart-indicator-host/0.5.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-chart-indicator-host/0.5.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "5707d0e1b6064c0e0669d4b42b9d5acc59b38f997d14265a4aa2751059105991",
+          "sha256": "eedf7b999047546fee70bc9d7c7e83c1a21483c100c2600af49f88aabf5baa83",
           "size_bytes": 6022
         }
       },
@@ -230,7 +245,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-chart-indicator-host/icon.svg"
       },
@@ -238,10 +253,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-chart-indicator-host/0.3.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-chart-indicator-host/0.3.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-chart-indicator-host/0.5.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-chart-indicator-host/0.5.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.5.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 6022
+        },
         {
           "version": "0.3.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -266,8 +286,8 @@
       "name": "Collaboration Engine",
       "tagline": "Real-time collaboration \u2014 multi-cursor, shared selection, presence, comment threads (CRDT).",
       "description": "Real-time collaboration \u2014 multi-cursor, shared selection, presence, comment threads (CRDT).",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [],
@@ -282,18 +302,18 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal-collab/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-collab/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-collab/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-collab/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "b2034634b89e81cdf65a887d0414bfd6580ba9c77234c6a8f052403bd26a7bc6",
-          "size_bytes": 2593998
+          "sha256": "c5e895bad0490b9bba0a46b87caf05dcb13ed40d1be6d17fb6e850b17cb6118d",
+          "size_bytes": 2593982
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-collab/icon.svg"
       },
@@ -301,10 +321,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-collab/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-collab/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-collab/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-collab/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 2593982
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -334,8 +359,8 @@
       "name": "Copilot Engine Service",
       "tagline": "AI Copilot \u2014 NL\u2192action, NL\u2192OptiScript codegen, cited research, multi-model with cost router.",
       "description": "AI Copilot \u2014 NL\u2192action, NL\u2192OptiScript codegen, cited research, multi-model with cost router.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [],
@@ -350,18 +375,18 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal-copilot/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-copilot/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-copilot/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-copilot/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "3250664bcd97c245eac111bebfd4e9f5714d5888c7e1e9729a82d4fe4a630529",
-          "size_bytes": 33506530
+          "sha256": "e3b5f03020c41a3a49857ed1d01098dae9d0c1c411c036127753bc84eb4f714a",
+          "size_bytes": 33506793
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-copilot/icon.svg"
       },
@@ -369,10 +394,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-copilot/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-copilot/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-copilot/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-copilot/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 33506793
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -402,8 +432,8 @@
       "name": "Footprint / Cluster Delta Service",
       "tagline": "Footprint / Cluster Delta \u2014 per-bar bid/ask volume grid, POC, stacked-imbalance detection.",
       "description": "Footprint / Cluster Delta \u2014 per-bar bid/ask volume grid, POC, stacked-imbalance detection.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "plugin",
       "categories": [],
@@ -418,10 +448,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": false,
-          "url": "plugins/deskmodal-footprint/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-footprint/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-footprint/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-footprint/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "1755ed2ab03a2d14355930f79ba626d9a92949249f746150b03d9e3eb171fe24",
+          "sha256": "ffd7eb13b03fd021fabc0fed10a4a7ce77566ffa2f751f3f3b06f476179b0066",
           "size_bytes": 13154
         }
       },
@@ -429,7 +459,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-footprint/icon.svg"
       },
@@ -437,10 +467,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-footprint/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-footprint/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-footprint/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-footprint/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 13154
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -470,8 +505,8 @@
       "name": "Orderflow Funding-Rate Service",
       "tagline": "Order-flow microstructure \u2014 funding rate, open interest, liquidations, MBO L3 depth feeds.",
       "description": "Order-flow microstructure \u2014 funding rate, open interest, liquidations, MBO L3 depth feeds.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
@@ -488,10 +523,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal-orderflow/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-orderflow/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-orderflow/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-orderflow/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "9d0d1d56465f3558f9273c2e79c7e15e53422cf4f4b2f51bea81daf17dfe7ecf",
+          "sha256": "9b1e485a7b0cc4610409f1109862f50f0d78dcb3902fd550fbdccffcf7d9dd83",
           "size_bytes": 30915388
         }
       },
@@ -499,7 +534,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-orderflow/icon.svg"
       },
@@ -507,10 +542,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-orderflow/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-orderflow/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-orderflow/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-orderflow/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 30915388
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -540,8 +580,8 @@
       "name": "Chart Pattern Detection Service",
       "tagline": "Chart pattern detection \u2014 14 classical patterns (H&S, triangles, wedges, flags) with overlays.",
       "description": "Chart pattern detection \u2014 14 classical patterns (H&S, triangles, wedges, flags) with overlays.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "plugin",
       "categories": [],
@@ -556,10 +596,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": false,
-          "url": "plugins/deskmodal-pattern-detection/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-pattern-detection/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-pattern-detection/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-pattern-detection/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "cdde2a9997f2f2dbd436005b895f58c0f610f99c13021ff400b50529bb986670",
+          "sha256": "17c16d78ddedce973a9ec3414ebb249b190502f78c0f45d91e77aaa48fb4a591",
           "size_bytes": 11125
         }
       },
@@ -567,7 +607,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-pattern-detection/icon.svg"
       },
@@ -575,10 +615,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-pattern-detection/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-pattern-detection/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-pattern-detection/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-pattern-detection/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 11125
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -608,8 +653,8 @@
       "name": "Settings",
       "tagline": "Workspace settings \u2014 brand, capabilities, services, licenses, resources",
       "description": "Settings \u2014 auto-registering UI for every plugin's config, live brand-swap, resource + license panels.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "plugin",
       "categories": [],
@@ -624,10 +669,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": false,
-          "url": "plugins/deskmodal-settings/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-settings/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-settings/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-settings/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "f755cec0bb13566bd3d95d59aa4a79994930763cd2f5035fe911c2c30d3f781f",
+          "sha256": "b306cdaee8f1cccf7dd30bc5d54e6c928df65fa42077db4358e18aab4f2884a8",
           "size_bytes": 10487
         }
       },
@@ -635,7 +680,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-settings/icon.svg"
       },
@@ -643,10 +688,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-settings/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-settings/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-settings/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-settings/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 10487
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -676,8 +726,8 @@
       "name": "Market Profile (TPO) Service",
       "tagline": "Market Profile (TPO) \u2014 letter-grid, POC, Value Area, single prints, Initial Balance overlay.",
       "description": "Market Profile (TPO) \u2014 letter-grid, POC, Value Area, single prints, Initial Balance overlay.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "plugin",
       "categories": [],
@@ -692,10 +742,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": false,
-          "url": "plugins/deskmodal-tpo/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-tpo/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-tpo/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-tpo/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "41d9f9b1147daecf64f42e3492d30146b18611d399bf9dee00b7309b4bfe4540",
+          "sha256": "eb960e58f2a40ec15baeb0e3702ffae9346ea965d5973dd190da2303eb81412d",
           "size_bytes": 10516
         }
       },
@@ -703,7 +753,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-tpo/icon.svg"
       },
@@ -711,10 +761,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-tpo/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-tpo/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-tpo/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-tpo/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 10516
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -744,8 +799,8 @@
       "name": "Volume Profile Service",
       "tagline": "Visible-Range Volume Profile (VPVR) \u2014 POC, Value Area, HVN/LVN bucket overlay.",
       "description": "Visible-Range Volume Profile (VPVR) \u2014 POC, Value Area, HVN/LVN bucket overlay.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "plugin",
       "categories": [],
@@ -760,10 +815,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": false,
-          "url": "plugins/deskmodal-volume-profile/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal-volume-profile/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal-volume-profile/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal-volume-profile/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "838bb50bd42dd40efdd6f61187fc20c7dfbb74fc73db828145eccbd63e76a5c1",
+          "sha256": "166c058c3cee3c5eadd5439ac29aea45a38c0ba626f6952f2cb5ef1a83752c44",
           "size_bytes": 10157
         }
       },
@@ -771,7 +826,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal-volume-profile/icon.svg"
       },
@@ -779,10 +834,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal-volume-profile/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal-volume-profile/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal-volume-profile/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal-volume-profile/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 10157
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -812,8 +872,8 @@
       "name": "TradeSurface Alerts",
       "tagline": "Alert management: price, indicator, compound conditions, webhooks",
       "description": "Alert management \u2014 compound conditions, webhook delivery, FDC3-cross-app routing, snooze.",
-      "version": "0.5.0",
-      "latest_version": "0.5.0",
+      "version": "0.7.0",
+      "latest_version": "0.7.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -830,10 +890,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.alerts/0.5.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.alerts/0.5.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.alerts/0.7.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.alerts/0.7.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "106a67b27f68bfed753cc9d950dc35af5cc3643f19d0360a81d9bb6db5c41e16",
+          "sha256": "c800b143945f5506926d283b65e146e34126ddf2c9cbe0bb7f0875352f22ac2b",
           "size_bytes": 231843844
         }
       },
@@ -841,7 +901,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.alerts/icon.svg"
       },
@@ -849,10 +909,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.alerts/0.5.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.alerts/0.5.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.alerts/0.7.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.alerts/0.7.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.7.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 231843844
+        },
         {
           "version": "0.5.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -887,8 +952,8 @@
       "name": "TradeSurface Analytics",
       "tagline": "On-chain metrics, liquidation heatmaps, funding rates",
       "description": "Trading analytics \u2014 on-chain metrics, liquidation heatmaps, funding-rate surfaces, OI history.",
-      "version": "0.5.0",
-      "latest_version": "0.5.0",
+      "version": "0.7.0",
+      "latest_version": "0.7.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -905,10 +970,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.analytics/0.5.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.analytics/0.5.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.analytics/0.7.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.analytics/0.7.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "720d3e65bb754bd1b59f7f97822cad63520e99e9dd9898b4853b6b46aff94b47",
+          "sha256": "190f49d10f1ebfb90e3d6eb4d5a9b29a8c781936109b7c89347f86396a3d62af",
           "size_bytes": 190861642
         }
       },
@@ -916,7 +981,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.analytics/icon.svg"
       },
@@ -924,10 +989,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.analytics/0.5.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.analytics/0.5.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.analytics/0.7.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.analytics/0.7.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.7.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 190861642
+        },
         {
           "version": "0.5.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -991,7 +1061,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.blotter/icon.svg"
       },
@@ -1005,7 +1075,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-26T00:42:47Z",
+          "published_at": "2026-05-26T02:24:20Z",
           "size_bytes": 188376464
         }
       ],
@@ -1017,8 +1087,8 @@
       "name": "Brand Editor",
       "tagline": "Edit brand tokens, typography, motion, and brand strings",
       "description": "Brand Editor \u2014 live-preview 12-token design system, OS-conformance toggle, signed .dmbrand export.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -1035,10 +1105,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.brand-editor/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.brand-editor/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.brand-editor/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.brand-editor/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "b1c06afe575e29eb2240dc0bab4f8b73c63ad4fe56ffaedf9cddc10a0af78fad",
+          "sha256": "08aefebfe564b34e791384fd067c200642b45d114b88f223c8e70fb6e4402cb2",
           "size_bytes": 421035
         }
       },
@@ -1046,7 +1116,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.brand-editor/icon.svg"
       },
@@ -1054,10 +1124,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.brand-editor/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.brand-editor/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.brand-editor/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.brand-editor/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 421035
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1087,8 +1162,8 @@
       "name": "TradeSurface Chart",
       "tagline": "State-of-the-art trading chart \u2014 info-density top bar, dark default, AI smart-suggest, position drawings, FDC3-linked",
       "description": "Multi-asset trading chart \u2014 18 chart types, 132 indicators, 8 drawing categories, FDC3-linked.",
-      "version": "0.6.0",
-      "latest_version": "0.6.0",
+      "version": "0.8.0",
+      "latest_version": "0.8.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -1105,10 +1180,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.chart/0.6.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.chart/0.6.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.chart/0.8.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.chart/0.8.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "35e0ae779f560c6f9b31e9e741064b4f88bd86599042696e59205f78ba7ad7f3",
+          "sha256": "ea66330d46cf24d388383039def5aeda09a02f4e0205b9a966dc348480fcd994",
           "size_bytes": 500083735
         }
       },
@@ -1116,7 +1191,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.chart/icon.svg"
       },
@@ -1124,10 +1199,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.chart/0.6.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.chart/0.6.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.chart/0.8.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.chart/0.8.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.8.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 500083735
+        },
         {
           "version": "0.6.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1167,8 +1247,8 @@
       "name": "TradeSurface Data Sources",
       "tagline": "Manage user-authored news and earnings sources with AI discovery",
       "description": "Data-source manager \u2014 author + install user news / earnings sources via AI-assisted discovery.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [],
@@ -1183,10 +1263,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.data-sources/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.data-sources/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.data-sources/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.data-sources/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "2b8b46b1bb30187d7dd7fac63e5fac4eda8f8372093b2dbb0b687622b53f5782",
+          "sha256": "63e5e6dc01fa16f53c07466613078eef93764e0a137ec05241c713d4f56fdf34",
           "size_bytes": 23983037
         }
       },
@@ -1194,7 +1274,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.data-sources/icon.svg"
       },
@@ -1202,10 +1282,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.data-sources/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.data-sources/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.data-sources/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.data-sources/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 23983037
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1235,8 +1320,8 @@
       "name": "TradeSurface Depth",
       "tagline": "Aggregated order book and depth visualization",
       "description": "Order book + depth-of-market \u2014 aggregation controls, depth curves, trade tape, \u226410ms updates.",
-      "version": "0.5.0",
-      "latest_version": "0.5.0",
+      "version": "0.7.0",
+      "latest_version": "0.7.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -1253,10 +1338,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.depth/0.5.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.depth/0.5.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.depth/0.7.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.depth/0.7.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "b806a152c8700565ee568ae54df8d9019f94c80546227e0b41fefed057acc7d5",
+          "sha256": "ba5097efef92a24c5aa7373e9c233bb4a66150f29e02da695c81faa577c8883b",
           "size_bytes": 214582536
         }
       },
@@ -1264,7 +1349,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.depth/icon.svg"
       },
@@ -1272,10 +1357,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.depth/0.5.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.depth/0.5.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.depth/0.7.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.depth/0.7.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.7.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 214582536
+        },
         {
           "version": "0.5.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1310,8 +1400,8 @@
       "name": "Discovery Feed Service",
       "tagline": "AI-assisted source discovery \u2014 Anthropic-backed UserSourceDescriptor synthesis + SSRF defence.",
       "description": "AI-assisted source discovery \u2014 Anthropic-backed UserSourceDescriptor synthesis + SSRF defence.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [],
@@ -1326,18 +1416,18 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal.discovery-feed/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.discovery-feed/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.discovery-feed/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.discovery-feed/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "f54d6a30ee65f2ceae69f604b4e251cfce53dc29b45dde5074cf264e0b449f7f",
-          "size_bytes": 8145799
+          "sha256": "f874c5a57b9f6fe7a6f7da8fbb4a091d0dd5e8440e2b43cd1f7d050c4e61d9d6",
+          "size_bytes": 8145815
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.discovery-feed/icon.svg"
       },
@@ -1345,10 +1435,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.discovery-feed/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.discovery-feed/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.discovery-feed/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.discovery-feed/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 8145815
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1378,8 +1473,8 @@
       "name": "TradeSurface Earnings",
       "tagline": "Earnings calendar: week grid, EPS detail strip, implied-move band, drag-to-chart",
       "description": "Earnings calendar \u2014 week grid, EPS detail, implied-move band, reaction tracker, FDC3 linked.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -1397,10 +1492,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.earnings/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.earnings/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.earnings/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.earnings/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "7bf1cfef4bbdec6250738e3435610cd27abb2142d8af4cc28e046ac2081f9ea1",
+          "sha256": "7ba2fcf23fcfcfb8e8d640afb51fbb94b87a21e49c677be04e1a1637b893e2d5",
           "size_bytes": 143282744
         }
       },
@@ -1408,7 +1503,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.earnings/icon.svg"
       },
@@ -1416,10 +1511,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.earnings/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.earnings/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.earnings/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.earnings/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 143282744
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1454,8 +1554,8 @@
       "name": "Earnings Feed Service",
       "tagline": "Earnings aggregator \u2014 multi-source upcoming + actuals + implied-move, FDC3 broadcaster.",
       "description": "Earnings aggregator \u2014 multi-source upcoming + actuals + implied-move, FDC3 broadcaster.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
@@ -1472,10 +1572,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal.earnings-feed/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.earnings-feed/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.earnings-feed/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.earnings-feed/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "d942ba937e4dc00f3b4e74e629ef8129ba136cd8ad89829813b0910677cfa22e",
+          "sha256": "055906097765dbad1f6fb8a98cc5bae52b4228f76d3e3fc298ef647cd83dbaaa",
           "size_bytes": 8255370
         }
       },
@@ -1483,7 +1583,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.earnings-feed/icon.svg"
       },
@@ -1491,10 +1591,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.earnings-feed/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.earnings-feed/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.earnings-feed/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.earnings-feed/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 8255370
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1558,7 +1663,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.feeds/icon.svg"
       },
@@ -1572,7 +1677,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-26T00:42:47Z",
+          "published_at": "2026-05-26T02:24:20Z",
           "size_bytes": 212657586
         },
         {
@@ -1589,8 +1694,8 @@
       "name": "TradeSurface News",
       "tagline": "News wire: severity-ranked headlines, source filters, drag to chart",
       "description": "Real-time news wire \u2014 multi-source aggregation, severity ranking, drag-to-chart, FDC3 linked.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -1607,10 +1712,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.news/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.news/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.news/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.news/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "fc4b49d53981710929784f01f7d7fcf754800e0f8e60837772956fa82f90c441",
+          "sha256": "0d8a14f698c5689bcba5a8d52239206692649b5ed4260232c44bd78335b10cf5",
           "size_bytes": 139337263
         }
       },
@@ -1618,7 +1723,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.news/icon.svg"
       },
@@ -1626,10 +1731,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.news/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.news/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.news/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.news/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 139337263
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1664,8 +1774,8 @@
       "name": "News Feed Service",
       "tagline": "News aggregator \u2014 multi-source dedup, severity ranking, FDC3 broadcaster, user sources.",
       "description": "News aggregator \u2014 multi-source dedup, severity ranking, FDC3 broadcaster, user sources.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
@@ -1682,10 +1792,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal.news-feed/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.news-feed/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.news-feed/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.news-feed/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "f6bdc0e9287fcd06eb2270bff5647420e9e9adeac3fb135fb6c463ee20cb93a8",
+          "sha256": "726e8b9585554304881c148098b904a447bc06b24060285cebdb78c3112a4c08",
           "size_bytes": 9775077
         }
       },
@@ -1693,7 +1803,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.news-feed/icon.svg"
       },
@@ -1701,10 +1811,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.news-feed/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.news-feed/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.news-feed/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.news-feed/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 9775077
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1739,8 +1854,8 @@
       "name": "DeskModal Notifications Center",
       "tagline": "All notifications: history, filter, snooze, do-not-disturb",
       "description": "Notifications hub \u2014 cross-app history, filter, snooze, do-not-disturb, deep-links, threads.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [],
@@ -1755,10 +1870,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.notifications-center/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.notifications-center/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.notifications-center/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.notifications-center/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "b9807d177862e4b8c88a145bdff8b9f25508e1103709b428125786fcf7e5b589",
+          "sha256": "41d94c65fcda8813039c89cf2cbabc4a34dcc4166d77e85ba5c7a007d701b888",
           "size_bytes": 5077757
         }
       },
@@ -1766,7 +1881,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.notifications-center/icon.svg"
       },
@@ -1774,10 +1889,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.notifications-center/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.notifications-center/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.notifications-center/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.notifications-center/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 5077757
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1807,8 +1927,8 @@
       "name": "Order Engine Service",
       "tagline": "Order execution platform \u2014 FSM, signed audit-trail, smart routing, algo executors, risk gate.",
       "description": "Order execution platform \u2014 FSM, signed audit-trail, smart routing, algo executors, risk gate.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
@@ -1825,10 +1945,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal.order-engine/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.order-engine/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.order-engine/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.order-engine/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "982b990e81a0b3a62d852ceacf6e9bfaae28303435e916ffb634600bd0f684f8",
+          "sha256": "97e19842d06f6f16abaf005e4a64479f1b359423677fa84cecc5bc4208f5d762",
           "size_bytes": 3902405
         }
       },
@@ -1836,7 +1956,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.order-engine/icon.svg"
       },
@@ -1844,10 +1964,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.order-engine/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.order-engine/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.order-engine/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.order-engine/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 3902405
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -1906,7 +2031,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.order-ticket/icon.svg"
       },
@@ -1920,7 +2045,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-26T00:42:47Z",
+          "published_at": "2026-05-26T02:24:20Z",
           "size_bytes": 212600683
         }
       ],
@@ -1932,8 +2057,8 @@
       "name": "Paper Trading Service",
       "tagline": "Simulated order execution with per-exchange balance isolation, OCO, if-done, trailing stops, and performance analytics",
       "description": "Simulated order execution with per-exchange balance isolation, OCO, if-done, trailing stops, and performance analytics",
-      "version": "0.5.0",
-      "latest_version": "0.5.0",
+      "version": "0.7.0",
+      "latest_version": "0.7.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
@@ -1951,10 +2076,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal.paper-trading/0.5.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.paper-trading/0.5.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.paper-trading/0.7.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.paper-trading/0.7.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "ab14d34206b967b4e5e8351a4aa8ce41436d8882f35090b711c03804a14c5855",
+          "sha256": "e1b7d9edf339ece115ad9e0455dd1e08b74bff8bfcd5130ba7e0f55856cfd293",
           "size_bytes": 4042954
         }
       },
@@ -1962,7 +2087,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.paper-trading/icon.svg"
       },
@@ -1970,10 +2095,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.paper-trading/0.5.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.paper-trading/0.5.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.paper-trading/0.7.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.paper-trading/0.7.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.7.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 4042954
+        },
         {
           "version": "0.5.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -2037,7 +2167,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.positions/icon.svg"
       },
@@ -2051,7 +2181,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-05-26T00:42:47Z",
+          "published_at": "2026-05-26T02:24:20Z",
           "size_bytes": 184600963
         }
       ],
@@ -2063,8 +2193,8 @@
       "name": "DeskModal Price Feed",
       "tagline": "Multi-venue price feed \u2014 8 spot + 6 derivatives, L1/L2 broadcast, \u226410ms p99 fan-out.",
       "description": "Multi-venue price feed \u2014 8 spot + 6 derivatives, L1/L2 broadcast, \u226410ms p99 fan-out.",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
@@ -2081,10 +2211,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/deskmodal.price-feed/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.price-feed/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.price-feed/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.price-feed/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "58a17e90adbe9f49908b710025f3c44e01fb5c457dee56e234dd5558b4525c83",
+          "sha256": "37b7da9509b322de3f8f1eb47a53440ac192001302a7412ef88d227c8f648eb5",
           "size_bytes": 7081478
         }
       },
@@ -2092,7 +2222,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.price-feed/icon.svg"
       },
@@ -2100,10 +2230,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.price-feed/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.price-feed/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.price-feed/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.price-feed/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 7081478
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -2133,8 +2268,8 @@
       "name": "TradeSurface Screener",
       "tagline": "Crypto screener with filters",
       "description": "Symbol screener \u2014 visual filter builder, sortable table, multi-chart grid view, OptiScript filters.",
-      "version": "0.6.0",
-      "latest_version": "0.6.0",
+      "version": "0.8.0",
+      "latest_version": "0.8.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -2151,10 +2286,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.screener/0.6.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.screener/0.6.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.screener/0.8.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.screener/0.8.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "7d029f3c0e92f41ac6a99fae0c857b4a74c16efcbb3191f7578f03baea9152de",
+          "sha256": "e1bdd0f3a2f10a51687b378d1b7069b5a7e8e92deaceec8db407487d7977f68c",
           "size_bytes": 222262409
         }
       },
@@ -2162,7 +2297,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.screener/icon.svg"
       },
@@ -2170,10 +2305,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.screener/0.6.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.screener/0.6.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.screener/0.8.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.screener/0.8.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.8.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 222262409
+        },
         {
           "version": "0.6.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -2213,8 +2353,8 @@
       "name": "TradeSurface Watchlist",
       "tagline": "Symbol watchlist with real-time prices",
       "description": "Symbol watchlist \u2014 sections, sorting, drag-reorder, real-time price streaming, FDC3 linked.",
-      "version": "0.5.0",
-      "latest_version": "0.5.0",
+      "version": "0.7.0",
+      "latest_version": "0.7.0",
       "type": "plugin",
       "content_type": "app",
       "categories": [
@@ -2231,10 +2371,10 @@
         "darwin-arm64": {
           "has_app": true,
           "has_services": false,
-          "url": "plugins/deskmodal.watchlist/0.5.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/deskmodal.watchlist/0.5.0/darwin-arm64/plugin.toml",
+          "url": "plugins/deskmodal.watchlist/0.7.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/deskmodal.watchlist/0.7.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "4641d422cc789751c4a196eee79a067c2b9b80daef26926276ae8ecdcf3fa620",
+          "sha256": "cc2e214f15dfa510e54873014e5abbfe9473fc30533bd2dece0e6d864b21a904",
           "size_bytes": 245937877
         }
       },
@@ -2242,7 +2382,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/deskmodal.watchlist/icon.svg"
       },
@@ -2250,10 +2390,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/deskmodal.watchlist/0.5.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/deskmodal.watchlist/0.5.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/deskmodal.watchlist/0.7.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/deskmodal.watchlist/0.7.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.7.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 245937877
+        },
         {
           "version": "0.5.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -2317,7 +2462,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/optiscript.editor/icon.svg"
       },
@@ -2331,7 +2476,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-05-26T00:42:47Z",
+          "published_at": "2026-05-26T02:24:20Z",
           "size_bytes": 5102906
         }
       ],
@@ -2343,8 +2488,8 @@
       "name": "OptiScript Engine",
       "tagline": "Compilation, execution, and backtesting engine",
       "description": "Compilation, execution, and backtesting engine",
-      "version": "0.4.0",
-      "latest_version": "0.4.0",
+      "version": "0.6.0",
+      "latest_version": "0.6.0",
       "type": "plugin",
       "content_type": "service",
       "categories": [
@@ -2361,10 +2506,10 @@
         "darwin-arm64": {
           "has_app": false,
           "has_services": true,
-          "url": "plugins/optiscript.engine/0.4.0/darwin-arm64/plugin.toml",
-          "asset_manifest_url": "plugins/optiscript.engine/0.4.0/darwin-arm64/plugin.toml",
+          "url": "plugins/optiscript.engine/0.6.0/darwin-arm64/plugin.toml",
+          "asset_manifest_url": "plugins/optiscript.engine/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
-          "sha256": "a3fa825f6e98d8a1ca16ac276f59462a469aec5f8f282f2a43984b1d484b98c6",
+          "sha256": "8398a348445b7c76f5357a0d2ff5e4ddd56507e2b8a8f763e587d6eb05f3d6a9",
           "size_bytes": 2084114
         }
       },
@@ -2372,7 +2517,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "icon": {
         "market": "icons/optiscript.engine/icon.svg"
       },
@@ -2380,10 +2525,15 @@
       "signature": {
         "algorithm": "ed25519",
         "publisher_key_id": "1c44bd0e9cf34e36",
-        "signature_url": "plugins/optiscript.engine/0.4.0/darwin-arm64/plugin.toml.sig",
-        "checksums_url": "plugins/optiscript.engine/0.4.0/darwin-arm64/checksums.txt"
+        "signature_url": "plugins/optiscript.engine/0.6.0/darwin-arm64/plugin.toml.sig",
+        "checksums_url": "plugins/optiscript.engine/0.6.0/darwin-arm64/checksums.txt"
       },
       "versions": [
+        {
+          "version": "0.6.0",
+          "published_at": "2026-05-26T02:24:20Z",
+          "size_bytes": 2084114
+        },
         {
           "version": "0.4.0",
           "published_at": "2026-05-26T00:42:47Z",
@@ -2438,7 +2588,7 @@
         }
       },
       "dependencies": [],
-      "published_at": "2026-05-26T00:42:47Z",
+      "published_at": "2026-05-26T02:24:20Z",
       "license": "Proprietary",
       "tags": [
         "theme",
