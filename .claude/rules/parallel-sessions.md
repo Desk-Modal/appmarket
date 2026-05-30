@@ -94,8 +94,8 @@ Cloud lanes **do not** do:
 
 | Session | Role | `CLAUDE_PROJECT_DIR` | Model |
 |---|---|---|---|
-| 1 | Orchestrator — rule edits, spec authoring, cross-repo coordination | `/Users/adrian/deskmodal` | Opus 4.7 1M ctx |
-| 2 | Platform Rust impl | `/Users/adrian/deskmodal/platform` | Opus 4.7 or Sonnet 4.6 |
+| 1 | Orchestrator — rule edits, spec authoring, cross-repo coordination | `/Users/adrian/deskmodal` | Opus 4.8 1M ctx |
+| 2 | Platform Rust impl | `/Users/adrian/deskmodal/platform` | Opus 4.8 or Sonnet 4.6 |
 | 3 | TradeSurface TSX impl | `/Users/adrian/deskmodal/plugins/tradesurface` | Sonnet 4.6 |
 | 4 | OptiScript | `/Users/adrian/deskmodal/plugins/optiscript` | Sonnet 4.6 |
 | N | Cloud lanes | (cloud clones) | Sonnet 4.6 |

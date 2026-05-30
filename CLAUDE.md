@@ -4,7 +4,7 @@
 
 ## What's native vs augmentation
 
-Claude Code (April 2026) provides natively: `Agent` tool for sub-agents, hook events (SessionStart/PreToolUse/PostToolUse/Stop/SubagentStop), plugin marketplaces, MCP servers, auto memory, CLAUDE.md, custom skills, `/loop` and `/schedule` scheduling primitives, routines, native `/review` and `/security-review`.
+Claude Code (May 2026) provides natively: `Agent` tool for sub-agents, the dynamic `Workflow` tool (graph-driven background orchestration; see `.claude/rules/parallelism.md §4.1`), hook events (SessionStart/PreToolUse/PostToolUse/Stop/SubagentStop), plugin marketplaces, MCP servers, auto memory, CLAUDE.md, custom skills, `/loop` and `/schedule` scheduling primitives, routines, native `/review` and `/security-review`.
 
 **We augment with:**
 - Workflow policy (`.claude/rules/*.md`) — when to dispatch, reviewer matrix, wave discipline
@@ -119,7 +119,7 @@ Platform-flat: one OS per dist, not multi-arch fat. Library extension picked at 
 
 26 personas in `.claude/agents/*.md`. Each: frontmatter (`name`, `description`, `tools`, `model`) + ≤35-line body (Domain + Invariants + Exit criteria).
 
-Model: **every persona runs on `claude-opus-4-7`** (policy 2026-05-14 — Sonnet/Haiku tiers retired; Opus 1M ctx dominates the cost trade-off for cross-stack DeskModal waves). See `.claude/rules/agents.md` §Model tiering.
+Model: **every persona runs on `claude-opus-4-8`** (policy 2026-05-14 — Sonnet/Haiku tiers retired; Opus 1M ctx dominates the cost trade-off for cross-stack DeskModal waves). See `.claude/rules/agents.md` §Model tiering.
 
 Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. All reviewers for a task in ONE parallel Agent batch (agents.md §Pod patterns).
 

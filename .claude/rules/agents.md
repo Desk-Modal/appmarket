@@ -8,7 +8,7 @@ Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. Claude's native router 
 
 ## Model tiering
 
-**Policy (2026-05-14, reaffirmed 2026-05-16): every persona runs on `claude-opus-4-7`.** Quality dominates cost for the DeskModal-beats-TradingView mandate. Sonnet/Haiku demotion was briefly attempted on 2026-05-16 and reverted same day per user directive ("we should use opus if we get the best possible results?"). The empirical evidence: W7a-W7e all converged first-try APPROVE on Opus; the 5× Sonnet cost saving disappears the first time a REWORK cycle erases the gain.
+**Policy (2026-05-14; reaffirmed 2026-05-16; bumped 4.7→4.8 on 2026-05-31 per user directive — Claude Code CLI is now Opus 4.8, 1M ctx retained): every persona runs on `claude-opus-4-8`.** Quality dominates cost for the DeskModal-beats-TradingView mandate. Sonnet/Haiku demotion was briefly attempted on 2026-05-16 and reverted same day per user directive ("we should use opus if we get the best possible results?"). The empirical evidence: W7a-W7e all converged first-try APPROVE on Opus; the 5× Sonnet cost saving disappears the first time a REWORK cycle erases the gain.
 
 **Effort tuning (F157 Layer 3, 2026-05-18):** Every persona declares `effort:` in frontmatter per Claude Code W16+ effort levels. Defaults:
 - `xhigh` — cross-stack impl personas (rust-systems-architect, plugin-sdk-engineer, frontend-architect, fdc3-protocol-engineer, data-pipeline-engineer, charting-expert, marketplace-architect, marketplace-ux-engineer, trading-ux-architect, interaction-designer, deskmodal-design-agent, service-plugin-exemplar, documentation-engineer, maestro-orchestrator, orchestrator)
@@ -28,26 +28,27 @@ Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. Claude's native router 
 
 | Tier | Model | Personas |
 |---|---|---|
-| All | `claude-opus-4-7` | every persona in `.claude/agents/*.md` (25 total) |
+| All | `claude-opus-4-8` | every persona in `.claude/agents/*.md` (25 total) |
 
-Dispatch always passes `model: "opus"` explicitly. The pin in each agent's frontmatter is `model: claude-opus-4-7` — orchestrator may override per dispatch, but defaults inherit from frontmatter. Cost is not the gating concern; the user has authorised "everything".
+Dispatch always passes `model: "opus"` explicitly. The pin in each agent's frontmatter is `model: claude-opus-4-8` — orchestrator may override per dispatch, but defaults inherit from frontmatter. Cost is not the gating concern; the user has authorised "everything".
 
 **Why not multi-tier:**
 - Mixed tiers historically caused REWORK cycles where Sonnet missed subtle invariants and Haiku lost focus past 8 objectives.
 - Quality + throughput dominate the trade-off; one REWORK cycle on Sonnet costs more wall-clock than running Opus first-time.
-- The 1M-ctx of Opus 4.7 lets one agent own cross-stack work end-to-end (Rust + TS + CSS) — contract-edge violations become impossible.
+- The 1M-ctx of Opus 4.8 lets one agent own cross-stack work end-to-end (Rust + TS + CSS) — contract-edge violations become impossible.
 - Even mechanical sweeps (CSS-token swaps) benefit from Opus's reasoning when edge cases hide in the "trivial" work.
 
 ## Dispatch patterns
 
-Claude Code's native sub-agent system is the dispatch mechanism (`Agent` tool). This section is workflow POLICY for when to use it.
+Claude Code's native orchestration is via BOTH the `Agent` tool (single-shot / pod / speculative / warm-agent) AND the dynamic `Workflow` tool (graph-driven background orchestration — `parallelism.md §4.1`). This section is workflow POLICY for when to use each.
 
-**Default is single-agent per wave.** Opus 4.7 1M-ctx owns cross-stack work end-to-end; contract-edge violations impossible; token cost ~50% vs multi-agent.
+**Default is single-agent per wave.** Opus 4.8 1M-ctx owns cross-stack work end-to-end; contract-edge violations impossible; token cost ~50% vs multi-agent.
 
 | Pattern | When | How |
 |---|---|---|
 | **Single-agent** (default) | Any wave — one agent owns Rust + TS + CSS end-to-end | One `Agent` call; agent edits in-place; returns unified diff via JSON |
 | **Sequenced single-agent** | Rare — if a commit must land before the next step can proceed (e.g. serde shape change that forces downstream TS regen) | Sequential `Agent` calls with a commit between |
+| **Workflow** (graph/pipeline; supersedes Sequenced single-agent) | Dependency-ordered multi-step graph (research→draft→cross-check; fan-out-N→synthesise; impl-draft→adversarial-refute) that would otherwise be hand-sequenced `Agent` calls; preferred when the main context is saturated | Native dynamic `Workflow` tool — runtime JS script holds orchestration + intermediate results OUT of main context; children run in fresh background contexts; only the final answer returns. ONE phase per invocation; ≤3 concurrent; disjoint dirs; main loop writes canonical files + commits. `parallelism.md §4.1` |
 | **Pod (≤7)** | Proven pairwise-disjoint write-sets (audited via `scripts/audit-wave-write-sets.sh`) AND zero contract edges between members | Parallel `Agent` batch up to 7 concurrent; `scripts/pod-apply.sh` atomic-merges all patches. Default cap 3 unaudited; 7 when audit passes (core.md §4) |
 | **Speculative N+1** (default ON) | While wave N's reviewers run, dispatch wave N+1 impl against current HEAD | Parallel `Agent` call alongside the review batch; rebase or discard per wave N verdict (core.md §4). Opt-out: `DESKMODAL_SPECULATIVE=0` |
 | **Warm-agent SendMessage** | Wave N+1 is a continuation of wave N with same persona + loaded context (e.g. plugin-sdk-engineer already holds SDK contract) | `SendMessage(to: <agent-id>)` instead of fresh `Agent()` — saves ~30–50K cold-start re-read tokens. Only valid for true continuations |

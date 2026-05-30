@@ -168,6 +168,31 @@ These are the durable optimization patterns that have shipped + the surface they
 - core.md §3 + §4 (MCP-first + audit-by-path; both ARE optimizations enforced via this rule)
 - architecture.md §28 + §29 + §30 (the three architecture-level optimization rules this rule binds workspace-wide)
 
+## §26.2 Skill-invocation discipline — use the Skill tool correctly; USE our skills, never hand-roll them
+
+**Cardinal rule:** when a DeskModal skill covers the task, invoke it via the Skill tool — do NOT re-implement its logic inline. Hand-rolling a handoff write, a mesh claim, a findings query, a tier-A verify, or a spec amend wastes tokens, drifts from the canonical schema, and bypasses the conflict/heartbeat machinery.
+
+**Correct Skill-tool mechanics (verified v2.1.158, docs https://code.claude.com/docs/en/skills.md):**
+- Invoke via the `Skill` tool with `skill: <name>` (no leading slash, no `--` prefix). Plugin-namespaced skills accept either `plugin:namespace:skill` or the bare `skill` form.
+- Pass `args` as a free-form string; skills embed their own instructions and read inputs from args + context. Skills are NOT function-call APIs with typed parameters.
+- Invoke ONLY skills that appear in the session's available-skills list (or a `/<name>` the user typed). NEVER invent a skill name from training data.
+- A skill body executes synchronously in the main conversation. `allowed-tools` / `disallowed-tools` frontmatter scopes the model's tools while the skill is active — respect it.
+- If a `<command-name>` tag is already present in the turn, the skill is ALREADY loaded — follow its instructions directly; do NOT re-invoke the Skill tool.
+
+**USE-our-skills mandate (the 5 canonical DeskModal SDLC skills):**
+
+| Task | Invoke (do not hand-roll) |
+|---|---|
+| Write a session handoff (≥70% ctx, before `/clear`, before scope pivot) | `deskmodal-handoff-write` |
+| Declare write-set bounds + check cross-session conflicts at session start | `deskmodal-mesh-claim` |
+| Surface other sessions' findings (24h) OR share a cross-session pattern | `deskmodal-mesh-findings` |
+| Scoped Tier-A verify (`cargo check -p` / `cargo test -p` / `pnpm --filter`) after an impl wave | `deskmodal-verify-tier-a` |
+| Atomic spec §6 / benchmark / open-concern update (per §21) | `deskmodal-spec-amend` |
+
+These are the canonical implementations of the discipline.md §26 persistence-tier protocol, the §33 Session Mesh, the §18.7.1 Tier-A cadence, and the §21 spec-hygiene contract. Re-implementing any of them inline is a banned posture (forbidden per §26.1 "apply every learning to every surface").
+
+**Cross-refs:** discipline.md §26 (context-window persistence tiers) + §26.1 (continuous-SDLC optimization, surface #3 agent prompts) + agents.md §"Skills preloaded (F157 Layer 3)" (every persona declares these in frontmatter). Built-in commands (`/clear`, `/compact`, `/code-review`, `/goal`) are NOT skills — they are harness commands; never route them through the Skill tool.
+
 ## 9. Handoff protocol
 
 Commit-driven. When a commit moves task state, the post-commit hook appends to the active handoff (`.session-state/handoff.md` by default, or a per-feature handoff under `.session-state/handoffs/<id>.md`). You edit free-form context on the next turn if needed.

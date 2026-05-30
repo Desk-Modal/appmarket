@@ -68,7 +68,7 @@ load_when: any work touching plugins/copilot/, RAG indexing, model registry, gol
    - **Total bundle delta: ~1.5 GB** added to dist/. Acceptable per F146 distribution. Signed delta via F125 lifecycle.
    - **First-run download option** for bandwidth-constrained users: signed model bundle from HuggingFace mirror OR self-hosted CDN. NEVER from npm.
    - **LocalOnly is the DEFAULT privacy mode.** No API key required for default operation; no cloud dependency.
-   - **Cloud escalation OPT-IN** (Claude Opus 4.7 + Sonnet 4.6 via Anthropic API) for complex reasoning the local model can't handle (strategy authoring requiring N-step reasoning + multi-step OptiScript synthesis + cross-symbol portfolio analysis). User-toggled in Settings UI (sdk-config per §20).
+   - **Cloud escalation OPT-IN** (Claude Opus 4.8 + Sonnet 4.6 via Anthropic API) for complex reasoning the local model can't handle (strategy authoring requiring N-step reasoning + multi-step OptiScript synthesis + cross-symbol portfolio analysis). User-toggled in Settings UI (sdk-config per §20).
    - **Inference framework: `candle` (Rust-native; HuggingFace; Apache 2.0)** — workspace dep consistency. `llama.cpp` Rust bindings is the fallback if candle has perf gaps.
    - **NO Ollama runtime dependency.** Inference is in-process via candle; no external runtime install.
    - Router: small classifier picks local-vs-cloud based on (task-class, complexity-score, privacy mode, daily cost ceiling). Audit-chain logs router decisions.

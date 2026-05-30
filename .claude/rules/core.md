@@ -87,6 +87,7 @@ Memory mirror: `~/.claude/projects/-Users-adrian-deskmodal/memory/feedback_f157_
 |---|---|---|
 | Verifiable terminal condition | `/goal <condition>` (one per session) | Routine impl where Tier A verifies |
 | Time-paced re-check | `/loop <interval> <prompt>` | When `/goal` fits |
+| Dependency-ordered multi-step graph / fan-out research / context-offload | dynamic `Workflow` tool (ONE phase per invocation; `parallelism.md §4.1`) | One-shot wave (use `Agent`); canonical-file writes (main loop only) |
 | Cross-stack DeskModal impl | `/effort xhigh` (default) | Mechanical sweeps — use `medium` |
 | Phase-boundary review | `/ultrareview` (cloud fleet) | Per-wave — use local reviewer pod |
 | Cloud research / markdown | `RemoteTrigger` / `/schedule` | Source edits (.rs/.ts/.tsx/.py/.toml) |

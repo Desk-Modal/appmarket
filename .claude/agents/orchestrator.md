@@ -2,7 +2,7 @@
 name: orchestrator
 description: "DEPRECATED: use maestro-orchestrator instead. Legacy entry kept for backward-compatibility with older dispatches; new work routes through maestro-orchestrator per .claude/rules/agents.md."
 tools: Read, Bash, Grep, Glob, Write, Edit, Agent
-model: claude-opus-4-7
+model: claude-opus-4-8
 color: yellow
 permissionMode: acceptEdits
 effort: xhigh
