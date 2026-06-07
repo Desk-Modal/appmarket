@@ -69,8 +69,14 @@ jobs:
                   errors.append(f"top-level missing '{k}'")
           cat_ids = {c["id"] for c in doc.get("categories", [])}
           seen_ids = set()
+          # local_indicator_packs is built locally + walked from dist/plugins/<id>/;
+          # no GitHub release asset, so asset_name_template is not required for it.
+          RELEASE_ASSET_MODES = {"single_release", "multi_plugin_release"}
           for i, s in enumerate(doc.get("sources", [])):
-              for k in ("owner", "repo", "mode", "content_type", "asset_name_template"):
+              required = ["owner", "repo", "mode", "content_type"]
+              if s.get("mode") in RELEASE_ASSET_MODES:
+                  required.append("asset_name_template")
+              for k in required:
                   if k not in s:
                       errors.append(f"source[{i}] missing '{k}'")
               mode = s.get("mode")
@@ -97,6 +103,21 @@ jobs:
                       for cat in p.get("categories", []):
                           if cat not in cat_ids:
                               errors.append(f"source[{i}].plugins[{j}] references unknown category '{cat}'")
+              elif mode == "local_indicator_packs":
+                  if "services" not in s or not isinstance(s["services"], list):
+                      errors.append(f"source[{i}] local_indicator_packs missing 'services' array")
+                  for j, svc in enumerate(s.get("services", [])):
+                      if "id" not in svc:
+                          errors.append(f"source[{i}].services[{j}] missing 'id'")
+                      else:
+                          if svc["id"] in seen_ids:
+                              errors.append(f"source[{i}].services[{j}] duplicate id '{svc['id']}'")
+                          seen_ids.add(svc["id"])
+                      for cat in svc.get("categories", []):
+                          if cat not in cat_ids:
+                              errors.append(f"source[{i}].services[{j}] references unknown category '{cat}'")
+                      if not isinstance(svc.get("indicators"), list):
+                          errors.append(f"source[{i}].services[{j}] missing 'indicators' array")
               else:
                   errors.append(f"source[{i}] unknown mode '{mode}'")
           if errors:
