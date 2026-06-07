@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l3.1 6.3 7 1-5 4.9 1.2 6.9L16 20l-6.3 3.1 1.2-6.9-5-4.9 7-1z"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+  <line x1="3.5" y1="6" x2="11" y2="6"/>
+  <line x1="3.5" y1="12" x2="11" y2="12"/>
+  <line x1="3.5" y1="18" x2="11" y2="18"/>
+  <polyline points="14,4 17,7 14,10"/>
+  <polyline points="20,11 17,14 20,17"/>
+  <line x1="14" y1="7" x2="20.5" y2="7"/>
+  <line x1="13.5" y1="14" x2="20" y2="14"/>
+</svg>
