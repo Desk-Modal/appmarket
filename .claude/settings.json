@@ -58,8 +58,6 @@
       "Bash(scripts/build-dist.sh:*)",
       "Bash(scripts/launch.sh:*)",
       "Bash(scripts/prod-check.sh:*)",
-      "Bash(scripts/pod-apply.sh:*)",
-      "Bash(scripts/wave-sandbox.sh:*)",
       "Bash(scripts/wiki-lint.sh:*)",
       "Bash(scripts/wiki-coverage.sh:*)",
       "Bash(scripts/wiki-mirror.sh:*)",
