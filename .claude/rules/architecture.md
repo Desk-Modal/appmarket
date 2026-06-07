@@ -211,6 +211,8 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **Cache-warming discipline:** target/`/`.nx`/`buildcache`/`.tsbuildinfo` MUST survive across waves. Forbidden mid-loop: `cargo clean` / `nx reset` / `rm -rf target/` / `rm -rf node_modules/` / `pnpm install --force`. Permitted reset points: `scripts/setup.sh --reset` OR `scripts/cleanup-build-assets.sh --apply` (F157 L13) OR pre-release `build-dist.sh --release`.
 
+**No-duplicate builds — isolate SOURCE, share CACHE (2026-06-07; NEVER FORGOTTEN; user: "do we need to duplicate building, testing and long running tasks?" — no):** never rebuild the same code twice across agents / worktree-verifies / `--full` / `build-dist`. (a) ONE shared incremental cache PER REPO reused by every agent (incl. `isolation:worktree`), every verify, and `build-dist` — worktrees isolate SOURCE but share the repo's warm CACHE via a per-repo `CARGO_TARGET_DIR` (different repos = different dirs = no fingerprint race; same-repo builds serialise naturally). (b) Verify AFFECTED-scope since `last-green.sha`, never full-workspace per fix-batch; `--full --sign` runs ONCE at the end on the warm cache. (c) `build-dist --sign` REUSES the verify's warm artifacts — sign, don't recompile. (d) A long build is long only because it's near-cold; warm + affected makes it seconds-to-minutes — make it NOT-long, don't merely background it. Settings: `CARGO_INCREMENTAL=1`. Memory: `feedback_no_duplicate_builds_share_cache`; pairs `feedback_sdlc_batch_not_repeat`.
+
 **Pairs with:** core.md §2, §28, quality.md §18.7.1, parallelism.md §15.
 
 ## 30. Aggregate MCP capabilities — deterministic Rust + visual-design SOTA (May 2026)

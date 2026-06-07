@@ -1,19 +1,15 @@
 # Parallel Claude Code sessions
 
-Multiple Claude Code sessions — local terminals + cloud-scheduled routines — work against this workspace simultaneously. This file is the isolation contract so they don't stomp each other.
+Multiple Claude Code sessions work against this workspace simultaneously. This file is the isolation contract so they don't stomp each other.
 
 ## Structure
 
 ```
 /Users/adrian/deskmodal/        ← outer git repo: .claude/, .specify/, specs/, scripts/, docs
 ├── platform/                    ← independent git repo: Rust + Tauri app
-├── plugins/
-│   ├── tradesurface/            ← independent git repo: TradeSurface 8 apps
-│   └── optiscript/              ← independent git repo: OptiScript runtime + editor
+├── plugins/{tradesurface,optiscript}/   ← independent git repos
 ├── plugin-tools/                ← independent git repo
-├── marketplace/
-│   ├── appmarket/               ← independent git repo
-│   └── plugin-index/            ← independent git repo
+├── marketplace/{appmarket,plugin-index}/ ← independent git repos
 └── core-server-api/             ← independent git repo
 ```
 
@@ -27,6 +23,8 @@ Every session MUST:
 2. **Work on a session-scoped branch**: `sess/<topic>-<YYYY-MM-DD-HHMM>` (or for Feature work, `feat/<NNN>-<topic>`). Never commit directly to `main` without a merge via PR.
 3. **Edit only files inside its `$CLAUDE_PROJECT_DIR`.** Root-canonical files (see §Canonical file ownership) are edited only from the root session.
 4. **Honor the launch-lockfile** before running `scripts/launch.sh --verify`: check `/tmp/deskmodal-launch.lock` — if present and recent (< 15 min old), another session owns the GUI; wait or skip.
+
+Cross-session coordination is by **native per-repo worktree isolation + single-session-per-repo discipline + native auto-memory** (architecture.md §33) — the bespoke Session Mesh ledger is retired.
 
 ## Canonical file ownership
 
@@ -46,21 +44,7 @@ Sub-repo sessions **never edit their local mirrored copies** — the next sync o
 
 ## sync-specs.sh usage
 
-On-demand only. Run it when:
-- Root session has finished a batch of canonical-file edits AND
-- No sub-repo session has uncommitted changes in its canonical paths
-
-Verify the latter first:
-```bash
-for d in platform plugins/tradesurface plugins/optiscript plugin-tools marketplace/appmarket marketplace/plugin-index core-server-api; do
-  n=$(git -C "$d" status --short .claude/ CLAUDE.md .mcp.json 2>/dev/null | wc -l | tr -d ' ')
-  [ "$n" -gt 0 ] && echo "BLOCKED: $d has $n uncommitted canonical-file edits"
-done
-```
-
-If any line prints BLOCKED: do not run `sync-specs.sh --apply`. Resolve first.
-
-The pre-commit hook does NOT enforce sync-specs — that was too noisy. It's manual discipline now.
+On-demand only. Run it when the root session has finished a batch of canonical-file edits AND no sub-repo session has uncommitted changes in its canonical paths. **Verify the latter first** with the per-repo `git status` pre-flight loop — full snippet + multi-session capacity reference table now live in `wiki/playbooks/onboard-new-developer.md`. If any sub-repo prints BLOCKED, resolve before `--apply`. The pre-commit hook does NOT enforce sync-specs — manual discipline.
 
 ## CBM server (codebase-memory-mcp)
 
@@ -68,17 +52,7 @@ Shared across sessions. `auto_index` is on — do not call `index_repository` ma
 
 ## Cloud-scheduled lanes
 
-Created via `RemoteTrigger create` (or the `schedule` skill). Cadence: hourly minimum. Each firing is an isolated cloud session with a fresh git clone.
-
-Cloud lanes are restricted to:
-- CSS / design-token audits (Lane D pattern)
-- Markdown / doc / spec polish
-- Perf baseline captures (bench runs without GUI)
-
-Cloud lanes **do not** do:
-- Cross-stack impl requiring GUI verification
-- Tauri IPC changes (needs local verification)
-- Anything editing root-canonical files (no sync coordination possible from cloud)
+Cloud lanes are DISABLED for impl/docs/audit/spec/research per quality.md §18.7 #2 (local-only delivery, 2026-05-23). The historical cloud-lane restrictions (CSS/token audits; markdown polish; perf baselines only; never source/IPC/canonical edits) are documented in architecture.md §31 for IF/WHEN re-enabled.
 
 ## Resource exclusivity
 
@@ -89,15 +63,4 @@ Cloud lanes **do not** do:
 | `origin/main` push | Standard git race; second pushes rebase | `git pull --rebase` + retry |
 | pre-commit hook | Serialised per repo | `flock` in `pre-commit-guard.sh` |
 | CBM index writes | Single-writer per project | Server-enforced |
-
-## Multi-session capacity on one machine (reference)
-
-| Session | Role | `CLAUDE_PROJECT_DIR` | Model |
-|---|---|---|---|
-| 1 | Orchestrator — rule edits, spec authoring, cross-repo coordination | `/Users/adrian/deskmodal` | Opus 4.8 1M ctx |
-| 2 | Platform Rust impl | `/Users/adrian/deskmodal/platform` | Opus 4.8 or Sonnet 4.6 |
-| 3 | TradeSurface TSX impl | `/Users/adrian/deskmodal/plugins/tradesurface` | Sonnet 4.6 |
-| 4 | OptiScript | `/Users/adrian/deskmodal/plugins/optiscript` | Sonnet 4.6 |
-| N | Cloud lanes | (cloud clones) | Sonnet 4.6 |
-
-4 local concurrent + N cloud. Fully isolated by per-repo git + `CLAUDE_PROJECT_DIR` + branch discipline.
+| Per-repo `CARGO_TARGET_DIR` | Shared warm cache; same-repo builds serialise | Per-repo dir (architecture.md §29 no-duplicate-builds) |

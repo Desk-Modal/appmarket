@@ -8,35 +8,19 @@ Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. Claude's native router 
 
 ## Model tiering
 
-**Policy (2026-05-14; reaffirmed 2026-05-16; bumped 4.7→4.8 on 2026-05-31 per user directive — Claude Code CLI is now Opus 4.8, 1M ctx retained): every persona runs on `claude-opus-4-8`.** Quality dominates cost for the DeskModal-beats-TradingView mandate. Sonnet/Haiku demotion was briefly attempted on 2026-05-16 and reverted same day per user directive ("we should use opus if we get the best possible results?"). The empirical evidence: W7a-W7e all converged first-try APPROVE on Opus; the 5× Sonnet cost saving disappears the first time a REWORK cycle erases the gain.
+**Policy (2026-05-14; reaffirmed 2026-05-16; bumped 4.7→4.8 on 2026-05-31 — Claude Code CLI is now Opus 4.8, 1M ctx): every persona runs on `claude-opus-4-8`.** Quality dominates cost for the DeskModal-beats-TradingView mandate; the 1M ctx lets one agent own cross-stack work (Rust + TS + CSS) end-to-end so contract-edge violations become impossible. The multi-tier rationale + the throughput-estimate prose live in `wiki/governance/rules-charter.md`.
 
-**Effort tuning (F157 Layer 3, 2026-05-18):** Every persona declares `effort:` in frontmatter per Claude Code W16+ effort levels. Defaults:
-- `xhigh` — cross-stack impl personas (rust-systems-architect, plugin-sdk-engineer, frontend-architect, fdc3-protocol-engineer, data-pipeline-engineer, charting-expert, marketplace-architect, marketplace-ux-engineer, trading-ux-architect, interaction-designer, deskmodal-design-agent, service-plugin-exemplar, documentation-engineer, maestro-orchestrator, orchestrator)
-- `high` — build-deploy-engineer, verification-gateway-engineer
-- `medium` — review-only personas (qa-architect, security-engineer, trading-sme, ux-design-lead, integration-architect, chart-qa-verifier, marketplace-qa) + style-bot
+**Effort tuning (F157 Layer 3):** every persona declares `effort:` in frontmatter. Defaults: `xhigh` — cross-stack impl personas (rust-systems-architect, plugin-sdk-engineer, frontend-architect, fdc3-protocol-engineer, data-pipeline-engineer, charting-expert, marketplace-architect, marketplace-ux-engineer, trading-ux-architect, interaction-designer, deskmodal-design-agent, service-plugin-exemplar, documentation-engineer, maestro-orchestrator, orchestrator); `high` — build-deploy-engineer, verification-gateway-engineer; `medium` — review-only personas (qa-architect, security-engineer, trading-sme, ux-design-lead, integration-architect, chart-qa-verifier, marketplace-qa) + style-bot. Orchestrator may pass `--effort` per dispatch to override frontmatter.
 
-**Per-dispatch override**: orchestrator may pass `--effort` to override frontmatter (e.g., promote a review-only persona to `high` for a security-critical batch).
+**Skills preloaded (F157 Layer 3):** every persona declares `skills:` in frontmatter. All include `codebase-memory`. Specialised additions: Rust personas `+ deskmodal-verify-tier-a`; UI personas `+ frontend-design`; Docs personas `+ deskmodal-spec-amend`; Build personas `+ deskmodal-verify-tier-b + deskmodal-verify-tier-c`. (The former mesh-claim / mesh-findings / handoff-write skills are RETIRED — replaced by native per-repo worktree isolation + native auto-memory; see architecture.md §33.)
 
-**Skills preloaded (F157 Layer 3):** Every persona declares `skills:` in frontmatter. All include `codebase-memory + deskmodal-mesh-claim + deskmodal-mesh-findings + deskmodal-handoff-write`. Specialised additions:
-- Rust personas: `+ deskmodal-verify-tier-a`
-- UI personas: `+ frontend-design`
-- Docs personas: `+ deskmodal-spec-amend`
-- Build personas: `+ deskmodal-verify-tier-b + deskmodal-verify-tier-c`
-- Maestro: full toolkit (`+ deskmodal-wave-dispatch + spec-amend + verify-{a,b,c} + cloud-lane + ultrareview-phase`)
-
-**disallowedTools (F157 Layer 3):** Review-only personas declare `disallowedTools: [Write, Edit, NotebookEdit]` as belt-and-braces beyond their `tools` allowlist.
+**disallowedTools (F157 Layer 3):** review-only personas declare `disallowedTools: [Write, Edit, NotebookEdit]` as belt-and-braces beyond their `tools` allowlist.
 
 | Tier | Model | Personas |
 |---|---|---|
 | All | `claude-opus-4-8` | every persona in `.claude/agents/*.md` (25 total) |
 
-Dispatch always passes `model: "opus"` explicitly. The pin in each agent's frontmatter is `model: claude-opus-4-8` — orchestrator may override per dispatch, but defaults inherit from frontmatter. Cost is not the gating concern; the user has authorised "everything".
-
-**Why not multi-tier:**
-- Mixed tiers historically caused REWORK cycles where Sonnet missed subtle invariants and Haiku lost focus past 8 objectives.
-- Quality + throughput dominate the trade-off; one REWORK cycle on Sonnet costs more wall-clock than running Opus first-time.
-- The 1M-ctx of Opus 4.8 lets one agent own cross-stack work end-to-end (Rust + TS + CSS) — contract-edge violations become impossible.
-- Even mechanical sweeps (CSS-token swaps) benefit from Opus's reasoning when edge cases hide in the "trivial" work.
+Dispatch always passes `model: "opus"` explicitly. The pin in each agent's frontmatter is `model: claude-opus-4-8`; orchestrator may override per dispatch.
 
 ## Dispatch patterns
 
@@ -47,21 +31,16 @@ Claude Code's native orchestration is via BOTH the `Agent` tool (single-shot / p
 | Pattern | When | How |
 |---|---|---|
 | **Single-agent** (default) | Any wave — one agent owns Rust + TS + CSS end-to-end | One `Agent` call; agent edits in-place; returns unified diff via JSON |
-| **Sequenced single-agent** | Rare — if a commit must land before the next step can proceed (e.g. serde shape change that forces downstream TS regen) | Sequential `Agent` calls with a commit between |
-| **Workflow** (graph/pipeline; supersedes Sequenced single-agent) | Dependency-ordered multi-step graph (research→draft→cross-check; fan-out-N→synthesise; impl-draft→adversarial-refute) that would otherwise be hand-sequenced `Agent` calls; preferred when the main context is saturated | Native dynamic `Workflow` tool — runtime JS script holds orchestration + intermediate results OUT of main context; children run in fresh background contexts; only the final answer returns. ONE phase per invocation; ≤3 concurrent; disjoint dirs; main loop writes canonical files + commits. `parallelism.md §4.1` |
-| **Pod (≤7)** | Proven pairwise-disjoint write-sets (audited via `scripts/audit-wave-write-sets.sh`) AND zero contract edges between members | Parallel `Agent` batch up to 7 concurrent; `scripts/pod-apply.sh` atomic-merges all patches. Default cap 3 unaudited; 7 when audit passes (core.md §4) |
-| **Speculative N+1** (default ON) | While wave N's reviewers run, dispatch wave N+1 impl against current HEAD | Parallel `Agent` call alongside the review batch; rebase or discard per wave N verdict (core.md §4). Opt-out: `DESKMODAL_SPECULATIVE=0` |
-| **Warm-agent SendMessage** | Wave N+1 is a continuation of wave N with same persona + loaded context (e.g. plugin-sdk-engineer already holds SDK contract) | `SendMessage(to: <agent-id>)` instead of fresh `Agent()` — saves ~30–50K cold-start re-read tokens. Only valid for true continuations |
+| **Workflow** (graph/pipeline; supersedes Sequenced single-agent) | Dependency-ordered multi-step graph (research→draft→cross-check; fan-out-N→synthesise; impl-draft→adversarial-refute) that would otherwise be hand-sequenced `Agent` calls; preferred when the main context is saturated | Native dynamic `Workflow` tool — runtime JS holds orchestration + intermediate results OUT of main context; children run in fresh background contexts; only the final answer returns. ONE phase per invocation; ≤3 concurrent; disjoint dirs; main loop writes canonical files + commits. `parallelism.md §4.1` |
+| **Pod (≤7)** | Proven pairwise-disjoint write-sets (audited via `scripts/audit-wave-write-sets.sh`) AND zero contract edges between members | Parallel `Agent` batch up to 7 concurrent (empirical cap 3); main loop integrates via `git apply` + commit on top per worktree (core.md §4) |
+| **Speculative N+1** (default ON) | While wave N's reviewers run, dispatch wave N+1 impl against current HEAD | Parallel `Agent` call alongside the review batch; rebase or discard per wave N verdict. Opt-out: `DESKMODAL_SPECULATIVE=0` |
+| **Warm-agent SendMessage** | Wave N+1 is a continuation of wave N with same persona + loaded context | `SendMessage(to: <agent-id>)` instead of fresh `Agent()` — saves ~30–50K cold-start re-read tokens. Only for true continuations |
 | **Angle-swarm** (review only) | One reviewer persona, multiple lenses | Parallel dispatch of same persona with angle-specialised prompts |
 | **Adversarial review** (mandatory every wave) | All declared reviewers for the wave | ONE parallel `Agent` batch per core.md §7 |
 
-Reviewers always parallel (read-only, no race risk). Impl single-agent by default; promote to pod when write-sets audit clean; layer speculative N+1 on top when pipelining pays.
+Reviewers always parallel (read-only, no race risk). Impl single-agent by default; promote to pod when write-sets audit clean; layer speculative N+1 on top when pipelining pays. Each prompt ≤ 15 concrete objectives; past that, decompose the wave not the agent.
 
-Each prompt ≤ 15 concrete objectives. Past that: decompose the wave, not the agent.
-
-**Audit-by-path, not by inline quote (core.md §4).** When dispatching N parallel agents that share an audit/spec/finding reference, pass the **file path** and instruct the agent to read it once. Inline-quoting the audit body in each prompt burns ~30–80K tokens per dispatch — at N=5 parallel, that's 150–400K wasted tokens.
-
-**Throughput estimate (2026-05-16 amendments combined):** serial 1-agent waves at ~15–20 min → 3–5 parallel agents per wave at ~10–15 min total. ~2–3× throughput on impl-heavy work, ~4–8× on mechanical sweeps (Haiku style-bot pods).
+**Audit-by-path, not by inline quote (core.md §4).** When dispatching N parallel agents that share an audit/spec/finding reference, pass the **file path** and instruct the agent to read it once. Inline-quoting burns ~30–80K tokens per dispatch.
 
 ## Return contract (every impl sub-agent)
 
@@ -85,22 +64,22 @@ Each prompt ≤ 15 concrete objectives. Past that: decompose the wave, not the a
 
 **Orchestrator handles (does NOT reject) returns where:**
 - `patch` is empty or malformed → dispatch a follow-up Agent with the exact malformation cited; never reset.
-- `write_set_actual ⊄ write_set_declared` → review the out-of-set files; accept if consistent with wave scope, otherwise carve them into a separate scoped follow-up commit.
-- `verification_exit_code != 0` → diagnose inline; the fix is a forward commit (reviewer finding or impl patch), not a reset.
-- `self_assessment == APPROVE` with non-empty `open_concerns` → integrate the patch; dispatch a scoped follow-up to close `open_concerns` before benchmark row marks green.
-- HEAD moved during agent's run → inspect the commit. If consistent with wave scope, accept + continue. If not, add a reconciling commit. Never `git reset --hard`.
+- `write_set_actual ⊄ write_set_declared` → review the out-of-set files; accept if consistent, otherwise carve into a separate scoped follow-up commit.
+- `verification_exit_code != 0` → diagnose inline; the fix is a forward commit, not a reset.
+- `self_assessment == APPROVE` with non-empty `open_concerns` → integrate the patch; dispatch a scoped follow-up to close `open_concerns` before the benchmark row marks green.
+- HEAD moved during agent's run → inspect the commit; accept + continue if consistent, else add a reconciling commit. Never `git reset --hard`.
 
 **Integration flow (evolve-and-fix-forward per core.md §15):**
-1. `scripts/wave-sandbox.sh init` (advisory snapshot — stable diff reference, NOT a rollback anchor).
+1. Main loop records `git rev-parse HEAD` as an advisory diff anchor (NOT a rollback anchor).
 2. Dispatch Agent(s) → collect patches.
-3. `scripts/wave-sandbox.sh assert-clean` → if dirty, inspect + reconcile via follow-up commits (never reset).
-4. `scripts/pod-apply.sh` (pod) or `git apply` (single-agent) → integrate.
+3. Assert working tree clean; if dirty, inspect + reconcile via follow-up commits (never reset).
+4. Integrate via `git apply` (single-agent) or sequential per-worktree apply (pod); native worktree isolation keeps parallel write-sets separate.
 5. `scripts/local-ci.sh --fast` → on failure, dispatch a scoped follow-up or close inline; commit the fix. Never reset.
 6. Parallel adversarial review → findings close via follow-up commits in severity order.
 7. `scripts/launch.sh --verify` (GUI/FDC3/dist-touching waves only) after all reviewer findings close.
 8. Benchmark row marks green in a final outer-workspace commit; push both repos.
 
-**Rollback is banned** as a wave-mechanic. If a wave's direction is wrong at the strategic level (rare), ESCALATE to the user and let them decide; do not `git reset` unilaterally.
+**Rollback is banned** as a wave-mechanic. If a wave's direction is wrong at the strategic level (rare), ESCALATE to the user; do not `git reset` unilaterally.
 
 ## Adversarial review contract
 

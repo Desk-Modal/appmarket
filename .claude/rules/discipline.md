@@ -1,10 +1,60 @@
 ---
 title: Discipline
-authority: derives from `core.md`; topic-file for §9 + §12 + §13 + §14 + §26
+authority: derives from `core.md`; topic-file for §9 + §12 + §13 + §14 + §26 + §33
 load_when: session start/end, between-wave checkpointing, deciding when to push, resuming after `/clear`, deciding when to clear/compress context
 ---
 
 # Discipline
+
+Lean topic-file. Each §-anchor below preserves its cardinal invariant + lookup tables in-file; verbose forbidden/optimal lists + incident narratives live in `wiki/playbooks/discipline/*.md` (NOT auto-loaded; queried on demand via `mcp__wiki-mcp__wiki_get_page playbooks/discipline/<theme>`).
+
+## Wiki playbook map
+
+| § | Playbook | Theme |
+|---|---|---|
+| §26 | `wiki/playbooks/discipline/context-window-management.md` | Forbidden/optimal patterns + /clear-when/never + session-pressure + edit-verification incident + honesty-under-compression |
+| §26.1 + §26.2 | `wiki/playbooks/discipline/sdlc-optimization-and-skills.md` | Per-/loop-wake audit bash + 14-row known-patterns register + Skill-tool mechanics |
+
+---
+
+## 9. Handoff protocol
+
+Commit-driven. When a commit moves task state, the post-commit hook appends to the active handoff (`.session-state/handoff.md`, or per-feature `.session-state/handoffs/<id>.md`). Edit free-form context on the next turn if needed.
+
+Session pressure checkpoint: at ≥ 70% context, write a fresh handoff before `/clear`. Below that, commits are the durable state — no preemptive handoffs needed.
+
+## 12. Tool discipline
+
+- No `--no-verify` on commits unless you've proven the hook is a false positive and documented the diagnosis in the commit body.
+- No `--force` push.
+- No deleting branches, files, or data without confirming the state is recoverable.
+- No `sync-specs.sh --apply` while another session is editing sub-repo canonical files — ownership is split (`parallel-sessions.md`).
+- One terminal + one cloud + one `/launch --verify` in flight at a time per machine (launch-lockfile `/tmp/deskmodal-launch.lock`).
+
+## 13. Autonomy protocol
+
+Goal: user never re-pastes prompts or re-explains context. State lives in git + `.session-state/`. On session start the `context-load` SessionStart hook prints active feature, branch + ahead/behind, gate state, latest handoff — read that before asking the user anything.
+
+Resume contract (F157 Layer 9 autonomous-SOTA-delivery loop):
+1. Read `.session-state/handoff.md` (or per-feature `handoffs/<feature>.md`). Skip any "Dead-ends" hypothesis.
+2. Read the active feature's `spec.md` + `benchmark.md`.
+3. Declare write-set bounds + check cross-session conflicts (native worktree isolation; single-session default per §33).
+4. Surface findings from other parallel sessions (native memory + handoff bus).
+5. Re-verify LIVE state — gates, branch, dirty files. Handoff is a SNAPSHOT; the gate file is LIVE.
+6. Declare `/effort xhigh` unless mechanical (then `medium`).
+7. Declare `/goal <terminal-condition>` if the work has a verifiable end-state.
+8. Continue. Don't ask the user to re-state the goal unless you hit a BLOCK.
+
+`--resume`/`--continue`: an active goal is restored. A commit is the durable checkpoint; the post-commit hook appends the handoff. `.session-state/active-feature` (optional) holds one feature-id for the statusline. Never claim "I don't have context" — write a handoff and continue.
+
+## 14. Output style
+
+Default output style is `concise`:
+- Short, dense sentences. Commands over descriptions.
+- State changes + decisions directly. Cite file:line, exit codes, SHAs.
+- No teaching tone, no motivational framing, no "let me explain."
+- End-of-turn summary = 1-2 sentences MAX. What changed + what's next.
+- Working update = 1 sentence per key moment (finding, direction change, blocker).
 
 ## 26. Context-window management — clear/compress optimally, never hallucinate, never lose data
 
@@ -14,231 +64,69 @@ load_when: session start/end, between-wave checkpointing, deciding when to push,
 
 | Tier | Mechanism | Survives | Use for |
 |---|---|---|---|
-| **1. CANONICAL git** | `.claude/rules/*.md`, `specs/**`, `wiki/**`, memory files committed via auto-memory | Everything (machine, dev, `/clear`, time) | Rules, specs, architectural reasoning, agent definitions |
-| **2. DURABLE auto-memory** | `~/.claude/projects/.../memory/feedback_*.md` + `MEMORY.md` index | `/clear`, restart, multi-session, cross-dev `git pull` (per-user copy) | User preferences, anti-pattern discoveries, durable critique-driven rules |
-| **3. EPHEMERAL handoffs** | `.session-state/handoffs/<feature>.md` (gitignored; per-repo-dir) | Session restart; not cross-dev | Live in-flight state: reviewer findings, agent IDs, pod plans, BLOCKING dispositions |
-| **4. CONVERSATIONAL window** | Current turn-by-turn chat | Until `/clear` or auto-compact ~95% | Active reasoning + tool calls + just-returned agent reports being processed |
+| **1. CANONICAL git** | `.claude/rules/*.md`, `specs/**`, `wiki/**`, committed memory | Everything (machine, dev, `/clear`, time) | Rules, specs, architectural reasoning, agent defs |
+| **2. DURABLE auto-memory** | `~/.claude/projects/.../memory/feedback_*.md` + `MEMORY.md` index | `/clear`, restart, multi-session, cross-dev `git pull` (per-user copy) | User prefs, anti-pattern discoveries, durable critique rules |
+| **3. EPHEMERAL handoffs** | `.session-state/handoffs/<feature>.md` (gitignored; per-repo-dir) | Session restart; not cross-dev | Live in-flight state: findings, agent IDs, dispatch plans, BLOCKING dispositions |
+| **4. CONVERSATIONAL window** | Current turn-by-turn chat | Until `/clear` or auto-compact ~95% | Active reasoning + tool calls + just-returned reports being processed |
 
-**Forbidden anti-patterns (token-waste; from today's audit of my own behaviour):**
-- Pasting full reviewer JSON returns into commit messages (use handoff path citation; commit body cites SHA + 1-line summary)
-- Reading 300+ line logs (`launch.sh --verify` etc.) when targeted `grep` would suffice
-- Inline-quoting full reviewer find-sets in re-dispatch prompts (cite handoff path; agent reads once)
-- Re-stating user directives verbatim in every commit (cite §-rule + memory-file once; subsequent commits cite the rule SHA)
-- Re-reading `.rs/.ts/.tsx/.py` files with `Read` when CBM `get_code_snippet` is ~500 tokens vs 80K (per architecture.md §3 + §17)
-- Not invoking `/clear` at natural checkpoints — burns context on stale conversation history when next pod is unrelated
+**Edit-verification discipline (durable; 2026-05-17 incident — Edit "success" ≠ persisted to disk; full narrative in playbook):**
+1. After ANY Edit on a canonical/rule/spec/commit-bound file, IMMEDIATELY verify via `grep -n "<distinctive-new-string>" <file>` OR `wc -l <file>`.
+2. NEVER trust the "successfully updated" message alone.
+3. If verify fails: re-Read fresh (current disk state), then re-Edit. Don't amend a stale in-memory view.
+4. Multi-paragraph inserts: prefer one whole-block Edit over many small ones — shrinks the race window.
+5. Canonical files mid-pod (other agents running): Read fresh BEFORE editing — concurrent agents shift line numbers.
 
-**Optimal patterns (canonical; apply per /loop wake):**
+Forbidden: committing a change without verifying the diff landed (`git diff --stat` shows the file). Honest failure mode is "Edit lost; re-applying" — never silent "I edited it" without verification.
 
-1. **Audit-by-path discipline** (from core.md §4 — applies workspace-wide): every parallel-agent prompt passes file paths, not inline content. Saves ~30-80K tokens per dispatch × N agents.
+**Honesty under compression (per §1):** every claim STILL cites evidence (file:line / SHA / log path / exit code) even when compressed. Compression compresses VERBOSITY, never CITATIONS.
 
-2. **Eager handoff write after every reviewer batch:** capture full JSON returns into `.session-state/handoffs/<feature>.md` BEFORE the orchestrator compresses to disposition tags in main context. Cost: 1 Bash append. Saves re-reading reviewer JSON later.
+**Full forbidden/optimal-pattern lists + /clear-when/never rules + session-pressure checkpoint + edit-verification incident narrative:** `wiki/playbooks/discipline/context-window-management.md`. Memory mirrors: `feedback_context_window_management.md` + `feedback_edit_verification_discipline.md`.
 
-3. **Memory mirror for every cross-session-relevant rule/decision:** if it's worth following next session, it lives in `~/.claude/projects/.../memory/feedback_*.md`. `/clear` doesn't lose reasoning.
-
-4. **Compress in main context, expand in handoff:** main context carries `commit-SHA` + 1-line summary. Handoff carries full report. Anti-pattern: copy-pasting reviewer JSON into the commit message body.
-
-5. **CBM-first for every code question** (architecture.md §3): `get_code_snippet(qualified_name)` ≈ 500 tokens vs `Read(file)` ≈ 80K for typical .rs service file. Same for `search_graph` vs `Grep`.
-
-6. **/clear at natural checkpoint boundaries:**
-   - Pod completes + all commits land + `local-ci.sh --fast` rc=0 + no in-flight reviewer findings unhandled + memory mirror written → safe to `/clear`
-   - Major directive pivot (today's V1/V2 ban / OptiScript-everywhere / branding / context-mgmt) — write memory mirror first, THEN consider `/clear`
-
-7. **NEVER /clear when:**
-   - Reviewer batch in flight (findings not yet in handoff)
-   - Mid-pod with uncommitted patches in working tree
-   - Unresolved BLOCKING finding not dispositioned per §18.1
-   - Within 60s of an agent return (race against auto-notification)
-
-**Session pressure checkpoint (per §9):** at ≥ 70% context utilisation, write fresh handoff before `/clear`. The handoff IS the solution to context pressure, not a failure mode.
-
-**Cross-session resumption contract (per §13 autonomy protocol):** SessionStart hook surfaces:
-- Active feature + branch + ahead/behind
-- Latest handoff entry
-- Recent committed waves
-
-Agent reading the handoff continues without user re-stating intent. The MEMORY.md index lists durable rules; loading on relevance per topic file is the §3-discovery-order optimal path.
-
-**Audit gate (queued):** `quality:context-discipline-self-check` — scans for token-waste anti-patterns in main-loop tool calls (e.g. Read of >5KB log file when grep could suffice; inline-quoting reviewer JSON in commit body). Advisory until promoted.
-
-**Honesty contract under compression (per §1):** every claim STILL cites evidence (file:line / SHA / log path / exit code) even when compressed. Compression compresses VERBOSITY, never CITATIONS. If a claim would lose its citation under compression, expand it first.
-
-**Edit-verification discipline (durable; 2026-05-17 incident lesson):** the Edit tool's "file has been updated successfully" message is NOT a guarantee that the change persisted to disk. Incident 2026-05-17: two consecutive Edit calls on `.claude/rules/architecture.md` both reported success; `wc -l` later showed file unchanged at original size; the §27 content was lost on disk despite green tool responses. Root cause unconfirmed (likely harness cache vs disk race when concurrent agents are in flight, OR a `linter has modified file` post-write hook reverting our diff).
-
-Rules (apply to every critical edit):
-1. After ANY Edit on a canonical / rule / spec / commit-bound file, IMMEDIATELY verify via `grep -n "<distinctive-new-string>" <file>` OR `wc -l <file>` (expect new line count).
-2. NEVER trust the "successfully updated / file state is current" message alone.
-3. If verify fails: re-Read the file fresh (gets current disk state), then re-Edit. Do NOT amend a stale in-memory view.
-4. For multi-paragraph inserts: prefer a single Edit with the whole block over multiple smaller Edits — reduces the race window.
-5. For canonical-files mid-pod (other agents running): Read fresh BEFORE editing — concurrent agents may have shifted line numbers.
-
-Forbidden: committing a code/rule change without verifying the diff lands on disk (`git diff --stat` shows expected file). Honest failure mode is "Edit lost; re-applying" — never silent "I edited it" without verification.
-
-**Memory mirror:** `~/.claude/projects/-Users-adrian-deskmodal/memory/feedback_context_window_management.md` + `feedback_edit_verification_discipline.md` (durable per cross-session persistence pattern).
-
-**Pairs with:**
-- §1 (honesty — every claim cites; compression keeps citations)
-- §3 (MCP-first discovery — CBM avoids re-reads)
-- §4 (audit-by-path agent dispatch)
-- §9 (handoff protocol — durable state between sessions)
-- §13 (autonomy protocol — session resume contract)
-- §18.7 (always-parallel-always-verify — context held for in-flight work)
-- §18.7.2 (never-block continuous-parallel — handoff is the resume primitive)
-- §21 (spec-hygiene — specs are CANONICAL persistence; commits update specs)
-- §26.1 (continuous SDLC optimization — apply every learning to every surface)
+**Pairs with:** §1 (honesty) · §3 (MCP-first) · §9 (handoff) · §13 (resume) · §26.1 (apply-everywhere).
 
 ## 26.1 Continuous SDLC optimization — apply every learning to every surface (NEVER FORGOTTEN)
 
 **Cardinal directive (user 2026-05-19 verbatim — preserved per §1 honesty rule):** "ensure we're applying these optimisations to everything used by our SDLC, and all other optimisations, then ensure we remember to always optimise leveraging all of the learnings"
 
-**The rule:** every optimization pattern proven on ONE SDLC surface MUST be applied to EVERY equivalent surface workspace-wide. Optimizations compound; under-applied wins decay. The /loop wake protocol audits the 7 SDLC surfaces below for known anti-patterns BEFORE planning new work.
+**The rule:** every optimization pattern proven on ONE SDLC surface MUST be applied to EVERY equivalent surface workspace-wide. Optimizations compound; under-applied wins decay.
 
-**7 SDLC surfaces + their optimization patterns (canonical list):**
+**7 SDLC surfaces (the /loop-wake audit register):**
 
-| # | Surface | Anti-pattern signal | Optimization pattern | Reference |
-|---|---|---|---|---|
-| 1 | Auto-loaded rules (`.claude/rules/**`) | Any single file > 40K chars OR any deprecated/archive content auto-loaded | Stub + wiki playbook split (`wiki/playbooks/<theme>/`) OR move to `.claude/rules-archive/<date>/` | architecture.md F157 split 2026-05-19; §26 |
-| 2 | Auto-loaded CLAUDE.md | > 15K chars OR mirrored content from rules | Pointer + cross-ref only; canonical detail in topic files | §26 tier-1 canonical |
-| 3 | Agent prompts (`.claude/agents/*.md`) | > 35 lines body OR re-stated workflow rules | Frontmatter + ≤35-line body; cite `.claude/rules/<file>.md §N` | agents.md model tiering + skills |
-| 4 | Sub-agent dispatch (Agent tool) | Inline-quoting audit/spec/finding in prompt | Audit-by-path; agent reads source once | core.md §4 (durable) |
-| 5 | Code discovery | Grep/Read on `.rs/.ts/.tsx/.py` OR `wiki/**` | CBM-first / wiki-mcp first per question shape | core.md §3 + architecture.md §30 |
-| 6 | Verification (`local-ci.sh --fast`) | Workspace-wide rebuild when scope didn't change | Affected-mode + last-green-SHA diff base | architecture.md §29 |
-| 7 | Memory (`~/.claude/.../memory/`) | MEMORY.md > 24KB OR entries > 200 chars | Index ≤ one-line entries; detail in topic memory files | MEMORY.md schema |
+| # | Surface | Anti-pattern signal | Optimization pattern |
+|---|---|---|---|
+| 1 | Auto-loaded rules (`.claude/rules/**`) | Any single file > 40K chars OR deprecated content auto-loaded | Stub + wiki playbook split OR move to `.claude/rules-archive/<date>/` |
+| 2 | Auto-loaded CLAUDE.md | > 15K chars OR mirrored rule content | Pointer + cross-ref only |
+| 3 | Agent prompts (`.claude/agents/*.md`) | > 35-line body OR re-stated workflow rules | Frontmatter + ≤35-line body; cite `.claude/rules/<file>.md §N` |
+| 4 | Sub-agent dispatch | Inline-quoting audit/spec/finding | Audit-by-path; agent reads source once (core.md §4) |
+| 5 | Code discovery | Grep/Read on `.rs/.ts/.tsx/.py` OR `wiki/**` | CBM-first / wiki-mcp first per question shape |
+| 6 | Verification | Workspace-wide rebuild when scope unchanged | Affected-mode + last-green-SHA diff base (architecture.md §29) |
+| 7 | Memory | MEMORY.md > 24KB OR entries > 200 chars | Index ≤ one-line entries; detail in topic memory files |
 
-**The "apply everywhere" contract:**
+**Apply-everywhere contract:** when any optimization is proven, the NEXT /loop wake MUST (1) inventory the 7 surfaces for the same anti-pattern, (2) fix-in-wave OR scope-transfer per §18.1, (3) codify as a memory entry, (4) add an audit gate when mechanical.
 
-When any optimization pattern is proven (lands a wave green, removes a measurable inefficiency, or closes a user-directive), the orchestrator's NEXT /loop wake MUST:
+**Per-/loop-wake audit bash + the 14-row known-patterns "remember-to-optimize" register + banned postures:** `wiki/playbooks/discipline/sdlc-optimization-and-skills.md`. Memory mirror: `feedback_continuous_sdlc_optimization.md`.
 
-1. **Inventory the 7 surfaces** above for instances of the same anti-pattern.
-2. **For each match:** either fix in current wave OR scope-transfer to a named cleanup wave per §18.1.
-3. **Codify the pattern** as a memory entry + cross-link to the rule that introduced it.
-4. **Add an audit gate** when the pattern is mechanical (e.g., `quality:auto-loaded-rule-size-ceiling` flags any `.claude/rules/*.md` > 40K chars).
+**Pairs with:** §26 (parent) · §18.2 (5-axis hygiene — this is the 6th axis) · §18.4 (cleanup wave) · core.md §3 + §4 · architecture.md §28 + §29 + §30.
 
-**Per-/loop-wake audit hook (extends §26 Step-1):**
+## 26.2 Skill-invocation discipline — use the Skill tool correctly; USE our skills, never hand-roll them
 
-Add to the orient step (~10s):
+**Cardinal rule:** when a DeskModal skill covers the task, invoke it via the Skill tool — do NOT re-implement its logic inline. Hand-rolling a tier-A verify or a spec amend wastes tokens and drifts from the canonical schema.
 
-```bash
-# Surface 1: rule-tree size
-find .claude/rules -maxdepth 1 -name '*.md' -exec wc -c {} + | awk 'END{print "Auto-load rule-tree:", $1, "chars"}'
-# Hard threshold: total > 200K = act. Per-file > 40K = act.
+**Correct Skill-tool mechanics (terse):** invoke via the `Skill` tool with `skill: <name>` (no leading slash; plugin-namespaced as `plugin:namespace:skill`); pass `args` as a free-form string (skills are NOT typed-parameter APIs); invoke ONLY skills in the session's available-skills list (never invent from training data); a skill body runs synchronously in the main conversation and its `allowed-tools` frontmatter scopes tools while active; if a `<command-name>` tag is already in the turn the skill is ALREADY loaded — follow it directly.
 
-# Surface 6: any pre-existing drift?
-scripts/local-ci.sh --fast 2>&1 | grep -E '^(FAIL|RED)' | head -5
-```
-
-If thresholds breach: add findings to the wave's `open_concerns` with disposition CLOSED-IN-WAVE or SCOPE-TRANSFERRED per §18.1.
-
-**Known patterns to ALWAYS check on /loop wake (the "remember to optimize" register):**
-
-These are the durable optimization patterns that have shipped + the surface they apply to. New entries append; entries never silently disappear.
-
-| Pattern | Origin | Applies to |
-|---|---|---|
-| Stub-and-playbook split for >40K-char auto-loaded rule | architecture.md split 2026-05-19 (commit e608e32) | Every `.claude/rules/*.md` |
-| Move legacy/deprecated rules outside auto-load tree | rules-archive move 2026-05-19 | Future `_deprecated-*/` under `.claude/rules/` |
-| Audit-by-path agent dispatch (paths not inline quotes) | core.md §4 amendment 2026-05-16 | Every `Agent()` dispatch |
-| CBM-first for code-structure questions | core.md §3 (durable) | Every `.rs/.ts/.tsx/.py` discovery |
-| wiki-mcp-first for synthesis questions | core.md §3 + architecture.md §30 | Every governance/inventory/brand question |
-| Per-question-shape MCP routing | architecture.md §30 | Every diagnostic / library-doc / visual question |
-| Tier A/B/C verification batching | architecture.md §29 + quality.md §18.7.1 | Every wave's verification scope decision |
-| Cache-aware ScheduleWakeup (60-270s or 1200-1800s; never 300s) | architecture.md §28 | Every `/loop` heartbeat |
-| Warm-agent SendMessage for true continuations | parallelism.md §4 + agents.md | Every wave-N+1 with same persona |
-| Per-file ≤300 LOC split-never-cut | architecture.md §24 | Every production source file |
-| Per-capability repo + tier metadata | architecture.md §27 | Every new capability |
-| Auto-load tree size ceiling (~150-200K chars total) | This rule 2026-05-19 | Every change to `.claude/rules/**` or CLAUDE.md |
-| Workspace task list size ceiling — ≤25 active items; aggressively `TaskUpdate status=deleted` completed-historical at every /loop wake; durable audit log lives in `.session-state/handoffs/<feature>.md`, NOT the task list | 2026-05-23 sweep (170→12 tasks; ~85% reminder bloat reduction) | Every /loop wake + session-start |
-| Agent dispatch hard caps — ≤3 files write-set, ≤300 LOC/file, ≤5 read paths pre-staged, ≤480s self-imposed budget (600s harness limit is failure not target), Tier-A scope only (no workspace tests, no workspace clippy fix) | F156 G1-W1 timeout 2026-05-19 (commit cycle 4a43cb6) | Every impl `Agent()` dispatch |
-| Reviewers ONLY at phase-boundary (read-only parallel pod); world-class verification batched per `quality.md §18.8`, NOT per-wave | F156 phase 1 BLOCK verdict 2026-05-19 | Every wave's APPROVE path |
-| Explicit `git stash` ban in every impl-persona prompt + use `git show HEAD:<path>` for baselines | F156 P1-F/G/H all violated stash ban 2026-05-19 | Every impl `Agent()` dispatch |
-| LSP/rust-analyzer diagnostics are advisory ONLY — `cargo check` is the verification truth (LSP cache flaps in hot sessions) | F156 multiple stale-LSP false-blocks 2026-05-19 | Every Rust agent return |
-
-**Banned posture:**
-- "We'll apply the optimization elsewhere later" — applies to the 7 surfaces NOW or scope-transfers per §18.1.
-- "It only matters for X" — every optimization compounds; missed application leaks compound interest.
-- Adding a rule/spec/skill without checking auto-load size impact (run `find .claude/rules -name '*.md' -exec wc -c {} +` BEFORE landing).
-- Restoring deprecated content into `.claude/rules/**` (it auto-loads; use `.claude/rules-archive/<date>/` instead).
-
-**Memory mirror:** `~/.claude/projects/-Users-adrian-deskmodal/memory/feedback_continuous_sdlc_optimization.md` (durable per cross-session persistence pattern).
-
-**Pairs with:**
-- §1 (honesty — never claim "optimized" without measuring the size before+after)
-- §26 (context-window management — this rule's parent)
-- §18.2 (5-axis hygiene — this rule is the 6th axis: optimization hygiene)
-- §18.4 (per-iteration cleanup wave — natural home for this rule's audits)
-- core.md §3 + §4 (MCP-first + audit-by-path; both ARE optimizations enforced via this rule)
-- architecture.md §28 + §29 + §30 (the three architecture-level optimization rules this rule binds workspace-wide)
-
-## §26.2 Skill-invocation discipline — use the Skill tool correctly; USE our skills, never hand-roll them
-
-**Cardinal rule:** when a DeskModal skill covers the task, invoke it via the Skill tool — do NOT re-implement its logic inline. Hand-rolling a handoff write, a mesh claim, a findings query, a tier-A verify, or a spec amend wastes tokens, drifts from the canonical schema, and bypasses the conflict/heartbeat machinery.
-
-**Correct Skill-tool mechanics (verified v2.1.158, docs https://code.claude.com/docs/en/skills.md):**
-- Invoke via the `Skill` tool with `skill: <name>` (no leading slash, no `--` prefix). Plugin-namespaced skills accept either `plugin:namespace:skill` or the bare `skill` form.
-- Pass `args` as a free-form string; skills embed their own instructions and read inputs from args + context. Skills are NOT function-call APIs with typed parameters.
-- Invoke ONLY skills that appear in the session's available-skills list (or a `/<name>` the user typed). NEVER invent a skill name from training data.
-- A skill body executes synchronously in the main conversation. `allowed-tools` / `disallowed-tools` frontmatter scopes the model's tools while the skill is active — respect it.
-- If a `<command-name>` tag is already present in the turn, the skill is ALREADY loaded — follow its instructions directly; do NOT re-invoke the Skill tool.
-
-**USE-our-skills mandate (the 5 canonical DeskModal SDLC skills):**
+**USE-our-skills mandate (canonical SDLC skills):**
 
 | Task | Invoke (do not hand-roll) |
 |---|---|
-| Write a session handoff (≥70% ctx, before `/clear`, before scope pivot) | `deskmodal-handoff-write` |
-| Declare write-set bounds + check cross-session conflicts at session start | `deskmodal-mesh-claim` |
-| Surface other sessions' findings (24h) OR share a cross-session pattern | `deskmodal-mesh-findings` |
 | Scoped Tier-A verify (`cargo check -p` / `cargo test -p` / `pnpm --filter`) after an impl wave | `deskmodal-verify-tier-a` |
 | Atomic spec §6 / benchmark / open-concern update (per §21) | `deskmodal-spec-amend` |
 
-These are the canonical implementations of the discipline.md §26 persistence-tier protocol, the §33 Session Mesh, the §18.7.1 Tier-A cadence, and the §21 spec-hygiene contract. Re-implementing any of them inline is a banned posture (forbidden per §26.1 "apply every learning to every surface").
+Built-in commands (`/clear`, `/compact`, `/review`, `/security-review`, `/goal`) are NOT skills — they are harness commands; never route them through the Skill tool. Full mechanics detail in `wiki/playbooks/discipline/sdlc-optimization-and-skills.md`.
 
-**Cross-refs:** discipline.md §26 (context-window persistence tiers) + §26.1 (continuous-SDLC optimization, surface #3 agent prompts) + agents.md §"Skills preloaded (F157 Layer 3)" (every persona declares these in frontmatter). Built-in commands (`/clear`, `/compact`, `/code-review`, `/goal`) are NOT skills — they are harness commands; never route them through the Skill tool.
+**Cross-refs:** §26 (persistence tiers) · §26.1 (surface #3 agent prompts) · agents.md §"Skills preloaded".
 
-## 9. Handoff protocol
+## 33. Multi-session coordination — native worktree + single-session default
 
-Commit-driven. When a commit moves task state, the post-commit hook appends to the active handoff (`.session-state/handoff.md` by default, or a per-feature handoff under `.session-state/handoffs/<id>.md`). You edit free-form context on the next turn if needed.
+**Stub (Session Mesh retired 2026-06-07 per `feedback_sdlc_lean_toward_native`).** The bespoke filesystem mesh (`.session-state/mesh/` + 8 `scripts/session-mesh/*.sh` + the `deskmodal-mesh-claim`/`deskmodal-mesh-findings` skills) is replaced by native Claude Code primitives: **per-agent/Workflow `isolation:"worktree"`** for FS-level write-set isolation, **single-session default** as the operating posture, and **native auto-memory** as the cross-session findings bus. Cross-session write-set conflict avoidance is handled by worktree isolation + the `parallel-sessions.md` canonical-file-ownership contract; live findings persist via memory tier 2 + handoff tier 3 (§26). No mesh-claim/heartbeat machinery to run.
 
-Session pressure checkpoint: at ≥ 70% of context window, write a fresh handoff before `/clear`. Below that, commits are the durable state; no preemptive handoffs required.
-
-
-## 12. Tool discipline
-
-- No `--no-verify` on commits unless you've proven the hook is producing a false positive and document the diagnosis in the commit body.
-- No `--force` push.
-- No deleting branches, files, or data without confirming the state is recoverable.
-- No invoking `sync-specs.sh --apply` while another session is actively editing sub-repo canonical files — canonical file ownership is split, see `.claude/rules/parallel-sessions.md`.
-- One terminal + one cloud + one `/launch --verify` in flight at a time per machine (launch-lockfile at `/tmp/deskmodal-launch.lock`).
-
-
-## 13. Autonomy protocol
-
-Goal: user never re-pastes prompts or re-explains context. State lives in git + `.session-state/`.
-
-On session start, the `context-load` SessionStart hook prints: active feature, branch + ahead/behind, gate state, latest handoff entry. Read that before asking the user anything.
-
-When resuming a task per F157 Layer 9 autonomous-SOTA-delivery loop:
-1. Read `.session-state/handoff.md` (workspace) or `.session-state/handoffs/<feature>.md` (per-feature). Skip any hypothesis in the "Dead-ends" section.
-2. Read the active feature's `spec.md` + `benchmark.md` (if applicable).
-3. **F157 Layer 11**: Invoke `/deskmodal-mesh-claim <feature> <program> <write-set-globs>` to declare write-set bounds + check for cross-session conflicts. If conflict, resolve before proceeding.
-4. **F157 Layer 11**: Invoke `/deskmodal-mesh-findings` to surface findings from other parallel sessions in the last 24h.
-5. Re-verify live state — gates, branch, dirty files — don't trust the handoff as ground truth. Handoff is a SNAPSHOT; the gate file is LIVE.
-6. Declare `/effort xhigh` unless the task is mechanical (then `medium`).
-7. Declare `/goal <terminal-condition>` if the work has a verifiable end-state.
-8. Continue. Do not ask the user to re-state the goal unless you have hit a BLOCK.
-
-When `--resume` or `--continue`: a goal that was active when the session ended is restored. Mesh claim is recreated by SessionStart hook.
-
-Between sessions:
-- A commit is the durable checkpoint. Post-commit hook appends to the handoff automatically.
-- `.session-state/active-feature` (optional) holds one feature-id string; the statusline surfaces it.
-- Never claim "I don't have context" — write a handoff and continue.
-
-
-## 14. Output style
-
-Claude Code default output style for this workspace is `concise`. Prefer:
-- Short, dense sentences. Commands over descriptions.
-- State changes and decisions directly. Cite file:line, exit codes, SHAs.
-- No teaching tone. No motivational framing. No "let me explain."
-- End-of-turn summary = 1-2 sentences MAX. What changed + what's next.
-- Working update = 1 sentence per key moment (finding, direction change, blocker).
-
+**Pairs with:** parallelism.md §4 (worktree isolation per dispatch) · parallel-sessions.md (canonical-file ownership) · §26 (persistence tiers 2+3 carry findings).
