@@ -86,6 +86,106 @@
       "tags": ["scripting", "indicators", "backtesting", "pine"],
       "featured": true,
       "asset_name_template": "optiscript-{version}-{platform}.dmpkg"
+    },
+    {
+      "comment": "F133-W13 first-party indicator packs. These cdylib services are built locally by scripts/build-dist.sh and walked from dist/plugins/<id>/; this source block carries ONLY their category + per-indicator metadata so scripts/lib/build_appmarket_catalog.py emits the `indicator-pack` category + indicators[] preview block. The platform/signature/checksums fields come from the local plugin walk, not a GitHub release. Schema: schema/indicator-pack.md. Validated by scripts/validate_catalog.py --category indicator-pack.",
+      "owner": "Desk-Modal",
+      "repo": "deskmodal",
+      "mode": "local_indicator_packs",
+      "content_type": "service",
+      "services": [
+        {
+          "id": "deskmodal.footprint",
+          "display_name": "Footprint / Cluster Delta",
+          "tagline": "Per-bar bid/ask volume grid, POC, stacked-imbalance detection",
+          "categories": ["indicator-pack", "charting"],
+          "featured": true,
+          "indicators": [
+            {
+              "id": "footprint.cluster-delta",
+              "display_name": "Cluster Delta Footprint",
+              "category": "volume",
+              "description": "Per-bar bid/ask volume grid; each price cell coloured by cluster delta (ask_volume - bid_volume). Surfaces who moved price, not just that it moved.",
+              "inputs": ["bid_volume", "ask_volume", "bar_period_minutes", "cell_granularity_ticks"],
+              "outputs": ["delta", "cell_grid"]
+            },
+            {
+              "id": "footprint.poc-imbalance",
+              "display_name": "POC Bid/Ask Imbalance",
+              "category": "volume",
+              "description": "Point-of-control bid/ask imbalance: the intra-bar price level with the largest absolute cluster delta, marked as the bar's order-flow control price.",
+              "inputs": ["bid_volume", "ask_volume", "imbalance_ratio"],
+              "outputs": ["poc_price", "poc_delta"]
+            },
+            {
+              "id": "footprint.stacked-imbalance",
+              "display_name": "Stacked Imbalance",
+              "category": "pattern",
+              "description": "Bookmap-style unfinished-business detector: flags when the top or bottom price level of a bar prints with non-zero delta, marking a high-probability retest target.",
+              "inputs": ["bid_volume", "ask_volume", "imbalance_ratio"],
+              "outputs": ["has_unfinished_business", "retest_target"]
+            }
+          ]
+        },
+        {
+          "id": "deskmodal.tpo",
+          "display_name": "Market Profile (TPO)",
+          "tagline": "Letter-grid, POC, Value Area, single prints, Initial Balance",
+          "categories": ["indicator-pack", "charting"],
+          "featured": true,
+          "indicators": [
+            {
+              "id": "tpo.market-profile",
+              "display_name": "TPO Market Profile",
+              "category": "volume",
+              "description": "Time-Price-Opportunity letter grid aggregating time-at-price across the session; renders the classic Market Profile distribution with POC and Value Area.",
+              "inputs": ["price", "tpo_period_minutes", "value_area_pct"],
+              "outputs": ["tpo_grid", "poc_price", "value_area_high", "value_area_low"]
+            },
+            {
+              "id": "tpo.single-prints",
+              "display_name": "Single Prints",
+              "category": "pattern",
+              "description": "Detects single-print TPO levels — prices touched in only one time bracket — flagging low-acceptance zones that often act as fast-fill gaps on retest.",
+              "inputs": ["tpo_grid"],
+              "outputs": ["single_print_levels"]
+            },
+            {
+              "id": "tpo.initial-balance",
+              "display_name": "Initial Balance",
+              "category": "volatility",
+              "description": "Marks the Initial Balance range (first N brackets of the session) and its extensions, the canonical Market Profile measure of early-session conviction.",
+              "inputs": ["tpo_grid", "initial_balance_brackets"],
+              "outputs": ["ib_high", "ib_low", "ib_extension"]
+            }
+          ]
+        },
+        {
+          "id": "deskmodal.volume-profile",
+          "display_name": "Volume Profile (VPVR)",
+          "tagline": "Visible-Range Volume Profile — POC, Value Area, HVN/LVN overlay",
+          "categories": ["indicator-pack", "charting"],
+          "featured": true,
+          "indicators": [
+            {
+              "id": "volume-profile.vpvr",
+              "display_name": "Visible-Range VPVR",
+              "category": "volume",
+              "description": "Aggregates traded volume by price across the visible chart range into a horizontal histogram; surfaces point-of-control and Value Area for the displayed window.",
+              "inputs": ["price", "volume", "row_count", "value_area_pct"],
+              "outputs": ["volume_histogram", "poc_price", "value_area_high", "value_area_low"]
+            },
+            {
+              "id": "volume-profile.hvn-lvn",
+              "display_name": "HVN / LVN Nodes",
+              "category": "volume",
+              "description": "Classifies profile rows into High-Volume Nodes (acceptance / magnet) and Low-Volume Nodes (rejection / fast-move zones) for support-resistance mapping.",
+              "inputs": ["volume_histogram", "hvn_threshold_pct", "lvn_threshold_pct"],
+              "outputs": ["hvn_levels", "lvn_levels"]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
