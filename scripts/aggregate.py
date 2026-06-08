@@ -532,6 +532,48 @@ def build_platforms_map(
     return out
 
 
+def capability_metadata(
+    manifest_data: dict, cfg: dict
+) -> tuple[str, Optional[dict]]:
+    """
+    Resolve the §27 capability tier + §27.11 resource footprint for an entry.
+
+    Tier comes from `plugin.toml [bundle] tier` (or a sources.json
+    `capability_tier` override), lowercased, defaulting to "optional" when
+    undeclared (the most conservative footprint-budget bucket, matching the
+    plugin-index `CapabilityTier::default`). Resources come from `[resources]`
+    (or a sources.json `resources` override) and are emitted ONLY when the
+    block is complete + numeric — a partial/absent block yields `None` (never a
+    zero-filled placeholder), so consumers read absent footprint as "unknown".
+    """
+    bundle = manifest_data.get("bundle")
+    raw_tier = cfg.get("capability_tier")
+    if raw_tier is None and isinstance(bundle, dict):
+        raw_tier = bundle.get("tier")
+    tier = str(raw_tier).strip().lower() if isinstance(raw_tier, str) else "optional"
+    if tier not in ("required", "recommended", "optional"):
+        tier = "optional"
+
+    raw_res = cfg.get("resources")
+    if raw_res is None:
+        raw_res = manifest_data.get("resources")
+    resources: Optional[dict] = None
+    if isinstance(raw_res, dict):
+        fields = ("disk_mb", "ram_mb_idle", "ram_mb_peak", "cpu_pct_steady")
+        vals = {f: raw_res.get(f) for f in fields}
+        if all(
+            isinstance(v, (int, float)) and not isinstance(v, bool) and v >= 0
+            for v in vals.values()
+        ):
+            resources = {
+                "disk_mb": int(vals["disk_mb"]),
+                "ram_mb_idle": int(vals["ram_mb_idle"]),
+                "ram_mb_peak": int(vals["ram_mb_peak"]),
+                "cpu_pct_steady": float(vals["cpu_pct_steady"]),
+            }
+    return tier, resources
+
+
 def build_entry_single(
     source: dict,
     release: Release,
@@ -582,6 +624,8 @@ def build_entry_single(
         else None
     ) or "0.0.0"
 
+    _cap_tier_single, _resources_single = capability_metadata(manifest_data, source)
+
     return {
         "id": source["id"],
         "owner": owner,
@@ -610,9 +654,11 @@ def build_entry_single(
         "icon_url": f"https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/{source['id']}-market.svg",
         "screenshots": source.get("screenshots", []),
         "homepage": f"https://github.com/{owner}/{repo}",
-        "license": source.get("license", "Proprietary"),
+        "license": source.get("license") or "Proprietary",
         "dependencies": source.get("dependencies", []),
         "capabilities": source.get("capabilities", {}),
+        "capability_tier": _cap_tier_single,
+        **({"resources": _resources_single} if _resources_single else {}),
         "platforms": platforms,
         "manifest": {
             "url": manifest_url,
@@ -686,6 +732,8 @@ def build_entries_multi(
             else None
         ) or "0.0.0"
 
+        _cap_tier_multi, _resources_multi = capability_metadata(manifest_data, plugin)
+
         entries.append({
             "id": plugin["id"],
             "owner": owner,
@@ -714,9 +762,11 @@ def build_entries_multi(
             "icon_url": f"https://raw.githubusercontent.com/Desk-Modal/appmarket/main/icons/{plugin['id']}-market.svg",
             "screenshots": plugin.get("screenshots", []),
             "homepage": f"https://github.com/{owner}/{repo}",
-            "license": plugin.get("license", "Proprietary"),
+            "license": plugin.get("license") or "Proprietary",
             "dependencies": plugin.get("dependencies", []),
             "capabilities": plugin.get("capabilities", {}),
+            "capability_tier": _cap_tier_multi,
+            **({"resources": _resources_multi} if _resources_multi else {}),
             "platforms": platforms,
             "manifest": {
                 "url": mf_asset.url if mf_asset else None,
@@ -815,6 +865,7 @@ def aggregate(sources_path: str, out_path: str, token: Optional[str], mirror: bo
             continue
         seen_ids.add(bp["id"])
         publisher = bp.get("publisher", {})
+        _cap_tier_bp, _resources_bp = capability_metadata({}, bp)
         catalog.append({
             "id": bp["id"],
             "owner": publisher.get("id", "deskmodal"),
@@ -835,7 +886,9 @@ def aggregate(sources_path: str, out_path: str, token: Optional[str], mirror: bo
             "latest_version": bp.get("version", "1.0.0"),
             "min_deskmodal_version": bp.get("min_deskmodal_version", "0.0.0"),
             "published_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "license": bp.get("license", "Proprietary"),
+            "license": bp.get("license") or "Proprietary",
+            "capability_tier": _cap_tier_bp,
+            **({"resources": _resources_bp} if _resources_bp else {}),
             "platforms": {"win-x64": True, "darwin-arm64": True, "linux-x64": True},
         })
         print(f"  [+] {bp['id']} @ {bp.get('version', '1.0.0')} (bundled)")

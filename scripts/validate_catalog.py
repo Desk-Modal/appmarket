@@ -37,11 +37,22 @@ import re
 import sys
 from typing import Any, Optional
 
+from verification_gateway import (
+    validate_capability_entry,
+    validate_manifest_capability,
+)
+
 # ----------------------------------------------------------------------
 # Indicator-pack schema (mirrors schema/indicator-pack.md)
 # ----------------------------------------------------------------------
 
 INDICATOR_PACK_CATEGORY = "indicator-pack"
+
+# Cross-cutting §27 capability contract (license + tier + footprint). Unlike
+# indicator-pack (a category-scoped content schema), this applies to EVERY
+# published capability entry, so it is selected via --category but not filtered
+# by an entry's `categories[]`.
+CAPABILITY_CATEGORY = "capability"
 
 # Closed indicator-category set. Adding a value requires coordinated edits
 # in plugins/tradesurface/indicator-registry, schema/indicator-pack.md, and
@@ -301,7 +312,7 @@ def main() -> int:
     parser.add_argument(
         "--category",
         required=True,
-        choices=[INDICATOR_PACK_CATEGORY],
+        choices=[INDICATOR_PACK_CATEGORY, CAPABILITY_CATEGORY],
         help="Category schema to apply.",
     )
     parser.add_argument(
@@ -326,7 +337,11 @@ def main() -> int:
         except (OSError, ValueError, UnicodeDecodeError) as e:
             print(f"failed to parse {args.manifest}: {e}", file=sys.stderr)
             return 2
-        issues = validate_indicator_pack(parsed)
+        if args.category == CAPABILITY_CATEGORY:
+            # Publisher pre-publish gate: FULL presence enforcement (§27.12/§27.11).
+            issues = validate_manifest_capability(parsed)
+        else:
+            issues = validate_indicator_pack(parsed)
         label = parsed.get("plugin", {}).get("id", args.manifest)
         print(f"validate_catalog --category {args.category}")
         print(_format_issues(label, issues))
@@ -357,7 +372,28 @@ def main() -> int:
         print(f"{args.index} missing required 'catalog' array", file=sys.stderr)
         return 2
 
-    matched: list[dict[str, Any]] = [
+    if args.category == CAPABILITY_CATEGORY:
+        # The capability contract applies to EVERY entry. Index-mode enforces
+        # VALIDITY of declared capability metadata + license presence (legacy
+        # entries predating the contract pass; full presence is enforced at the
+        # publisher manifest gate). Bundled entries are exempt — they ship
+        # inside the binary and carry no installable footprint of their own.
+        matched = [
+            e for e in catalog if isinstance(e, dict) and not e.get("bundled")
+        ]
+        print(f"validate_catalog --category {args.category} ({len(matched)} entries)")
+        failed = 0
+        for entry in matched:
+            issues = validate_capability_entry(entry, require_footprint=False)
+            print(_format_issues(entry.get("id", "<unknown>"), issues))
+            if issues:
+                failed += 1
+        if failed:
+            print(f"\nFAIL: {failed} entry/entries failed validation", file=sys.stderr)
+            return 1
+        return 0
+
+    matched = [
         e
         for e in catalog
         if isinstance(e, dict)

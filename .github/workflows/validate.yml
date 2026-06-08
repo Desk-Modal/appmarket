@@ -168,6 +168,19 @@ jobs:
           echo "dry-run output:"
           python3 -c "import json; d=json.load(open('/tmp/index-dryrun.json')); print(f'{len(d[\"catalog\"])} entries'); [print(f'  {e[\"id\"]} @ {e[\"latest_version\"]} platforms={sorted([p for p,v in e[\"platforms\"].items() if v])}') for e in d['catalog']]"
 
+      - name: Verification Gateway — capability contract (license + tier + footprint)
+        run: |
+          # §27/§27.12 Verification Gateway: every freshly-aggregated entry must
+          # carry a valid license + capability_tier, and any declared [resources]
+          # block must be well-formed. Runs against the dry-run output (the shape
+          # actually published). Full footprint PRESENCE is enforced at the
+          # publisher manifest boundary (validate_catalog --category capability
+          # --manifest plugin.toml).
+          python3 scripts/validate_catalog.py --category capability --index /tmp/index-dryrun.json
+
+      - name: Verification Gateway — unit tests
+        run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
+
   ci-all-green:
     name: "CI: all green"
     needs: [changes, validate-json]

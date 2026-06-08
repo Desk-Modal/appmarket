@@ -80,14 +80,19 @@
         "additionalProperties": true
       }
     },
-    "bundle": {
+    "capability_tier": {
+      "description": "Install tier from `plugin.toml [bundle] tier` per architecture.md §27. Lowercase to match the plugin.toml field + the plugin-index discovery types. Absent ⇒ consumers default to `optional`. The Verification Gateway (`validate_catalog.py --category capability`) enforces presence at the publisher manifest boundary.",
+      "enum": ["required", "recommended", "optional"]
+    },
+    "resources": {
       "type": "object",
-      "description": "Mirror of `plugin.toml [bundle]` per architecture.md §27 (3-tier metadata). Aggregator copies fields verbatim so the storefront can render tier badges + footprint without re-fetching the manifest.",
+      "description": "Resource footprint from `plugin.toml [resources]` per architecture.md §27.11, mirrored so the storefront can render footprint + drive step-up/step-down budget UX without re-fetching the manifest. Emitted only when the block is complete; absent ⇒ footprint unknown (never zero-filled).",
+      "required": ["disk_mb", "ram_mb_idle", "ram_mb_peak", "cpu_pct_steady"],
       "properties": {
-        "tier": { "enum": ["REQUIRED", "RECOMMENDED", "OPTIONAL"] },
         "disk_mb": { "type": "number", "minimum": 0 },
         "ram_mb_idle": { "type": "number", "minimum": 0 },
-        "ram_mb_peak": { "type": "number", "minimum": 0 }
+        "ram_mb_peak": { "type": "number", "minimum": 0 },
+        "cpu_pct_steady": { "type": "number", "minimum": 0 }
       },
       "additionalProperties": true
     },

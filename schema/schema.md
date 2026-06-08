@@ -109,6 +109,18 @@ install if nothing matches and `wasm` is absent.
     "fdc3_channels":        ["deskmodal.paper-trading"]
   },
 
+  // ---------- capability tier + footprint (architecture §27 / §27.11) ----------
+  "capability_tier": "optional",            // "required" | "recommended" | "optional"
+                                            // from plugin.toml [bundle] tier (lowercase,
+                                            // matching the plugin-index discovery types);
+                                            // omitted ⇒ consumers default to "optional"
+  "resources": {                            // from plugin.toml [resources]; emitted only
+    "disk_mb":        80,                   // when complete (never zero-filled — an absent
+    "ram_mb_idle":    200,                  // block means footprint unknown)
+    "ram_mb_peak":    400,
+    "cpu_pct_steady": 1.5
+  },
+
   // ---------- per-platform delivery ----------
   "platforms": {
     "win32-x64": {
@@ -159,6 +171,16 @@ install if nothing matches and `wasm` is absent.
 7. **Dependencies** are resolved lazily at install time, not by the
    aggregator. The aggregator only validates that the `id` string
    parses.
+8. **`capability_tier` + `resources`** come from `plugin.toml`'s
+   `[bundle] tier` + `[resources]` (architecture §27 / §27.11). Tier is
+   lowercased and defaults to `optional`; `resources` is emitted only when
+   the block is complete. The **Capability Verification Gateway**
+   (`scripts/verification_gateway.py`, wired via
+   `validate_catalog.py --category capability`) is the §27.12 enforcement:
+   in manifest mode (publisher pre-publish) it REJECTS (rc≠0) a manifest
+   missing `[license] spdx`, `[bundle] tier`, or a complete `[resources]`
+   block; in index mode it validates every published entry's declared
+   capability metadata + license presence.
 
 ## Client consumption
 
