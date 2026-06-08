@@ -81,6 +81,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.DESKMODAL_REPO_TOKEN }}
         run: python3 scripts/aggregate.py --sources sources.json --out index.json
 
+      - name: Verification Gateway — gate the published catalog (fail-closed)
+        # §27/§27.12 enforcement on the ACTUAL published artifact, BEFORE
+        # signing. This is the real publish path (aggregate.yml pushes the
+        # signed index.json to protected main via admin PAT, bypassing the
+        # validate.yml status checks), so the gateway MUST run here or it
+        # never sees what ships. Index-mode: every entry must carry a valid
+        # license + capability_tier and a well-formed [resources] block when
+        # declared. rc≠0 aborts the run before sign+push — a malformed
+        # tier/footprint or missing license can never reach a signed catalog.
+        # (Full footprint PRESENCE is enforced at the publisher manifest
+        # boundary via `validate_catalog.py --category capability --manifest`.)
+        run: python3 scripts/validate_catalog.py --category capability --index index.json
+
       - name: Sign index.json with DeskModal publisher key
         # 113-A iter24 F-071 — drop the `if: env.SIGNING_KEY != ''`
         # guard. Previous behaviour: if the secret was unset the

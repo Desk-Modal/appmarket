@@ -190,6 +190,53 @@ class TestAggregatorEmission(unittest.TestCase):
         self.assertIsInstance(res["disk_mb"], int)
         self.assertIsInstance(res["cpu_pct_steady"], float)
 
+    def test_partial_source_override_merges_over_manifest(self):
+        # A partial sources override refines, not replaces, the manifest block.
+        _, res = capability_metadata(
+            {"resources": dict(GOOD_RESOURCES)}, {"resources": {"disk_mb": 9}}
+        )
+        self.assertEqual(res["disk_mb"], 9)
+        self.assertEqual(res["ram_mb_idle"], 200)  # retained from manifest
+
+    def test_complete_source_override_without_manifest(self):
+        _, res = capability_metadata({}, {"resources": dict(GOOD_RESOURCES)})
+        self.assertEqual(res["disk_mb"], 80)
+
+    def test_whitespace_tier_normalized_by_aggregator(self):
+        # Aggregator is lenient (strips); the strict gate rejects the raw value.
+        tier, _ = capability_metadata({"bundle": {"tier": "  Optional  "}}, {})
+        self.assertEqual(tier, "optional")
+        self.assertTrue(validate_capability_tier("  Optional  ", required=True))
+
+
+class TestUncoveredBranches(unittest.TestCase):
+    def test_resources_cpu_missing_and_negative(self):
+        missing = {k: v for k, v in GOOD_RESOURCES.items() if k != "cpu_pct_steady"}
+        self.assertTrue(validate_resources(missing, required=True))
+        neg = dict(GOOD_RESOURCES, cpu_pct_steady=-0.5)
+        self.assertTrue(validate_resources(neg, required=False))
+
+    def test_resources_cpu_zero_is_valid(self):
+        ok = dict(GOOD_RESOURCES, cpu_pct_steady=0)
+        self.assertEqual(validate_resources(ok, required=True), [])
+
+    def test_entry_non_dict_rejected(self):
+        self.assertTrue(validate_capability_entry("not-a-dict", require_footprint=False))
+
+    def test_manifest_non_dict_rejected(self):
+        self.assertTrue(validate_manifest_capability("not-a-dict"))
+
+    def test_manifest_advisory_fields_must_be_nonempty_strings(self):
+        m = {
+            "license": {"spdx": "MIT", "notice": "   "},
+            "bundle": {"tier": "optional"},
+            "resources": dict(GOOD_RESOURCES),
+        }
+        self.assertTrue(validate_manifest_capability(m))
+
+    def test_tier_as_list_rejected(self):
+        self.assertTrue(validate_capability_tier(["optional"], required=False))
+
 
 if __name__ == "__main__":
     unittest.main()

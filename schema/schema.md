@@ -26,6 +26,13 @@ Every published version of this file is also signed with the DeskModal
 Ed25519 publisher key and the detached signature is served at
 `index.json.sig` next to the JSON.
 
+This `index.json` is a SEPARATE catalog from the plugin-index
+`plugin-index.json` (Rust discovery types in `marketplace/plugin-index`):
+distinct files, distinct schemas, distinct consumers — appmarket's entries
+are NOT deserialized into plugin-index's `PluginEntry`. The two share the
+`capability_tier` (lowercase) + `resources` vocabulary deliberately, for
+cross-repo consistency, not because one feeds the other.
+
 ## Top-level shape
 
 ```jsonc

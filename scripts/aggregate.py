@@ -542,9 +542,16 @@ def capability_metadata(
     `capability_tier` override), lowercased, defaulting to "optional" when
     undeclared (the most conservative footprint-budget bucket, matching the
     plugin-index `CapabilityTier::default`). Resources come from `[resources]`
-    (or a sources.json `resources` override) and are emitted ONLY when the
-    block is complete + numeric — a partial/absent block yields `None` (never a
-    zero-filled placeholder), so consumers read absent footprint as "unknown".
+    (or a sources.json `resources` override MERGED over the manifest, so a
+    partial override augments rather than destroys the manifest footprint) and
+    are emitted ONLY when the merged block is complete + numeric — a
+    partial/absent block yields `None` (never a zero-filled placeholder), so
+    consumers read absent footprint as "unknown".
+
+    Normalization here is intentionally LENIENT (lowercase/strip tier, coerce
+    invalid → "optional", truncate float disk/ram to the plugin-index u32
+    shape) — the STRICT publisher gate (`verification_gateway`) rejects the same
+    malformed values at publish time; the aggregator never emits a broken entry.
     """
     bundle = manifest_data.get("bundle")
     raw_tier = cfg.get("capability_tier")
@@ -554,9 +561,15 @@ def capability_metadata(
     if tier not in ("required", "recommended", "optional"):
         tier = "optional"
 
-    raw_res = cfg.get("resources")
-    if raw_res is None:
-        raw_res = manifest_data.get("resources")
+    # Merge a sources.json override over the manifest block — a partial override
+    # (e.g. just disk_mb) refines the manifest footprint instead of replacing
+    # and silently dropping it.
+    merged: dict = {}
+    if isinstance(manifest_data.get("resources"), dict):
+        merged.update(manifest_data["resources"])
+    if isinstance(cfg.get("resources"), dict):
+        merged.update(cfg["resources"])
+    raw_res: Optional[dict] = merged or None
     resources: Optional[dict] = None
     if isinstance(raw_res, dict):
         fields = ("disk_mb", "ram_mb_idle", "ram_mb_peak", "cpu_pct_steady")
