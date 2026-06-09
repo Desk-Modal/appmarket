@@ -144,6 +144,16 @@ install if nothing matches and `wasm` is absent.
     ]
   },
 
+  // ---------- offering: DeskModal-MANAGED selling metadata (architecture §27.12) ----------
+  "offering": {                             // the publisher-LISTED "price tag" DeskModal sells at
+    "model":          "subscription",       // subscription | per-seat | per-api-call | one-time | trial
+    "price":          "$29/mo",             // display token; the money flows through DeskModal, not the publisher
+    "trial_days":     14,                   // default 0
+    "required_grants": ["market-data"]      // DISPLAY-only; enforcement = runtime has_grant + /api/entitlements
+  },                                        // NOT a licensing authority. NO publisher license_check_endpoint —
+                                            // licensing/verification/entitlement are ALWAYS the DeskModal backend
+                                            // (core-server-api). Present only on a paid App (non-empty price).
+
   // ---------- per-platform delivery ----------
   "platforms": {
     "win32-x64": {
@@ -216,6 +226,26 @@ install if nothing matches and `wasm` is absent.
    for indicator/algo/screener/alert kinds) + license presence. The
    entry-level Ed25519 `signature` is reused verbatim — no per-`.opti`
    signing; per-script integrity binds via `source_sha256`.
+10. **`offering` is DeskModal-MANAGED SELLING metadata, NOT a licensing
+    authority.** Licensing + permissioning are managed by DeskModal via
+    **core-server-api**: the backend ISSUES the Ed25519 license token
+    (`POST /api/licenses`), VERIFIES it (`POST /api/licenses/verify-anonymous`
+    + `GET /api/licenses/status-list`), and SERVES entitlement
+    (`GET /api/entitlements` + `/api/entitlements/stream`). The client/runtime
+    (platform `deskmodal-license`) checks DeskModal, **never** a publisher
+    endpoint. The `offering` block carries only the publisher-LISTED selling
+    terms — `model` (∈ subscription / per-seat / per-api-call / one-time /
+    trial, byte-identical to the dmpkg + plugin-index enums), `price` (display
+    token DeskModal charges), `trial_days`, and DISPLAY-only `required_grants`
+    (actual grant enforcement is runtime `ServiceClient::has_grant` +
+    `/api/entitlements`). The catalog carries **NO publisher
+    `license_check_endpoint`** — its absence is intentional: a publisher must
+    not declare where its license is checked (an attacker-pointed endpoint is
+    exactly the threat this closes), and the Verification Gateway
+    (`verification_gateway.validate_offering`) REJECTS a manifest that declares
+    one. The aggregator emits `offering` only for a paid App (non-empty
+    `price`); an empty-price block is a dormant community-tier placeholder and
+    is dropped.
 
 ## Client consumption
 

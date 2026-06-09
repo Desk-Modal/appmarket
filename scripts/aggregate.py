@@ -53,7 +53,7 @@ from datetime import datetime, timezone
 from typing import Any, Optional
 
 AGGREGATOR_NAME = "appmarket-aggregator"
-AGGREGATOR_VERSION = "1.1.0"
+AGGREGATOR_VERSION = "1.2.0"
 
 # Native platforms DeskModal targets. Order matters: when the aggregator
 # walks release assets, it tries each key in turn and picks the first
@@ -668,6 +668,113 @@ def script_pack_metadata(
     }
 
 
+# Lowercase to match the plugin-index `LicenseModel` serde kebab-case repr + the
+# plugin.toml `[license.commercial] model` field + the gateway frozenset.
+_OFFERING_MODELS = (
+    "subscription",
+    "per-seat",
+    "per-api-call",
+    "one-time",
+    "trial",
+)
+
+
+def offering_metadata(
+    manifest_data: dict, cfg: dict
+) -> Optional[dict]:
+    """
+    Resolve the §27.12 `offering` SELLING-metadata block for a catalog entry.
+
+    DeskModal-MANAGED licensing: the catalog `offering` block is the "price tag"
+    DeskModal SELLS at (model/price/trial_days/required_grants) — the
+    publisher-LISTED terms, like an App-Store price tag. It is NOT a licensing
+    authority. License issuance, verification, and entitlement are ALWAYS the
+    DeskModal backend (core-server-api): it ISSUES the Ed25519 token
+    (POST /api/licenses), VERIFIES it (POST /api/licenses/verify-anonymous +
+    GET /api/licenses/status-list), and SERVES entitlement
+    (GET /api/entitlements + /api/entitlements/stream). The client/runtime
+    (platform deskmodal-license) checks DeskModal, NEVER a publisher endpoint.
+
+    Therefore the catalog carries NO publisher `license_check_endpoint`: a
+    publisher must not declare where its license is checked. The DeskModal
+    backend base is client-config (the runtime already knows its core-server-api
+    base) — it is never a per-entry catalog field. A publisher-supplied
+    `license_check_endpoint` in the manifest is IGNORED here (never emitted) and
+    REJECTED at the publisher gate (`verification_gateway.validate_offering` +
+    dmpkg `validate_offering`).
+
+    Distinct from the runtime `[license] spdx` string (already carried as catalog
+    `license`). Mirrors `plugin.toml [license.commercial]` (model/price/
+    trial_days/required_grants). Source precedence mirrors
+    `capability_metadata`/`script_pack_metadata`: a sources.json `offering`
+    override (cfg) takes precedence over the manifest `[license.commercial]`
+    sub-table (`parse_toml_minimal` populates `manifest_data["license"]["commercial"]`
+    via its dotted-section stack).
+
+    DORMANT-vs-LIVE is keyed PURELY on `price`: a paid offering has a price. An
+    empty-price block is a DORMANT community-tier placeholder (matching the
+    discovery-feed comment "Fields stay empty so the marketplace Verification
+    Gateway treats this plugin as community-tier") — it is DROPPED so the entry
+    carries NO `offering` ("no commercial offering"). A non-empty price is a LIVE
+    offering, emitted so "is this a paid App?" is answerable from the catalog
+    alone. A publisher endpoint can NEVER make an offering "LIVE". Normalization
+    is LENIENT (lowercase/strip model, coerce trial_days→int, drop the block when
+    model is not in the enum) — the STRICT publisher gate
+    (`verification_gateway.validate_offering`) rejects the same malformed values
+    at publish time; the aggregator never emits a broken block.
+    """
+    raw = cfg.get("offering")
+    if not isinstance(raw, dict):
+        raw = cfg.get("license_commercial")
+    if not isinstance(raw, dict):
+        lic = manifest_data.get("license")
+        raw = lic.get("commercial") if isinstance(lic, dict) else None
+    if not isinstance(raw, dict):
+        return None
+
+    raw_model = raw.get("model")
+    model = (
+        raw_model.strip().lower() if isinstance(raw_model, str) else None
+    )
+    if model not in _OFFERING_MODELS:
+        return None
+
+    price = raw.get("price")
+    price = price if isinstance(price, str) else ""
+
+    # DORMANT placeholder — empty price = community-tier, no purchase surface.
+    # Drop it so the catalog entry carries no `offering`. A publisher
+    # `license_check_endpoint` is deliberately IGNORED — it never participates in
+    # liveness (licensing is DeskModal-managed; a publisher does not declare the
+    # license-check authority).
+    if not price.strip():
+        return None
+
+    raw_trial = raw.get("trial_days")
+    trial_days = (
+        int(raw_trial)
+        if isinstance(raw_trial, (int, float)) and not isinstance(raw_trial, bool) and raw_trial >= 0
+        else 0
+    )
+
+    grants_in = raw.get("required_grants") or []
+    grants = (
+        [str(g) for g in grants_in] if isinstance(grants_in, list) else []
+    )
+
+    # NOTE: NO `license_check_endpoint` is emitted — licensing is DeskModal-
+    # managed via core-server-api; the publisher does not control the license
+    # check. `required_grants` is DISPLAY-only ("this paid App needs grants X,Y");
+    # the enforcement path is runtime ServiceClient::has_grant + DeskModal
+    # /api/entitlements, never this catalog field.
+    return {
+        "model": model,
+        "price": price,
+        "trial_days": trial_days,
+        "required_grants": grants,
+    }
+
+
 def build_entry_single(
     source: dict,
     release: Release,
@@ -720,6 +827,7 @@ def build_entry_single(
 
     _cap_tier_single, _resources_single = capability_metadata(manifest_data, source)
     _script_pack_single = script_pack_metadata(manifest_data, source)
+    _offering_single = offering_metadata(manifest_data, source)
 
     return {
         "id": source["id"],
@@ -755,6 +863,7 @@ def build_entry_single(
         "capability_tier": _cap_tier_single,
         **({"resources": _resources_single} if _resources_single else {}),
         **({"script_pack": _script_pack_single} if _script_pack_single else {}),
+        **({"offering": _offering_single} if _offering_single else {}),
         "platforms": platforms,
         "manifest": {
             "url": manifest_url,
@@ -830,6 +939,7 @@ def build_entries_multi(
 
         _cap_tier_multi, _resources_multi = capability_metadata(manifest_data, plugin)
         _script_pack_multi = script_pack_metadata(manifest_data, plugin)
+        _offering_multi = offering_metadata(manifest_data, plugin)
 
         entries.append({
             "id": plugin["id"],
@@ -865,6 +975,7 @@ def build_entries_multi(
             "capability_tier": _cap_tier_multi,
             **({"resources": _resources_multi} if _resources_multi else {}),
             **({"script_pack": _script_pack_multi} if _script_pack_multi else {}),
+            **({"offering": _offering_multi} if _offering_multi else {}),
             "platforms": platforms,
             "manifest": {
                 "url": mf_asset.url if mf_asset else None,

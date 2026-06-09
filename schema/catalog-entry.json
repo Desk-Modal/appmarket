@@ -158,6 +158,32 @@
       },
       "additionalProperties": true
     },
+    "offering": {
+      "type": "object",
+      "description": "§27.12 SELLING metadata — the publisher-LISTED price tag DeskModal sells at (like an App-Store price tag), from `plugin.toml [license.commercial]`. It is NOT a licensing authority. Licensing + permissioning are MANAGED BY DESKMODAL via core-server-api: the backend ISSUES the Ed25519 token (POST /api/licenses), VERIFIES it (POST /api/licenses/verify-anonymous + GET /api/licenses/status-list), and SERVES entitlement (GET /api/entitlements + /api/entitlements/stream). The client/runtime (platform deskmodal-license) checks DeskModal, NEVER a publisher endpoint. The catalog therefore carries NO publisher `license_check_endpoint` — its absence is intentional; a publisher must not declare where its license is checked, and the Verification Gateway REJECTS a manifest that declares one. The DeskModal backend base is client-config, never a per-entry catalog field. Present only on a paid App (non-empty `price`); a free App carries no `offering`. Older clients ignore this field (additive; no V2 ladder per quality.md §5).",
+      "required": ["model"],
+      "properties": {
+        "model": {
+          "enum": ["subscription", "per-seat", "per-api-call", "one-time", "trial"],
+          "description": "Selling model. Byte-identical to the dmpkg publisher gate (`VALID_COMMERCIAL_MODELS`), the appmarket gateway (`VALID_OFFERING_MODELS`), and the plugin-index `LicenseModel` serde repr (cross-repo parity)."
+        },
+        "price": {
+          "type": "string",
+          "description": "Display token of the publisher-LISTED price DeskModal charges (e.g. `$29/mo`). The money flows through DeskModal (Stripe/billing/subscriptions), not the publisher."
+        },
+        "trial_days": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Trial length in days (default 0)."
+        },
+        "required_grants": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "DISPLAY-only (\"this paid App needs grants X,Y\"). NEVER the enforcement path — grant enforcement is runtime `ServiceClient::has_grant` + DeskModal `/api/entitlements`."
+        }
+      },
+      "additionalProperties": true
+    },
     "platforms": {
       "type": "object",
       "description": "Per-platform delivery descriptors. Keys MUST be of the form `<os>-<arch>` per the DeskModal platform matrix, or the literal `wasm` cross-platform fallback. `null` value means no asset for that platform.",

@@ -12,13 +12,19 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from aggregate import capability_metadata, script_pack_metadata  # noqa: E402
+from aggregate import (  # noqa: E402
+    capability_metadata,
+    offering_metadata,
+    script_pack_metadata,
+)
 from verification_gateway import (  # noqa: E402
+    VALID_OFFERING_MODELS,
     validate_capability_entry,
     validate_capability_tier,
     validate_license,
     validate_manifest_capability,
     validate_manifest_script,
+    validate_offering,
     validate_resources,
     validate_script_entry,
     validate_script_pack,
@@ -529,6 +535,199 @@ class TestScriptPackAggregatorEmission(unittest.TestCase):
             {}, {"script_pack": _good_pack(scripts=[_good_script(source_sha256="A" * 64)])}
         )
         self.assertEqual(sp["scripts"][0]["source_sha256"], "a" * 64)
+
+
+# A well-formed paid `offering` block (selling metadata; no endpoint).
+GOOD_OFFERING = {
+    "model": "subscription",
+    "price": "$29/mo",
+    "trial_days": 14,
+    "required_grants": ["market-data"],
+}
+
+
+class TestOfferingValidator(unittest.TestCase):
+    """validate_offering — DeskModal-managed SELLING metadata; no publisher authority."""
+
+    def test_none_is_free_app(self):
+        # A free App carries no offering — no findings.
+        self.assertEqual(validate_offering(None), [])
+
+    def test_good_block_passes(self):
+        self.assertEqual(validate_offering(GOOD_OFFERING), [])
+
+    def test_all_five_models_pass(self):
+        for m in ("subscription", "per-seat", "per-api-call", "one-time", "trial"):
+            self.assertEqual(validate_offering({"model": m}), [], m)
+
+    def test_unknown_model_fails(self):
+        self.assertTrue(validate_offering({"model": "freemium"}))
+
+    def test_uppercase_model_fails(self):
+        # kebab-case lowercase parity with dmpkg + plugin-index.
+        self.assertTrue(validate_offering({"model": "Subscription"}))
+
+    def test_non_string_price_fails(self):
+        self.assertTrue(validate_offering({"model": "trial", "price": 29}))
+
+    def test_empty_price_allowed_at_boundary(self):
+        # Dormant placeholder — manifest may carry empty price; the aggregator
+        # drops it before it reaches the catalog.
+        self.assertEqual(validate_offering({"model": "trial", "price": ""}), [])
+
+    def test_negative_trial_days_fails(self):
+        self.assertTrue(validate_offering({"model": "trial", "trial_days": -1}))
+
+    def test_bool_trial_days_fails(self):
+        self.assertTrue(validate_offering({"model": "trial", "trial_days": True}))
+
+    def test_required_grants_must_be_string_array(self):
+        self.assertTrue(validate_offering({"model": "trial", "required_grants": [1, 2]}))
+        self.assertEqual(
+            validate_offering({"model": "trial", "required_grants": ["a", "b"]}), []
+        )
+
+    def test_publisher_endpoint_is_rejected(self):
+        # THE security correction: a publisher MUST NOT declare a license-check
+        # authority. A non-empty license_check_endpoint fail-closes.
+        issues = validate_offering(
+            {"model": "subscription", "license_check_endpoint": "https://evil.example/check"}
+        )
+        self.assertTrue(issues)
+        self.assertTrue(
+            any("DeskModal-managed" in i["message"] for i in issues),
+            issues,
+        )
+
+    def test_empty_endpoint_ignored(self):
+        # An empty/whitespace endpoint is not an authority claim — no finding for it.
+        self.assertEqual(
+            validate_offering({"model": "subscription", "license_check_endpoint": "  "}), []
+        )
+
+    def test_non_object_fails(self):
+        self.assertTrue(validate_offering("subscription"))
+
+    def test_wired_into_capability_entry(self):
+        # A catalog entry's `offering` is validated by validate_capability_entry.
+        entry = {
+            "license": "MIT",
+            "signature": dict(GOOD_SIG),
+            "offering": {
+                "model": "subscription",
+                "license_check_endpoint": "https://evil.example/check",
+            },
+        }
+        self.assertTrue(validate_capability_entry(entry, require_footprint=False))
+
+    def test_wired_into_manifest_capability(self):
+        # A publisher manifest's [license.commercial] endpoint is rejected.
+        manifest = {
+            "license": {
+                "spdx": "MIT",
+                "commercial": {
+                    "model": "subscription",
+                    "license_check_endpoint": "https://publisher.example/lic",
+                },
+            },
+            "bundle": {"tier": "optional"},
+            "resources": dict(GOOD_RESOURCES),
+        }
+        issues = validate_manifest_capability(manifest)
+        self.assertTrue(
+            any("license.commercial.license_check_endpoint" == i["path"] for i in issues),
+            issues,
+        )
+
+    def test_clean_manifest_commercial_passes(self):
+        manifest = {
+            "license": {"spdx": "MIT", "commercial": dict(GOOD_OFFERING)},
+            "bundle": {"tier": "optional"},
+            "resources": dict(GOOD_RESOURCES),
+        }
+        self.assertEqual(validate_manifest_capability(manifest), [])
+
+
+class TestOfferingModelParity(unittest.TestCase):
+    """The 5-value model enum is the cross-repo parity contract."""
+
+    def test_enum_is_the_five_canonical_values(self):
+        self.assertEqual(
+            VALID_OFFERING_MODELS,
+            frozenset({"subscription", "per-seat", "per-api-call", "one-time", "trial"}),
+        )
+
+
+class TestOfferingAggregatorEmission(unittest.TestCase):
+    """offering_metadata — emit SELLING metadata; drop dormant; never emit endpoint."""
+
+    def test_emits_paid_offering_from_source_override(self):
+        off = offering_metadata({}, {"offering": dict(GOOD_OFFERING)})
+        self.assertIsNotNone(off)
+        self.assertEqual(off["model"], "subscription")
+        self.assertEqual(off["price"], "$29/mo")
+        self.assertEqual(off["trial_days"], 14)
+        self.assertEqual(off["required_grants"], ["market-data"])
+
+    def test_legacy_license_commercial_cfg_key_still_resolves(self):
+        # Source override may still use the old `license_commercial` cfg key.
+        off = offering_metadata({}, {"license_commercial": dict(GOOD_OFFERING)})
+        self.assertIsNotNone(off)
+        self.assertEqual(off["model"], "subscription")
+
+    def test_emits_from_manifest_license_commercial(self):
+        off = offering_metadata(
+            {"license": {"commercial": dict(GOOD_OFFERING)}}, {}
+        )
+        self.assertIsNotNone(off)
+        self.assertEqual(off["model"], "subscription")
+
+    def test_never_emits_license_check_endpoint(self):
+        # The publisher endpoint is NEVER propagated into the catalog, even if a
+        # manifest carries one alongside a valid price.
+        off = offering_metadata(
+            {},
+            {
+                "offering": {
+                    "model": "subscription",
+                    "price": "$29/mo",
+                    "license_check_endpoint": "https://publisher.example/lic",
+                }
+            },
+        )
+        self.assertIsNotNone(off)
+        self.assertNotIn("license_check_endpoint", off)
+
+    def test_dormant_empty_price_dropped(self):
+        # Re-keyed on price: empty price = dormant community-tier; drop the block.
+        # A publisher endpoint can NEVER make an offering "LIVE".
+        self.assertIsNone(
+            offering_metadata(
+                {},
+                {"offering": {"model": "subscription", "price": "",
+                              "license_check_endpoint": "https://publisher.example/lic"}},
+            )
+        )
+
+    def test_absent_yields_none(self):
+        self.assertIsNone(offering_metadata({}, {}))
+
+    def test_bad_model_dropped(self):
+        self.assertIsNone(
+            offering_metadata({}, {"offering": {"model": "freemium", "price": "$1"}})
+        )
+
+    def test_source_override_wins_over_manifest(self):
+        off = offering_metadata(
+            {"license": {"commercial": {"model": "one-time", "price": "$99"}}},
+            {"offering": {"model": "subscription", "price": "$29/mo"}},
+        )
+        self.assertEqual(off["model"], "subscription")
+
+    def test_emitted_block_validates_clean(self):
+        # End-to-end: what the aggregator emits passes the gateway validator.
+        off = offering_metadata({}, {"offering": dict(GOOD_OFFERING)})
+        self.assertEqual(validate_offering(off), [])
 
 
 if __name__ == "__main__":

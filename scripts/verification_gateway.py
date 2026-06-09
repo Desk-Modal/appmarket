@@ -27,6 +27,18 @@ from typing import Any
 # Lowercase to match plugin.toml `[bundle] tier` + plugin-index serde repr.
 VALID_CAPABILITY_TIERS = frozenset({"required", "recommended", "optional"})
 
+# §27.12 OFFERING (selling) model enum. DeskModal-MANAGED licensing: the catalog
+# `offering` block is SELLING metadata (the publisher-LISTED price tag DeskModal
+# sells at), NOT a licensing authority. License issuance/verification/entitlement
+# are ALWAYS the DeskModal backend (core-server-api: POST /api/licenses,
+# POST /api/licenses/verify-anonymous, GET /api/entitlements) — never a publisher
+# endpoint. Byte-identical to dmpkg `VALID_OFFERING_MODELS`, the aggregator
+# `_OFFERING_MODELS`, and the plugin-index `LicenseModel` serde repr (cross-repo
+# parity contract). Lowercase / kebab-case.
+VALID_OFFERING_MODELS = frozenset(
+    {"subscription", "per-seat", "per-api-call", "one-time", "trial"}
+)
+
 # --------------------------------------------------------------------- #
 # L7 — .opti reference-script catalog contract                           #
 # --------------------------------------------------------------------- #
@@ -85,6 +97,89 @@ def validate_license(license_value: Any, path: str = "license") -> list[dict[str
     if not isinstance(license_value, str) or not license_value.strip():
         return [_err(path, "license must be a non-empty SPDX identifier string")]
     return []
+
+
+def validate_offering(
+    offering: Any, path: str = "offering"
+) -> list[dict[str, str]]:
+    """
+    Validate a §27.12 `offering` SELLING-metadata block (catalog or manifest
+    `[license.commercial]`).
+
+    DeskModal-MANAGED licensing: this block is the publisher-LISTED price tag
+    DeskModal sells at — model/price/trial_days/required_grants are DISPLAY/selling
+    metadata only. It is NOT a licensing authority. License issuance, verification,
+    and entitlement are ALWAYS the DeskModal backend (core-server-api:
+    POST /api/licenses + POST /api/licenses/verify-anonymous + GET /api/entitlements);
+    the runtime checks DeskModal, never a publisher endpoint.
+
+    A publisher MUST NOT declare a `license_check_endpoint` — a publisher pointing
+    the license check at its own (or an attacker's) URL is exactly the threat this
+    gate closes. A non-empty `license_check_endpoint` is REJECTED here; the field
+    is never validated as a legitimate authority and never propagated. (Mirrors the
+    dmpkg `validate_offering` rejection so a manifest passes/fails BOTH gates
+    identically — cross-repo parity.)
+
+    `None` ⇒ no commercial offering (free App) ⇒ no findings. `price` may be empty
+    at the manifest boundary (a dormant community-tier placeholder); the aggregator
+    drops an empty-price block so it never surfaces in the catalog.
+    """
+    if offering is None:
+        return []
+    if not isinstance(offering, dict):
+        return [_err(path, "offering must be an object")]
+
+    issues: list[dict[str, str]] = []
+
+    # model ∈ enum (byte-identical to dmpkg + plugin-index).
+    model = offering.get("model")
+    if not isinstance(model, str) or model not in VALID_OFFERING_MODELS:
+        issues.append(
+            _err(
+                f"{path}.model",
+                f"offering.model '{model}' must be one of: "
+                + ", ".join(sorted(VALID_OFFERING_MODELS)),
+            )
+        )
+
+    # price — DISPLAY string (may be empty in pre-publish dormant placeholders).
+    price = offering.get("price")
+    if price is not None and not isinstance(price, str):
+        issues.append(_err(f"{path}.price", "offering.price must be a string"))
+
+    # trial_days — integer >= 0 (bool rejected: `true` ≠ 1).
+    trial = offering.get("trial_days")
+    if trial is not None and (
+        isinstance(trial, bool) or not isinstance(trial, int) or trial < 0
+    ):
+        issues.append(
+            _err(f"{path}.trial_days", f"offering.trial_days must be an int >= 0, got {trial!r}")
+        )
+
+    # required_grants — DISPLAY-only array of strings (enforcement is runtime
+    # ServiceClient::has_grant + DeskModal /api/entitlements, never this field).
+    grants = offering.get("required_grants")
+    if grants is not None and (
+        not isinstance(grants, list) or not all(isinstance(g, str) and g.strip() for g in grants)
+    ):
+        issues.append(
+            _err(f"{path}.required_grants", "offering.required_grants must be an array of non-empty strings")
+        )
+
+    # license_check_endpoint — a publisher MUST NOT declare a license-check
+    # authority. Licensing is DeskModal-managed; reject a non-empty value.
+    endpoint = offering.get("license_check_endpoint")
+    if isinstance(endpoint, str) and endpoint.strip():
+        issues.append(
+            _err(
+                f"{path}.license_check_endpoint",
+                "licensing is DeskModal-managed — publishers must not declare a "
+                "license_check_endpoint (the runtime always verifies via the DeskModal "
+                "backend: /api/licenses/verify-anonymous + /api/entitlements)",
+            )
+        )
+
+    return issues
 
 
 # The Ed25519 sign/verify roundtrip is entry-level: every published catalog
@@ -220,6 +315,9 @@ def validate_capability_entry(
     issues.extend(
         validate_resources(entry.get("resources"), required=require_footprint)
     )
+    # §27.12 offering — selling metadata; validated when present (a free App
+    # carries no `offering`). Never required; the catalog key is `offering`.
+    issues.extend(validate_offering(entry.get("offering")))
     return issues
 
 
@@ -248,6 +346,12 @@ def validate_manifest_capability(manifest: Any) -> list[dict[str, str]]:
                 issues.append(
                     _err(f"license.{advisory}", f"license.{advisory} must be a non-empty string")
                 )
+        # [license.commercial] OFFERING block — selling metadata; validated when
+        # present (DeskModal-managed; a publisher license_check_endpoint here is
+        # REJECTED — see validate_offering). Catalog emits it as `offering`.
+        issues.extend(
+            validate_offering(license_block.get("commercial"), "license.commercial")
+        )
 
     # [bundle] tier — presence required.
     bundle = manifest.get("bundle")
