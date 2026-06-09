@@ -178,6 +178,17 @@ jobs:
           # --manifest plugin.toml).
           python3 scripts/validate_catalog.py --category capability --index /tmp/index-dryrun.json
 
+      - name: Verification Gateway — script contract (license + signature + script_pack)
+        run: |
+          # L7 reference-script Verification Gateway: every freshly-aggregated
+          # content_type=script entry must carry a valid license + entry-level
+          # Ed25519 signature, and any declared script_pack metadata must be
+          # well-formed (kind/sha/intents/conformance). Runs against the same
+          # dry-run output as the capability gate (the shape actually published).
+          # Full PRESENCE + conformance=pass is enforced at the publisher manifest
+          # boundary (validate_catalog --category script --manifest plugin.toml).
+          python3 scripts/validate_catalog.py --category script --index /tmp/index-dryrun.json
+
       - name: Verification Gateway — unit tests
         run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
 

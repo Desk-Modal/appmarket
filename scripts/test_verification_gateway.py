@@ -22,6 +22,7 @@ from verification_gateway import (  # noqa: E402
     validate_resources,
     validate_script_entry,
     validate_script_pack,
+    validate_signature_presence,
 )
 
 GOOD_RESOURCES = {
@@ -29,6 +30,15 @@ GOOD_RESOURCES = {
     "ram_mb_idle": 200,
     "ram_mb_peak": 400,
     "cpu_pct_steady": 1.5,
+}
+
+# A well-formed entry-level Ed25519 signature pointer block (mirrors the catalog
+# schema + the shape aggregate.py emits + index.json carries).
+GOOD_SIG = {
+    "algorithm": "ed25519",
+    "publisher_key_id": "1c44bd0e9cf34e36",
+    "checksums_url": "plugins/x/0.1.0/darwin-arm64/checksums.txt",
+    "signature_url": "plugins/x/0.1.0/darwin-arm64/plugin.toml.sig",
 }
 
 _SHA = "a" * 64
@@ -108,19 +118,20 @@ class TestResources(unittest.TestCase):
 
 class TestEntry(unittest.TestCase):
     def test_legacy_entry_passes_lenient(self):
-        # license present, no tier/resources → passes index-mode (lenient).
-        entry = {"license": "Proprietary"}
+        # license + signature present, no tier/resources → passes index-mode.
+        entry = {"license": "Proprietary", "signature": dict(GOOD_SIG)}
         self.assertEqual(
             validate_capability_entry(entry, require_footprint=False), []
         )
 
     def test_legacy_entry_fails_strict(self):
-        entry = {"license": "Proprietary"}
+        entry = {"license": "Proprietary", "signature": dict(GOOD_SIG)}
         self.assertTrue(validate_capability_entry(entry, require_footprint=True))
 
     def test_full_entry_passes_strict(self):
         entry = {
             "license": "MIT",
+            "signature": dict(GOOD_SIG),
             "capability_tier": "optional",
             "resources": GOOD_RESOURCES,
         }
@@ -129,7 +140,12 @@ class TestEntry(unittest.TestCase):
         )
 
     def test_malformed_tier_fails_even_lenient(self):
-        entry = {"license": "MIT", "capability_tier": "OPTIONAL"}
+        entry = {"license": "MIT", "signature": dict(GOOD_SIG), "capability_tier": "OPTIONAL"}
+        self.assertTrue(validate_capability_entry(entry, require_footprint=False))
+
+    def test_missing_signature_fails_even_lenient(self):
+        # Self-contained gate: a valid license but no signature fail-closes.
+        entry = {"license": "MIT", "capability_tier": "optional", "resources": GOOD_RESOURCES}
         self.assertTrue(validate_capability_entry(entry, require_footprint=False))
 
 
@@ -163,6 +179,50 @@ class TestManifestGate(unittest.TestCase):
     def test_bad_spdx_fails(self):
         m = self._manifest(license={"spdx": ""})
         self.assertTrue(validate_manifest_capability(m))
+
+
+class TestSignaturePresence(unittest.TestCase):
+    def test_complete_signature_passes(self):
+        self.assertEqual(validate_signature_presence({"signature": dict(GOOD_SIG)}), [])
+
+    def test_minimal_required_only_passes(self):
+        # checksums_url / signature_url are optional pointers.
+        sig = {"algorithm": "ed25519", "publisher_key_id": "abc123"}
+        self.assertEqual(validate_signature_presence({"signature": sig}), [])
+
+    def test_absent_signature_fails(self):
+        self.assertTrue(validate_signature_presence({"license": "MIT"}))
+
+    def test_non_dict_signature_fails(self):
+        self.assertTrue(validate_signature_presence({"signature": "ed25519"}))
+        self.assertTrue(validate_signature_presence({"signature": ["ed25519"]}))
+
+    def test_non_dict_entry_rejected(self):
+        self.assertTrue(validate_signature_presence("nope"))
+
+    def test_missing_algorithm_fails(self):
+        sig = dict(GOOD_SIG)
+        del sig["algorithm"]
+        self.assertTrue(validate_signature_presence({"signature": sig}))
+
+    def test_wrong_algorithm_fails(self):
+        sig = dict(GOOD_SIG, algorithm="rsa")
+        self.assertTrue(validate_signature_presence({"signature": sig}))
+
+    def test_missing_publisher_key_id_fails(self):
+        sig = dict(GOOD_SIG)
+        del sig["publisher_key_id"]
+        self.assertTrue(validate_signature_presence({"signature": sig}))
+
+    def test_empty_publisher_key_id_fails(self):
+        sig = dict(GOOD_SIG, publisher_key_id="   ")
+        self.assertTrue(validate_signature_presence({"signature": sig}))
+
+    def test_malformed_pointer_url_fails(self):
+        sig = dict(GOOD_SIG, checksums_url="")
+        self.assertTrue(validate_signature_presence({"signature": sig}))
+        sig2 = dict(GOOD_SIG, signature_url=123)
+        self.assertTrue(validate_signature_presence({"signature": sig2}))
 
 
 class TestAggregatorEmission(unittest.TestCase):
@@ -348,6 +408,7 @@ class TestScriptEntry(unittest.TestCase):
     def test_full_entry_passes_strict(self):
         entry = {
             "license": "MIT",
+            "signature": dict(GOOD_SIG),
             "content_type": "script",
             "script_pack": _good_pack(),
         }
@@ -356,18 +417,33 @@ class TestScriptEntry(unittest.TestCase):
         )
 
     def test_wrong_content_type_fails_strict(self):
-        entry = {"license": "MIT", "content_type": "service", "script_pack": _good_pack()}
+        entry = {
+            "license": "MIT",
+            "signature": dict(GOOD_SIG),
+            "content_type": "service",
+            "script_pack": _good_pack(),
+        }
         self.assertTrue(validate_script_entry(entry, require=True, require_conformance=True))
 
     def test_legacy_non_script_entry_passes_lenient(self):
-        # An index-gate sweep over a non-script entry: no script_pack, license ok.
-        entry = {"license": "Proprietary"}
+        # An index-gate sweep over a non-script entry: no script_pack, license +
+        # signature ok.
+        entry = {"license": "Proprietary", "signature": dict(GOOD_SIG)}
         self.assertEqual(
             validate_script_entry(entry, require=False, require_conformance=False), []
         )
 
     def test_missing_license_fails(self):
-        entry = {"content_type": "script", "script_pack": _good_pack()}
+        entry = {
+            "content_type": "script",
+            "signature": dict(GOOD_SIG),
+            "script_pack": _good_pack(),
+        }
+        self.assertTrue(validate_script_entry(entry, require=True, require_conformance=True))
+
+    def test_missing_signature_fails_even_lenient(self):
+        # Self-contained gate: a script entry with no signature fail-closes.
+        entry = {"license": "MIT", "content_type": "script", "script_pack": _good_pack()}
         self.assertTrue(validate_script_entry(entry, require=True, require_conformance=True))
 
     def test_non_dict_entry_rejected(self):

@@ -87,6 +87,52 @@ def validate_license(license_value: Any, path: str = "license") -> list[dict[str
     return []
 
 
+# The Ed25519 sign/verify roundtrip is entry-level: every published catalog
+# entry (capability OR script) carries a `signature{}` pointer block. The
+# catalog schema (schema/catalog-entry.json) makes `algorithm` (const "ed25519")
+# + `publisher_key_id` REQUIRED, with `checksums_url` / `signature_url` as
+# optional URI pointers to the detached-signature + checksums assets. This gate
+# asserts that contract self-contained-ly (not relying on the separate
+# index-schema check), so a missing/malformed signature fail-closes (rc≠0).
+def validate_signature_presence(
+    entry: Any, path: str = "signature"
+) -> list[dict[str, str]]:
+    """Assert the entry carries a well-formed Ed25519 `signature{}` block."""
+    if not isinstance(entry, dict):
+        return [_err("", "entry must be an object")]
+
+    sig = entry.get("signature")
+    if sig is None:
+        return [_err(path, "signature is required (entry-level Ed25519 sign/verify block)")]
+    if not isinstance(sig, dict):
+        return [_err(path, "signature must be an object")]
+
+    issues: list[dict[str, str]] = []
+
+    # algorithm — required; schema pins it to the literal "ed25519".
+    algo = sig.get("algorithm")
+    if algo != "ed25519":
+        issues.append(
+            _err(f"{path}.algorithm", f"algorithm must be 'ed25519', got {algo!r}")
+        )
+
+    # publisher_key_id — required; non-empty string (binds entry to a publisher).
+    key_id = sig.get("publisher_key_id")
+    if not isinstance(key_id, str) or not key_id.strip():
+        issues.append(
+            _err(f"{path}.publisher_key_id", "publisher_key_id must be a non-empty string")
+        )
+
+    # checksums_url / signature_url — optional pointers; when present must be
+    # non-empty strings (the schema types them as URI strings).
+    for field in ("checksums_url", "signature_url"):
+        v = sig.get(field)
+        if v is not None and (not isinstance(v, str) or not v.strip()):
+            issues.append(_err(f"{path}.{field}", f"{field} must be a non-empty string"))
+
+    return issues
+
+
 def validate_capability_tier(
     tier: Any, path: str = "capability_tier", *, required: bool
 ) -> list[dict[str, str]]:
@@ -167,6 +213,7 @@ def validate_capability_entry(
 
     issues: list[dict[str, str]] = []
     issues.extend(validate_license(entry.get("license")))
+    issues.extend(validate_signature_presence(entry))
     issues.extend(
         validate_capability_tier(entry.get("capability_tier"), required=require_footprint)
     )
@@ -361,6 +408,7 @@ def validate_script_entry(
 
     issues: list[dict[str, str]] = []
     issues.extend(validate_license(entry.get("license")))
+    issues.extend(validate_signature_presence(entry))
 
     ct = entry.get("content_type")
     if require and ct != "script":
