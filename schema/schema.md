@@ -128,6 +128,22 @@ install if nothing matches and `wasm` is absent.
     "cpu_pct_steady": 1.5
   },
 
+  // ---------- reference-script bundle (L7; content_type=script only) ----------
+  "script_pack": {                          // OptiScript reference-script metadata; see script-pack.md
+    "engine_min_version": "0.1.0",          // optiscript-runtime compat floor
+    "scripts": [                            // one per .opti in the bundle's optiscript/ tree
+      {
+        "path":            "indicators/rsi.opti",
+        "kind":            "indicator",     // indicator | algo | screener | alert | drawing
+        "display_name":    "RSI",
+        "intents_handled": ["deskmodal.IndicatorRsi"],
+        "broadcasts":      ["deskmodal.indicator.rsi"],
+        "source_sha256":   "…64 hex chars…",// SHA-256 of the .opti bytes (provenance; pairs F143-D)
+        "conformance":     "pass"           // dmpkg test verdict: pass | compile-only | absent
+      }
+    ]
+  },
+
   // ---------- per-platform delivery ----------
   "platforms": {
     "win32-x64": {
@@ -188,6 +204,18 @@ install if nothing matches and `wasm` is absent.
    missing `[license] spdx`, `[bundle] tier`, or a complete `[resources]`
    block; in index mode it validates every published entry's declared
    capability metadata + license presence.
+9. **`script_pack`** (L7) is present on `content_type: "script"` entries
+   that pack OptiScript reference scripts; see `script-pack.md`. The
+   aggregator passes the `[[scripts]]` block through (computing/forwarding
+   `source_sha256` + the `dmpkg test` `conformance` verdict), emitting it
+   only when well-formed. The same **Verification Gateway**, selected via
+   `validate_catalog.py --category script`, enforces it: manifest mode
+   REJECTS (rc≠0) a script bundle missing `script_pack` or carrying any
+   script not at `conformance == "pass"`; index mode validates declared
+   script metadata (`kind` ∈ enum, `source_sha256` 64-hex, intent presence
+   for indicator/algo/screener/alert kinds) + license presence. The
+   entry-level Ed25519 `signature` is reused verbatim — no per-`.opti`
+   signing; per-script integrity binds via `source_sha256`.
 
 ## Client consumption
 

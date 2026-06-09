@@ -40,6 +40,8 @@ from typing import Any, Optional
 from verification_gateway import (
     validate_capability_entry,
     validate_manifest_capability,
+    validate_manifest_script,
+    validate_script_entry,
 )
 
 # ----------------------------------------------------------------------
@@ -53,6 +55,13 @@ INDICATOR_PACK_CATEGORY = "indicator-pack"
 # published capability entry, so it is selected via --category but not filtered
 # by an entry's `categories[]`.
 CAPABILITY_CATEGORY = "capability"
+
+# L7 reference-script catalog contract. Selected via --category script; in index
+# mode it matches every content_type=script entry (the install-unit classifier),
+# validating VALIDITY of declared script_pack metadata + license presence. In
+# manifest mode (publisher pre-publish) it enforces FULL PRESENCE + every script
+# conformance == 'pass'.
+SCRIPT_CATEGORY = "script"
 
 # Closed indicator-category set. Adding a value requires coordinated edits
 # in plugins/tradesurface/indicator-registry, schema/indicator-pack.md, and
@@ -312,7 +321,7 @@ def main() -> int:
     parser.add_argument(
         "--category",
         required=True,
-        choices=[INDICATOR_PACK_CATEGORY, CAPABILITY_CATEGORY],
+        choices=[INDICATOR_PACK_CATEGORY, CAPABILITY_CATEGORY, SCRIPT_CATEGORY],
         help="Category schema to apply.",
     )
     parser.add_argument(
@@ -340,6 +349,9 @@ def main() -> int:
         if args.category == CAPABILITY_CATEGORY:
             # Publisher pre-publish gate: FULL presence enforcement (§27.12/§27.11).
             issues = validate_manifest_capability(parsed)
+        elif args.category == SCRIPT_CATEGORY:
+            # Publisher pre-publish gate: PRESENCE + every script conformance 'pass'.
+            issues = validate_manifest_script(parsed)
         else:
             issues = validate_indicator_pack(parsed)
         label = parsed.get("plugin", {}).get("id", args.manifest)
@@ -385,6 +397,30 @@ def main() -> int:
         failed = 0
         for entry in matched:
             issues = validate_capability_entry(entry, require_footprint=False)
+            print(_format_issues(entry.get("id", "<unknown>"), issues))
+            if issues:
+                failed += 1
+        if failed:
+            print(f"\nFAIL: {failed} entry/entries failed validation", file=sys.stderr)
+            return 1
+        return 0
+
+    if args.category == SCRIPT_CATEGORY:
+        # Reference-script entries are matched by the install-unit classifier
+        # (content_type=script), NOT a categories[] tag — a bundle may carry
+        # categories=[scripting] OR [indicator-pack]. Index-mode enforces VALIDITY
+        # of declared script_pack metadata + license presence (legacy/non-script
+        # entries are skipped); full presence + conformance=pass is enforced at the
+        # publisher manifest gate.
+        matched = [
+            e for e in catalog if isinstance(e, dict) and e.get("content_type") == "script"
+        ]
+        print(f"validate_catalog --category {args.category} ({len(matched)} entries)")
+        failed = 0
+        for entry in matched:
+            issues = validate_script_entry(
+                entry, require=False, require_conformance=False
+            )
             print(_format_issues(entry.get("id", "<unknown>"), issues))
             if issues:
                 failed += 1

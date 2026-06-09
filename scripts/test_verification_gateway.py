@@ -12,13 +12,16 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from aggregate import capability_metadata  # noqa: E402
+from aggregate import capability_metadata, script_pack_metadata  # noqa: E402
 from verification_gateway import (  # noqa: E402
     validate_capability_entry,
     validate_capability_tier,
     validate_license,
     validate_manifest_capability,
+    validate_manifest_script,
     validate_resources,
+    validate_script_entry,
+    validate_script_pack,
 )
 
 GOOD_RESOURCES = {
@@ -27,6 +30,28 @@ GOOD_RESOURCES = {
     "ram_mb_peak": 400,
     "cpu_pct_steady": 1.5,
 }
+
+_SHA = "a" * 64
+
+
+def _good_script(**over):
+    s = {
+        "path": "indicators/rsi.opti",
+        "kind": "indicator",
+        "display_name": "RSI",
+        "intents_handled": ["deskmodal.IndicatorRsi"],
+        "broadcasts": ["deskmodal.indicator.rsi"],
+        "source_sha256": _SHA,
+        "conformance": "pass",
+    }
+    s.update(over)
+    return s
+
+
+def _good_pack(**over):
+    p = {"engine_min_version": "0.1.0", "scripts": [_good_script()]}
+    p.update(over)
+    return p
 
 
 class TestLicense(unittest.TestCase):
@@ -236,6 +261,198 @@ class TestUncoveredBranches(unittest.TestCase):
 
     def test_tier_as_list_rejected(self):
         self.assertTrue(validate_capability_tier(["optional"], required=False))
+
+
+# --------------------------------------------------------------------- #
+# L7 — script-pack gateway                                              #
+# --------------------------------------------------------------------- #
+class TestScriptPack(unittest.TestCase):
+    def test_good_pack_passes_both_modes(self):
+        self.assertEqual(
+            validate_script_pack(_good_pack(), require=True, require_conformance=True), []
+        )
+        self.assertEqual(
+            validate_script_pack(_good_pack(), require=False, require_conformance=False), []
+        )
+
+    def test_absent_required_fails_optional_passes(self):
+        self.assertTrue(
+            validate_script_pack(None, require=True, require_conformance=False)
+        )
+        self.assertEqual(
+            validate_script_pack(None, require=False, require_conformance=False), []
+        )
+
+    def test_empty_scripts_fails(self):
+        self.assertTrue(
+            validate_script_pack(
+                _good_pack(scripts=[]), require=False, require_conformance=False
+            )
+        )
+
+    def test_bad_engine_version_fails(self):
+        self.assertTrue(
+            validate_script_pack(
+                _good_pack(engine_min_version="latest"),
+                require=False,
+                require_conformance=False,
+            )
+        )
+
+    def test_bad_kind_fails(self):
+        p = _good_pack(scripts=[_good_script(kind="widget")])
+        self.assertTrue(validate_script_pack(p, require=False, require_conformance=False))
+
+    def test_bad_sha_fails(self):
+        p = _good_pack(scripts=[_good_script(source_sha256="xyz")])
+        self.assertTrue(validate_script_pack(p, require=False, require_conformance=False))
+
+    def test_indicator_without_intents_fails(self):
+        p = _good_pack(scripts=[_good_script(intents_handled=[])])
+        self.assertTrue(validate_script_pack(p, require=False, require_conformance=False))
+
+    def test_drawing_without_intents_passes(self):
+        p = _good_pack(scripts=[_good_script(kind="drawing", intents_handled=[])])
+        self.assertEqual(
+            validate_script_pack(p, require=False, require_conformance=False), []
+        )
+
+    def test_bad_conformance_value_fails_even_lenient(self):
+        p = _good_pack(scripts=[_good_script(conformance="maybe")])
+        self.assertTrue(validate_script_pack(p, require=False, require_conformance=False))
+
+    def test_compile_only_fails_publish_passes_index(self):
+        p = _good_pack(scripts=[_good_script(conformance="compile-only")])
+        # publish gate requires pass
+        self.assertTrue(validate_script_pack(p, require=False, require_conformance=True))
+        # index gate accepts a declared-but-unverified verdict
+        self.assertEqual(
+            validate_script_pack(p, require=False, require_conformance=False), []
+        )
+
+    def test_duplicate_path_fails(self):
+        p = _good_pack(scripts=[_good_script(), _good_script()])
+        self.assertTrue(validate_script_pack(p, require=False, require_conformance=False))
+
+    def test_path_traversal_rejected(self):
+        p = _good_pack(scripts=[_good_script(path="../evil.opti")])
+        self.assertTrue(validate_script_pack(p, require=False, require_conformance=False))
+
+    def test_non_object_pack_fails(self):
+        self.assertTrue(
+            validate_script_pack("scripts", require=False, require_conformance=False)
+        )
+
+
+class TestScriptEntry(unittest.TestCase):
+    def test_full_entry_passes_strict(self):
+        entry = {
+            "license": "MIT",
+            "content_type": "script",
+            "script_pack": _good_pack(),
+        }
+        self.assertEqual(
+            validate_script_entry(entry, require=True, require_conformance=True), []
+        )
+
+    def test_wrong_content_type_fails_strict(self):
+        entry = {"license": "MIT", "content_type": "service", "script_pack": _good_pack()}
+        self.assertTrue(validate_script_entry(entry, require=True, require_conformance=True))
+
+    def test_legacy_non_script_entry_passes_lenient(self):
+        # An index-gate sweep over a non-script entry: no script_pack, license ok.
+        entry = {"license": "Proprietary"}
+        self.assertEqual(
+            validate_script_entry(entry, require=False, require_conformance=False), []
+        )
+
+    def test_missing_license_fails(self):
+        entry = {"content_type": "script", "script_pack": _good_pack()}
+        self.assertTrue(validate_script_entry(entry, require=True, require_conformance=True))
+
+    def test_non_dict_entry_rejected(self):
+        self.assertTrue(
+            validate_script_entry("nope", require=False, require_conformance=False)
+        )
+
+
+class TestManifestScriptGate(unittest.TestCase):
+    def test_script_pack_table_passes(self):
+        m = {"license": {"spdx": "MIT"}, "script_pack": _good_pack()}
+        self.assertEqual(validate_manifest_script(m), [])
+
+    def test_toml_scripts_list_normalized(self):
+        # A manifest carrying a top-level [[scripts]] list + bundle engine floor.
+        m = {
+            "license": "MIT",
+            "bundle": {"engine_min_version": "0.1.0"},
+            "scripts": [_good_script()],
+        }
+        self.assertEqual(validate_manifest_script(m), [])
+
+    def test_missing_scripts_fails(self):
+        m = {"license": {"spdx": "MIT"}}
+        self.assertTrue(validate_manifest_script(m))
+
+    def test_compile_only_blocks_publish(self):
+        m = {
+            "license": {"spdx": "MIT"},
+            "script_pack": _good_pack(
+                scripts=[_good_script(conformance="compile-only")]
+            ),
+        }
+        self.assertTrue(validate_manifest_script(m))
+
+    def test_non_dict_manifest_rejected(self):
+        self.assertTrue(validate_manifest_script("nope"))
+
+
+class TestScriptPackAggregatorEmission(unittest.TestCase):
+    def test_emits_from_source_override(self):
+        sp = script_pack_metadata({}, {"script_pack": _good_pack()})
+        self.assertIsNotNone(sp)
+        self.assertEqual(sp["scripts"][0]["kind"], "indicator")
+        self.assertEqual(sp["scripts"][0]["source_sha256"], _SHA)
+
+    def test_emits_from_manifest_scripts_list(self):
+        sp = script_pack_metadata(
+            {"bundle": {"engine_min_version": "0.1.0"}, "scripts": [_good_script()]}, {}
+        )
+        self.assertIsNotNone(sp)
+        self.assertEqual(sp["engine_min_version"], "0.1.0")
+
+    def test_source_override_wins_over_manifest(self):
+        sp = script_pack_metadata(
+            {"script_pack": _good_pack(scripts=[_good_script(display_name="MANIFEST")])},
+            {"script_pack": _good_pack(scripts=[_good_script(display_name="SOURCE")])},
+        )
+        self.assertEqual(sp["scripts"][0]["display_name"], "SOURCE")
+
+    def test_absent_yields_none(self):
+        self.assertIsNone(script_pack_metadata({}, {}))
+
+    def test_malformed_script_drops_whole_block(self):
+        # A single bad sha drops the block (never zero-filled) — the strict gate
+        # would reject it at publish; the aggregator never emits a broken block.
+        bad = _good_pack(scripts=[_good_script(source_sha256="zz")])
+        self.assertIsNone(script_pack_metadata({}, {"script_pack": bad}))
+
+    def test_bad_kind_drops_block(self):
+        bad = _good_pack(scripts=[_good_script(kind="widget")])
+        self.assertIsNone(script_pack_metadata({}, {"script_pack": bad}))
+
+    def test_emitted_block_validates_clean(self):
+        # End-to-end: what the aggregator emits passes the index gate.
+        sp = script_pack_metadata({}, {"script_pack": _good_pack()})
+        self.assertEqual(
+            validate_script_pack(sp, require=False, require_conformance=False), []
+        )
+
+    def test_sha_lowercased_on_emit(self):
+        sp = script_pack_metadata(
+            {}, {"script_pack": _good_pack(scripts=[_good_script(source_sha256="A" * 64)])}
+        )
+        self.assertEqual(sp["scripts"][0]["source_sha256"], "a" * 64)
 
 
 if __name__ == "__main__":

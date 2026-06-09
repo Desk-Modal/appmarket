@@ -105,6 +105,59 @@
       },
       "additionalProperties": true
     },
+    "script_pack": {
+      "type": "object",
+      "description": "L7 EXTENSION (S-SDLC) — OptiScript reference-script bundle metadata. Present on a `content_type: \"script\"` entry that packs one or more `.opti` reference scripts (one PluginEntry per kind-bundle, mirroring the `[[indicators]]` indicator-pack precedent — never one row per `.opti`). Each `scripts[]` entry mirrors the per-script `manifest { intents.handle / broadcasts }` header of its `.opti` source. The cryptographic Ed25519 sign/verify roundtrip stays entry-level (`signature`) and is reused verbatim; this block adds content-level provenance + conformance. Emitted only when well-formed (the aggregator drops a malformed block rather than zero-fill); the Verification Gateway (`validate_catalog.py --category script`) enforces PRESENCE + conformance=pass at the publisher manifest boundary and VALIDITY in the index gate. Older clients ignore this field (additive extension; no V2 ladder per quality.md §5).",
+      "required": ["engine_min_version", "scripts"],
+      "properties": {
+        "engine_min_version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+][A-Za-z0-9.-]+)?$",
+          "description": "optiscript-runtime SemVer compat floor — the bundle's scripts require at least this engine."
+        },
+        "scripts": {
+          "type": "array",
+          "minItems": 1,
+          "description": "One descriptor per `.opti` source inside the `.dmpkg` optiscript/ tree.",
+          "items": {
+            "type": "object",
+            "required": ["path", "kind", "display_name", "source_sha256", "conformance"],
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Relative path inside the `.dmpkg` optiscript/ tree (e.g. `indicators/rsi.opti`). No leading slash, no `..`."
+              },
+              "kind": {
+                "enum": ["indicator", "algo", "screener", "alert", "drawing"],
+                "description": "The reference/ subdir / UX surface this script targets. The chart indicator dialog / screener panel / alert builder / drawing-extension registry filter by `kind`; the generic content_type=script classifier cannot disambiguate."
+              },
+              "display_name": { "type": "string", "minLength": 1, "maxLength": 60 },
+              "intents_handled": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "FDC3 intents the script's `manifest { intents.handle }` header declares. Required non-empty for kinds indicator/algo/screener/alert; optional for drawing."
+              },
+              "broadcasts": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "FDC3 channels/contexts the script broadcasts, from its `manifest { broadcasts }` header."
+              },
+              "source_sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-fA-F]{64}$",
+                "description": "SHA-256 of the `.opti` source bytes — provenance-DISPLAY metadata only, publisher-asserted (the aggregator does not recompute it nor bind it to the signed tarball). Integrity flows from the entry-level Ed25519 `signature` over the `.dmpkg` that CONTAINS the real `.opti`; this per-script hash is for triage/UX, not a verified integrity binding. Pairs the F143-D `script_source_hash` audit primitive."
+              },
+              "conformance": {
+                "enum": ["pass", "compile-only", "absent"],
+                "description": "`dmpkg test <.opti>` (L6) verdict. `pass` = full numeric conformance against golden bars; `compile-only` = parsed + sema-checked, no golden fixture; `absent` = not run. The publisher gate requires `pass`."
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
     "platforms": {
       "type": "object",
       "description": "Per-platform delivery descriptors. Keys MUST be of the form `<os>-<arch>` per the DeskModal platform matrix, or the literal `wasm` cross-platform fallback. `null` value means no asset for that platform.",

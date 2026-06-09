@@ -587,6 +587,87 @@ def capability_metadata(
     return tier, resources
 
 
+# Lowercase to match the plugin-index ScriptKind serde repr + the gateway.
+_SCRIPT_KINDS = ("indicator", "algo", "screener", "alert", "drawing")
+_CONFORMANCE = ("pass", "compile-only", "absent")
+_SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
+
+
+def script_pack_metadata(
+    manifest_data: dict, cfg: dict
+) -> Optional[dict]:
+    """
+    Resolve the L7 `script_pack` block for a content_type=script entry.
+
+    Source precedence mirrors `capability_metadata`: a sources.json `script_pack`
+    override (cfg) takes precedence over the manifest. Because `parse_toml_minimal`
+    does NOT parse `[[scripts]]` array-of-tables, the canonical producer path is a
+    `script_pack` table in sources.json (or a manifest `script_pack`/`scripts`
+    table when a richer TOML parser populated it). The block is emitted ONLY when
+    well-formed (≥1 script, each with a valid kind + 64-hex source_sha256 + known
+    conformance) — a partial/absent block yields `None` (never zero-filled), so
+    consumers read absent script_pack as "no reference scripts declared". The
+    STRICT publisher gate (`verification_gateway.validate_script_pack`) rejects
+    the same malformed values at publish time; the aggregator never emits a
+    broken block.
+    """
+    raw = cfg.get("script_pack")
+    if not isinstance(raw, dict):
+        raw = manifest_data.get("script_pack")
+    if not isinstance(raw, dict):
+        # A manifest may carry a top-level `scripts` list (TOML [[scripts]]).
+        scripts_list = manifest_data.get("scripts")
+        if isinstance(scripts_list, list):
+            bundle = manifest_data.get("bundle")
+            eng = bundle.get("engine_min_version") if isinstance(bundle, dict) else None
+            raw = {"engine_min_version": eng, "scripts": scripts_list}
+        else:
+            return None
+
+    scripts_in = raw.get("scripts")
+    if not isinstance(scripts_in, list) or not scripts_in:
+        return None
+
+    cleaned: list[dict] = []
+    for s in scripts_in:
+        if not isinstance(s, dict):
+            return None
+        kind = s.get("kind")
+        sha = s.get("source_sha256")
+        rel = s.get("path")
+        conf = s.get("conformance")
+        if (
+            kind not in _SCRIPT_KINDS
+            or not isinstance(sha, str)
+            or not _SHA256_RE.match(sha)
+            or not isinstance(rel, str)
+            or not rel.strip()
+            or conf not in _CONFORMANCE
+        ):
+            return None
+        intents = s.get("intents_handled") or []
+        broadcasts = s.get("broadcasts") or []
+        if not (isinstance(intents, list) and isinstance(broadcasts, list)):
+            return None
+        cleaned.append(
+            {
+                "path": rel,
+                "kind": kind,
+                "display_name": str(s.get("display_name") or rel),
+                "intents_handled": [str(x) for x in intents],
+                "broadcasts": [str(x) for x in broadcasts],
+                "source_sha256": sha.lower(),
+                "conformance": conf,
+            }
+        )
+
+    eng = raw.get("engine_min_version")
+    return {
+        "engine_min_version": str(eng) if isinstance(eng, str) and eng else "0.0.0",
+        "scripts": cleaned,
+    }
+
+
 def build_entry_single(
     source: dict,
     release: Release,
@@ -638,6 +719,7 @@ def build_entry_single(
     ) or "0.0.0"
 
     _cap_tier_single, _resources_single = capability_metadata(manifest_data, source)
+    _script_pack_single = script_pack_metadata(manifest_data, source)
 
     return {
         "id": source["id"],
@@ -672,6 +754,7 @@ def build_entry_single(
         "capabilities": source.get("capabilities", {}),
         "capability_tier": _cap_tier_single,
         **({"resources": _resources_single} if _resources_single else {}),
+        **({"script_pack": _script_pack_single} if _script_pack_single else {}),
         "platforms": platforms,
         "manifest": {
             "url": manifest_url,
@@ -746,6 +829,7 @@ def build_entries_multi(
         ) or "0.0.0"
 
         _cap_tier_multi, _resources_multi = capability_metadata(manifest_data, plugin)
+        _script_pack_multi = script_pack_metadata(manifest_data, plugin)
 
         entries.append({
             "id": plugin["id"],
@@ -780,6 +864,7 @@ def build_entries_multi(
             "capabilities": plugin.get("capabilities", {}),
             "capability_tier": _cap_tier_multi,
             **({"resources": _resources_multi} if _resources_multi else {}),
+            **({"script_pack": _script_pack_multi} if _script_pack_multi else {}),
             "platforms": platforms,
             "manifest": {
                 "url": mf_asset.url if mf_asset else None,
