@@ -77,7 +77,7 @@ The native **Workflow** tool moves orchestration OUT of the main conversation in
 
 **Banned postures:** pushing on Tier-A / agent self-assessment (the drift root cause); verifying against the LIVE working tree mid-mutation; `nohup`-inside-background (masks rc); `pgrep`/log-tail to wait on a verify (self-matches own cmdline; `cmd | tail` rc-mask); re-deriving lane state from `git log` instead of the task plan; any new bespoke script (`verify-async.sh`, `delivery-plan.json`).
 
-**Reusable skeleton:** the per-wave impl fan-out Workflow script lives at `.session-state/pipelined-impl-fanout.js` (correct native Workflow-tool API; agents DRAFT only, main loop commits + verify-gates-push).
+**Reusable skeleton:** the per-wave impl fan-out Workflow script lives at `.claude/workflows/pipelined-impl-fanout.js` (registered as the `pipelined-impl-fanout` skill; correct native Workflow-tool API; agents DRAFT only, main loop commits + verify-gates-push).
 
 **Pairs with:** §4 (single-agent default + pod cap 3 + single-writer) · §4.1 (Workflow fan-out + worktree isolation + verify-never-mid-mutation) · §15 (evolve-and-fix-forward — red verify closes forward) · `quality.md §18.7.1` (Tier A advisory / Tier C gate) · `quality.md §18.7` (always-parallel always-verify) · `architecture.md §29` (incremental cache discipline) · `parallel-sessions.md` (8 disjoint repos) · `discipline.md §26` (durable state — native task list + handoff) · `core.md §11` autonomous-primitive matrix.
 

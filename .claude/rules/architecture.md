@@ -111,7 +111,7 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **Provider model:** multiple plugins MAY register as copilot providers; FDC3 intent resolver picks per `findIntentsByContext` + sdk-config `copilot.default_provider`. Specialised providers declare context filters. Default copilot is universal fallback.
 
-**Tool federation:** copilot dispatches FDC3 intents registered by plugins (e.g., order-engine `place_twap_order` tool backed by `deskmodal.Order.PlaceAlgo`). User-confirmation dialog per F143-D risk-gate → order placed → audit chain → result back to copilot.
+**Tool federation:** copilot dispatches FDC3 intents registered by plugins (e.g., order-engine `place_twap_order` tool backed by `deskmodal.order.PlaceAlgo`). User-confirmation dialog per F143-D risk-gate → order placed → audit chain → result back to copilot.
 
 **Forbidden:** plugin bespoke `Ask<X>Ai` / `<X>Suggest` intents; bypass sdk-fdc3; hardcoded copilot endpoints; bundled LLM in plugin.
 
