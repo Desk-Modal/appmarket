@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10T13:56:23Z",
+  "generated_at": "2026-06-10T14:02:08Z",
   "generator": {
     "name": "build_appmarket_catalog.py",
     "version": "1.0.0"
@@ -37,7 +37,14 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 14,
+        "ram_mb_idle": 55,
+        "ram_mb_peak": 130,
+        "cpu_pct_steady": 3
+      },
       "icon": {
         "market": "icons/deskmodal-altdata-onchain/icon.svg"
       },
@@ -51,7 +58,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 8005116
         },
         {
@@ -110,7 +117,21 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "optional",
+      "resources": {
+        "disk_mb": 8,
+        "ram_mb_idle": 32,
+        "ram_mb_peak": 64,
+        "cpu_pct_steady": 1
+      },
+      "offering": {
+        "model": "subscription",
+        "price": "",
+        "trial_days": 30,
+        "required_grants": []
+      },
       "icon": {
         "market": "icons/deskmodal-audit-explainer/icon.svg"
       },
@@ -124,7 +145,7 @@
       "versions": [
         {
           "version": "0.5.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 4282445
         },
         {
@@ -180,7 +201,15 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "required",
+      "resources": {
+        "disk_mb": 8,
+        "ram_mb_idle": 40,
+        "ram_mb_peak": 80,
+        "cpu_pct_steady": 1
+      },
       "icon": {
         "market": "icons/deskmodal-brand-service/icon.svg"
       },
@@ -194,7 +223,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 6056197
         },
         {
@@ -245,7 +274,15 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "required",
+      "resources": {
+        "disk_mb": 6,
+        "ram_mb_idle": 12,
+        "ram_mb_peak": 64,
+        "cpu_pct_steady": 1
+      },
       "icon": {
         "market": "icons/deskmodal-chart-indicator-host/icon.svg"
       },
@@ -259,7 +296,7 @@
       "versions": [
         {
           "version": "0.5.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 6726798
         },
         {
@@ -313,7 +350,21 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "optional",
+      "resources": {
+        "disk_mb": 18,
+        "ram_mb_idle": 70,
+        "ram_mb_peak": 200,
+        "cpu_pct_steady": 4
+      },
+      "offering": {
+        "model": "per-seat",
+        "price": "",
+        "trial_days": 14,
+        "required_grants": []
+      },
       "icon": {
         "market": "icons/deskmodal-collab/icon.svg"
       },
@@ -327,7 +378,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 3587018
         },
         {
@@ -386,7 +437,21 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "optional",
+      "resources": {
+        "disk_mb": 1500,
+        "ram_mb_idle": 200,
+        "ram_mb_peak": 800,
+        "cpu_pct_steady": 15
+      },
+      "offering": {
+        "model": "subscription",
+        "price": "",
+        "trial_days": 14,
+        "required_grants": []
+      },
       "icon": {
         "market": "icons/deskmodal-copilot/icon.svg"
       },
@@ -400,7 +465,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 34178408
         },
         {
@@ -459,7 +524,14 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 16,
+        "ram_mb_idle": 65,
+        "ram_mb_peak": 180,
+        "cpu_pct_steady": 6
+      },
       "icon": {
         "market": "icons/deskmodal-footprint/icon.svg"
       },
@@ -473,7 +545,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 3847481
         },
         {
@@ -534,7 +606,21 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "optional",
+      "resources": {
+        "disk_mb": 20,
+        "ram_mb_idle": 80,
+        "ram_mb_peak": 220,
+        "cpu_pct_steady": 8
+      },
+      "offering": {
+        "model": "subscription",
+        "price": "",
+        "trial_days": 14,
+        "required_grants": []
+      },
       "icon": {
         "market": "icons/deskmodal-orderflow/icon.svg"
       },
@@ -548,7 +634,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 56399516
         },
         {
@@ -607,7 +693,14 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 14,
+        "ram_mb_idle": 60,
+        "ram_mb_peak": 200,
+        "cpu_pct_steady": 8
+      },
       "icon": {
         "market": "icons/deskmodal-pattern-detection/icon.svg"
       },
@@ -621,7 +714,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 3845586
         },
         {
@@ -681,6 +774,7 @@
       "dependencies": [],
       "min_deskmodal_version": "",
       "published_at": "2026-06-08T07:58:07Z",
+      "license": "Proprietary",
       "icon": {
         "market": "icons/deskmodal-settings/icon.svg"
       },
@@ -753,7 +847,14 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 12,
+        "ram_mb_idle": 55,
+        "ram_mb_peak": 140,
+        "cpu_pct_steady": 4
+      },
       "icon": {
         "market": "icons/deskmodal-tpo/icon.svg"
       },
@@ -767,7 +868,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 3844359
         },
         {
@@ -826,7 +927,14 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 12,
+        "ram_mb_idle": 55,
+        "ram_mb_peak": 130,
+        "cpu_pct_steady": 4
+      },
       "icon": {
         "market": "icons/deskmodal-volume-profile/icon.svg"
       },
@@ -840,7 +948,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 3844561
         },
         {
@@ -901,7 +1009,14 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 6,
+        "ram_mb_idle": 35,
+        "ram_mb_peak": 80,
+        "cpu_pct_steady": 2
+      },
       "icon": {
         "market": "icons/deskmodal.alerts/icon.svg"
       },
@@ -915,7 +1030,7 @@
       "versions": [
         {
           "version": "0.7.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 270798680
         },
         {
@@ -981,7 +1096,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 10,
+        "ram_mb_idle": 45,
+        "ram_mb_peak": 130,
+        "cpu_pct_steady": 4
+      },
       "icon": {
         "market": "icons/deskmodal.analytics/icon.svg"
       },
@@ -995,7 +1118,7 @@
       "versions": [
         {
           "version": "0.7.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 222036181
         },
         {
@@ -1061,7 +1184,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 9,
+        "ram_mb_idle": 45,
+        "ram_mb_peak": 95,
+        "cpu_pct_steady": 2
+      },
       "icon": {
         "market": "icons/deskmodal.blotter/icon.svg"
       },
@@ -1075,7 +1206,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 213206374
         }
       ],
@@ -1116,7 +1247,21 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "optional",
+      "resources": {
+        "disk_mb": 12,
+        "ram_mb_idle": 55,
+        "ram_mb_peak": 140,
+        "cpu_pct_steady": 2
+      },
+      "offering": {
+        "model": "one-time",
+        "price": "",
+        "trial_days": 0,
+        "required_grants": []
+      },
       "icon": {
         "market": "icons/deskmodal.brand-editor/icon.svg"
       },
@@ -1130,7 +1275,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 493836
         },
         {
@@ -1191,7 +1336,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "required",
+      "resources": {
+        "disk_mb": 25,
+        "ram_mb_idle": 60,
+        "ram_mb_peak": 180,
+        "cpu_pct_steady": 5
+      },
       "icon": {
         "market": "icons/deskmodal.chart/icon.svg"
       },
@@ -1205,7 +1358,7 @@
       "versions": [
         {
           "version": "0.8.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 588962001
         },
         {
@@ -1274,7 +1427,14 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 5,
+        "ram_mb_idle": 30,
+        "ram_mb_peak": 65,
+        "cpu_pct_steady": 1
+      },
       "icon": {
         "market": "icons/deskmodal.data-sources/icon.svg"
       },
@@ -1288,7 +1448,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 53296353
         },
         {
@@ -1349,7 +1509,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 8,
+        "ram_mb_idle": 40,
+        "ram_mb_peak": 100,
+        "cpu_pct_steady": 3
+      },
       "icon": {
         "market": "icons/deskmodal.depth/icon.svg"
       },
@@ -1363,7 +1531,7 @@
       "versions": [
         {
           "version": "0.7.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 251927865
         },
         {
@@ -1427,7 +1595,20 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 10,
+        "ram_mb_idle": 50,
+        "ram_mb_peak": 130,
+        "cpu_pct_steady": 3
+      },
+      "offering": {
+        "model": "subscription",
+        "price": "",
+        "trial_days": 14,
+        "required_grants": []
+      },
       "icon": {
         "market": "icons/deskmodal.discovery-feed/icon.svg"
       },
@@ -1441,7 +1622,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 8260321
         },
         {
@@ -1503,7 +1684,14 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 5,
+        "ram_mb_idle": 30,
+        "ram_mb_peak": 60,
+        "cpu_pct_steady": 1
+      },
       "icon": {
         "market": "icons/deskmodal.earnings/icon.svg"
       },
@@ -1517,7 +1705,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 175102557
         },
         {
@@ -1583,7 +1771,20 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 10,
+        "ram_mb_idle": 45,
+        "ram_mb_peak": 100,
+        "cpu_pct_steady": 2
+      },
+      "offering": {
+        "model": "subscription",
+        "price": "",
+        "trial_days": 14,
+        "required_grants": []
+      },
       "icon": {
         "market": "icons/deskmodal.earnings-feed/icon.svg"
       },
@@ -1597,7 +1798,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 8301706
         },
         {
@@ -1663,7 +1864,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "required",
+      "resources": {
+        "disk_mb": 12,
+        "ram_mb_idle": 50,
+        "ram_mb_peak": 120,
+        "cpu_pct_steady": 3
+      },
       "icon": {
         "market": "icons/deskmodal.feeds/icon.svg"
       },
@@ -1677,7 +1886,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 244090569
         },
         {
@@ -1721,7 +1930,20 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 8,
+        "ram_mb_idle": 30,
+        "ram_mb_peak": 70,
+        "cpu_pct_steady": 1
+      },
+      "offering": {
+        "model": "subscription",
+        "price": "",
+        "trial_days": 14,
+        "required_grants": []
+      },
       "icon": {
         "market": "icons/deskmodal.fundamental-feed/icon.svg"
       },
@@ -1735,7 +1957,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 7484875
         }
       ],
@@ -1776,7 +1998,14 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 5,
+        "ram_mb_idle": 30,
+        "ram_mb_peak": 60,
+        "cpu_pct_steady": 1
+      },
       "icon": {
         "market": "icons/deskmodal.news/icon.svg"
       },
@@ -1790,7 +2019,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 171430670
         },
         {
@@ -1856,7 +2085,21 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 10,
+        "ram_mb_idle": 50,
+        "ram_mb_peak": 110,
+        "cpu_pct_steady": 3
+      },
+      "offering": {
+        "model": "subscription",
+        "price": "",
+        "trial_days": 14,
+        "required_grants": []
+      },
       "icon": {
         "market": "icons/deskmodal.news-feed/icon.svg"
       },
@@ -1870,7 +2113,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 10008069
         },
         {
@@ -1934,7 +2177,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "required",
+      "resources": {
+        "disk_mb": 7,
+        "ram_mb_idle": 45,
+        "ram_mb_peak": 100,
+        "cpu_pct_steady": 2
+      },
       "icon": {
         "market": "icons/deskmodal.notifications-center/icon.svg"
       },
@@ -1948,7 +2199,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 30412242
         },
         {
@@ -2009,7 +2260,15 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 35,
+        "ram_mb_idle": 80,
+        "ram_mb_peak": 220,
+        "cpu_pct_steady": 5
+      },
       "icon": {
         "market": "icons/deskmodal.optiscript.alert-service/icon.svg"
       },
@@ -2023,7 +2282,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 4898386
         }
       ],
@@ -2064,7 +2323,21 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "optional",
+      "resources": {
+        "disk_mb": 18,
+        "ram_mb_idle": 65,
+        "ram_mb_peak": 160,
+        "cpu_pct_steady": 4
+      },
+      "offering": {
+        "model": "per-api-call",
+        "price": "",
+        "trial_days": 7,
+        "required_grants": []
+      },
       "icon": {
         "market": "icons/deskmodal.order-engine/icon.svg"
       },
@@ -2078,7 +2351,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 4569770
         },
         {
@@ -2139,7 +2412,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 9,
+        "ram_mb_idle": 45,
+        "ram_mb_peak": 95,
+        "cpu_pct_steady": 2
+      },
       "icon": {
         "market": "icons/deskmodal.order-ticket/icon.svg"
       },
@@ -2153,7 +2434,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 242691956
         }
       ],
@@ -2195,7 +2476,15 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 9,
+        "ram_mb_idle": 45,
+        "ram_mb_peak": 95,
+        "cpu_pct_steady": 2
+      },
       "icon": {
         "market": "icons/deskmodal.paper-trading/icon.svg"
       },
@@ -2209,7 +2498,7 @@
       "versions": [
         {
           "version": "0.7.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 4107210
         },
         {
@@ -2275,7 +2564,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 9,
+        "ram_mb_idle": 45,
+        "ram_mb_peak": 95,
+        "cpu_pct_steady": 2
+      },
       "icon": {
         "market": "icons/deskmodal.positions/icon.svg"
       },
@@ -2289,7 +2586,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 208850283
         }
       ],
@@ -2330,7 +2627,15 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "required",
+      "resources": {
+        "disk_mb": 15,
+        "ram_mb_idle": 75,
+        "ram_mb_peak": 180,
+        "cpu_pct_steady": 8
+      },
       "icon": {
         "market": "icons/deskmodal.price-feed/icon.svg"
       },
@@ -2344,7 +2649,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 7193835
         },
         {
@@ -2405,7 +2710,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 7,
+        "ram_mb_idle": 40,
+        "ram_mb_peak": 90,
+        "cpu_pct_steady": 3
+      },
       "icon": {
         "market": "icons/deskmodal.screener/icon.svg"
       },
@@ -2419,7 +2732,7 @@
       "versions": [
         {
           "version": "0.8.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 265254195
         },
         {
@@ -2488,7 +2801,14 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "resources": {
+        "disk_mb": 6,
+        "ram_mb_idle": 35,
+        "ram_mb_peak": 70,
+        "cpu_pct_steady": 1
+      },
       "icon": {
         "market": "icons/deskmodal.settings/icon.svg"
       },
@@ -2502,7 +2822,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 813114
         }
       ],
@@ -2543,7 +2863,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 5,
+        "ram_mb_idle": 30,
+        "ram_mb_peak": 70,
+        "cpu_pct_steady": 1
+      },
       "icon": {
         "market": "icons/deskmodal.watchlist/icon.svg"
       },
@@ -2557,7 +2885,7 @@
       "versions": [
         {
           "version": "0.7.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 278364052
         },
         {
@@ -2623,7 +2951,15 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 35,
+        "ram_mb_idle": 80,
+        "ram_mb_peak": 220,
+        "cpu_pct_steady": 5
+      },
       "icon": {
         "market": "icons/optiscript.editor/icon.svg"
       },
@@ -2637,7 +2973,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 65743693
         }
       ],
@@ -2678,7 +3014,15 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
+      "license": "Apache-2.0",
+      "capability_tier": "recommended",
+      "resources": {
+        "disk_mb": 35,
+        "ram_mb_idle": 80,
+        "ram_mb_peak": 220,
+        "cpu_pct_steady": 5
+      },
       "icon": {
         "market": "icons/optiscript.engine/icon.svg"
       },
@@ -2692,7 +3036,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T13:56:23Z",
+          "published_at": "2026-06-10T14:02:08Z",
           "size_bytes": 4269740
         },
         {
@@ -2750,7 +3094,7 @@
         }
       },
       "dependencies": [],
-      "published_at": "2026-06-10T13:56:23Z",
+      "published_at": "2026-06-10T14:02:08Z",
       "license": "Proprietary",
       "tags": [
         "theme",
