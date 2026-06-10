@@ -142,7 +142,18 @@ jobs:
                   errors.append(f"top-level missing '{k}'")
           seen_ids = set()
           for e in doc.get("catalog", []):
-              for k in ("id", "owner", "repo", "name", "content_type", "latest_version", "platforms", "publisher", "signature"):
+              # Bundled entries (bundled: true) ship inside the signed
+              # DeskModal binary itself — they have no release asset and no
+              # entry-level signature block by design. The canonical
+              # Verification Gateway exempts them the same way
+              # (scripts/validate_catalog.py filters `not e.get("bundled")`),
+              # and scripts/aggregate.py emits them without `signature`.
+              # Requiring `signature` here contradicted both and would fail
+              # every freshly-aggregated index.json.
+              required = ["id", "owner", "repo", "name", "content_type", "latest_version", "platforms", "publisher"]
+              if not e.get("bundled"):
+                  required.append("signature")
+              for k in required:
                   if k not in e:
                       errors.append(f"entry '{e.get('id','?')}' missing '{k}'")
               if e.get("id") in seen_ids:
