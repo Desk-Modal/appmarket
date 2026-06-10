@@ -4,7 +4,7 @@ description: Import a TradingView Pinescript v5 file and transpile to OptiScript
 when_to_use: User pastes / cites a .pine file or asks to "import this Pinescript"
 disable-model-invocation: true
 allowed-tools: Read Bash(plugins/optiscript/**) Edit Write
-effort: high
+effort: xhigh
 paths: plugins/optiscript/**
 ---
 

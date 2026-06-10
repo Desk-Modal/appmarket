@@ -4,7 +4,7 @@ description: Phase-boundary Tier B verification — scripts/local-ci.sh --fast. 
 when_to_use: Logical-impact batch integrated (e.g., F156-P1 A+C+D landed); need workspace-wide affected-gate verification
 disable-model-invocation: true
 allowed-tools: Bash(scripts/local-ci.sh*) Bash(git log:*)
-effort: medium
+effort: xhigh
 ---
 
 # DeskModal Tier B verification

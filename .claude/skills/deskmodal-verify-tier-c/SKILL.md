@@ -4,7 +4,7 @@ description: Pre-push / pre-release Tier C — scripts/local-ci.sh --full --sign
 when_to_use: About to push to main / cut release; OR logical-impact-batch with GUI/FDC3/dist changes wants CDP evidence
 disable-model-invocation: true
 allowed-tools: Bash(scripts/launch.sh*) Bash(scripts/local-ci.sh*) Bash(scripts/build-dist.sh*) Bash(python scripts/cdp-test-runner.py*)
-effort: high
+effort: xhigh
 ---
 
 # DeskModal Tier C verification

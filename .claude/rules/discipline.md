@@ -41,7 +41,7 @@ Resume contract (F157 Layer 9 autonomous-SOTA-delivery loop):
 3. Declare write-set bounds + check cross-session conflicts (native worktree isolation; single-session default per §33).
 4. Surface findings from other parallel sessions (native memory + handoff bus).
 5. Re-verify LIVE state — gates, branch, dirty files. Handoff is a SNAPSHOT; the gate file is LIVE.
-6. Declare `/effort xhigh` unless mechanical (then `medium`).
+6. Session runs ultracode (settings `effortLevel: xhigh` + `ultracode: true`, durable — ULTRACODE-FOR-ALL 2026-06-10); no per-session `/effort` downgrade (medium tier retired).
 7. Declare `/goal <terminal-condition>` if the work has a verifiable end-state.
 8. Continue. Don't ask the user to re-state the goal unless you hit a BLOCK.
 

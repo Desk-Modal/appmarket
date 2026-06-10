@@ -6,7 +6,7 @@ model: claude-opus-4-8
 color: red
 memory: project
 review_angles: [supply-chain, acl, signature, crypto, secrets]
-effort: medium
+effort: xhigh
 skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 disallowedTools: [Write, Edit, NotebookEdit]
 ---

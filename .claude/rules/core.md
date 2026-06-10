@@ -67,7 +67,7 @@ For **autonomous /goal-driven sessions**: `/goal`'s supervisor evaluator judges 
 | Verifiable terminal condition | `/goal <condition>` (one per session) | Routine impl where Tier A verifies |
 | Time-paced re-check | `/loop <interval> <prompt>` | When `/goal` fits |
 | Dependency-ordered multi-step graph / fan-out research / context-offload | dynamic `Workflow` tool (ONE phase per invocation; `parallelism.md §4.1`) | One-shot wave (use `Agent`); canonical-file writes (main loop only) |
-| Cross-stack DeskModal impl | `/effort xhigh` (default) | Mechanical sweeps — use `medium` |
+| All DeskModal work | session ultracode — settings `effortLevel: xhigh` + `ultracode: true` (durable; ULTRACODE-FOR-ALL 2026-06-10) | — medium tier RETIRED; no per-task downgrade |
 | Phase-boundary review | `/review` + `/security-review` (native) | Per-wave — use local reviewer pod |
 | Cross-stack impl + GUI verify | local `Agent` dispatch | Source edits via cloud (cloud DISABLED per quality.md §18.7 #2) |
 | Multi-session work | native per-repo worktree isolation (parallel-sessions.md) | Agent-teams (high cost; experimental) |

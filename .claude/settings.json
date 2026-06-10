@@ -365,6 +365,7 @@
     "frontend-design@claude-plugins-official": true
   },
   "outputStyle": "concise",
-  "effort": "xhigh",
+  "effortLevel": "xhigh",
+  "ultracode": true,
   "maxSkillDescriptionChars": 1536
 }

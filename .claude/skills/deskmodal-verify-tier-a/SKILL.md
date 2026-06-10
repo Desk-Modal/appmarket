@@ -3,7 +3,7 @@ name: deskmodal-verify-tier-a
 description: Scoped Tier A verification — cargo check -p / cargo test -p / pnpm --filter — for the wave's declared write-set only. Per quality.md §18.7.1. Use after impl agents return + before committing.
 when_to_use: An impl wave just finished; need scoped Tier A verification before commit
 allowed-tools: Bash(cargo check -p *) Bash(cargo test -p *) Bash(cargo clippy -p *) Bash(cargo fmt -p *) Bash(pnpm --filter *) Bash(git diff --name-only:*)
-effort: medium
+effort: xhigh
 ---
 
 # DeskModal Tier A verification

@@ -6,7 +6,7 @@ model: claude-opus-4-8
 color: pink
 memory: project
 review_angles: [glassmorphism, oklch-tokens, typography-motion, density-grid, overlay-frame, component-patterns]
-effort: medium
+effort: xhigh
 skills:
   - codebase-memory
   - deskmodal-mesh-claim

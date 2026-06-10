@@ -4,7 +4,7 @@ description: Atomically update spec.md + benchmark.md per architecture.md §21 s
 when_to_use: A wave just committed; need to update the parent spec to reflect LANDED state
 disable-model-invocation: true
 allowed-tools: Edit Read Bash(git add specs/*) Bash(git commit:*) Bash(git log:*) Bash(git rev-parse:*)
-effort: medium
+effort: xhigh
 ---
 
 # DeskModal spec-amend skill

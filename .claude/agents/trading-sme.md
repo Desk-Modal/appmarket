@@ -6,7 +6,7 @@ model: claude-opus-4-8
 color: green
 memory: project
 review_angles: [pnl-correctness, order-flow, timezone-weekend, market-data, regulatory]
-effort: medium
+effort: xhigh
 skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 disallowedTools: [Write, Edit, NotebookEdit]
 ---

@@ -6,7 +6,7 @@ model: claude-opus-4-8
 color: orange
 permissionMode: acceptEdits
 impl_angles: [compliance-pipeline, meilisearch-index, marketplace-api, publisher-mgmt, quality-badges]
-effort: high
+effort: xhigh
 skills:
   - codebase-memory
   - deskmodal-mesh-claim

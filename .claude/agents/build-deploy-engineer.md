@@ -6,7 +6,7 @@ model: claude-opus-4-8
 color: yellow
 permissionMode: acceptEdits
 impl_angles: [nx-cache, cargo-incremental, sign-notarize, dist-layout, ci-matrix]
-effort: high
+effort: xhigh
 skills:
   - codebase-memory
   - deskmodal-mesh-claim
