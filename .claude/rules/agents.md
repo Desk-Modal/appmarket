@@ -16,11 +16,15 @@ Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. Claude's native router 
 
 **disallowedTools (F157 Layer 3):** review-only personas declare `disallowedTools: [Write, Edit, NotebookEdit]` as belt-and-braces beyond their `tools` allowlist.
 
-| Tier | Model | Personas |
-|---|---|---|
-| All | `claude-opus-4-8` | every persona in `.claude/agents/*.md` (25 total) |
+**Per-task model tiering (user 2026-06-10 verbatim — supersedes all-opus-always: "using the optimal claude model for the tasks in our dynamic workflow"):** persona frontmatter pins (`claude-opus-4-8`) are the DEFAULT; every `Workflow agent()` / `Agent()` dispatch picks the CHEAPEST model that fully serves the task class. Cost is a real constraint (2026-06-10 monthly-spend-limit incident killed a 90%-done lane).
 
-Dispatch always passes `model: "opus"` explicitly. The pin in each agent's frontmatter is `model: claude-opus-4-8`; orchestrator may override per dispatch.
+| Task class | Model |
+|---|---|
+| Mechanical sweeps — lock/pin bumps, renames, file moves, log/gitignore hygiene | `haiku` |
+| Delta re-reviews (owner-scoped findings), scoped Tier-A verify runs, doc/tracker/ledger updates | `sonnet` |
+| Cross-stack impl, type-system/runtime features, architecture, adversarial full-lane review, deployed-seam changes | `opus` / `fable` (default) |
+
+When unsure, one tier up — a rework cycle costs more than the tier saved.
 
 ## Dispatch patterns
 

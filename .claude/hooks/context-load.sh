@@ -20,6 +20,16 @@ print_section() {
     printf '\n▸ %s\n%s\n' "$1" "$2"
 }
 
+# 0. Mesh bootstrap — the durable resume contract (anti-scrap; 2026-06-10).
+# A fresh/cleared session re-adopts every standing approach from these
+# three files BEFORE dispatching anything. Ledger NEXT row surfaced inline
+# so the next unit of work is visible without a read.
+if [ -f "$ROOT/specs/SOTA-MASTER/SESSION-BOOTSTRAP.md" ]; then
+    next_row=$(grep -m1 '^| 1 | S-' "$ROOT/specs/SOTA-MASTER/DELIVERY-LEDGER.md" 2>/dev/null | cut -c1-160)
+    print_section "mesh bootstrap (READ FIRST)" "specs/SOTA-MASTER/SESSION-BOOTSTRAP.md → DELIVERY-LEDGER.md + PROGRESS-TRACKER.md before ANY dispatch${next_row:+
+ledger next: $next_row}"
+fi
+
 # 1. Active feature
 if [ -f "$STATE/active-feature" ]; then
     feature=$(cat "$STATE/active-feature")

@@ -30,8 +30,15 @@
 #   9. `--all` produces root `.prod-check/status.json` mirroring the
 #      optiscript domain (byte-exact, no `domain` key).
 #  10. workspace.json schema fields match the documented contract
-#      (INT-M3): totals, domains[].{name,rc,pass,fail,blocked,
-#      status_path}, blocked_review[].{domain,gate,expected_path}.
+#      (INT-M3): totals.{pass,fail,blocked,skip}, domains[].{name,rc,
+#      pass,fail,blocked,skip,status_path},
+#      blocked_review[].{domain,gate,expected_path}.
+#  11. A gate returning rc=3 → SKIP: single-domain run exits 0 (SKIP is
+#      not a FAIL), per-domain status.json records skip=1 with a
+#      results[] row state="SKIP" (2026-06-10 SKIP-state plumbing).
+#  12. --all aggregates SKIP into workspace.json totals.skip and the
+#      legacy root mirror carries a `skip` counter (internal consistency
+#      with the verbatim-copied SKIP results[] rows).
 
 set -u
 
@@ -117,6 +124,14 @@ DOMAIN_TASK_DESC="synthetic blocked domain"
 GATES=(alpha)
 FAST_SKIP=""
 check_alpha() { echo "alpha blocked"; return 2; }
+EOS
+            ;;
+        skip)
+            cat >"$f" <<'EOS'
+DOMAIN_TASK_DESC="synthetic skip domain"
+GATES=(alpha)
+FAST_SKIP=""
+check_alpha() { echo "alpha N/A on this host"; return 3; }
 EOS
             ;;
     esac
@@ -318,13 +333,13 @@ else
 import json, sys
 d = json.load(open(sys.argv[1]))
 ok = True
-# totals.{pass,fail,blocked}
-for k in ("pass", "fail", "blocked"):
+# totals.{pass,fail,blocked,skip}
+for k in ("pass", "fail", "blocked", "skip"):
     if k not in d.get("totals", {}) or not isinstance(d["totals"][k], int):
         ok = False
 # domains[] required fields
 for entry in d.get("domains", []):
-    for k in ("name", "rc", "pass", "fail", "blocked", "status_path"):
+    for k in ("name", "rc", "pass", "fail", "blocked", "skip", "status_path"):
         if k not in entry:
             ok = False
 # blocked_review[] required fields (only when present)
@@ -340,6 +355,48 @@ PY
     else
         report_fail "case 10 — workspace.json missing required fields"
     fi
+fi
+
+# ─── Case 11: rc=3 → SKIP (not FAIL); per-domain status.json skip=1 ─────
+SB=$TMPDIR_BASE/c11
+make_sandbox "$SB"
+make_module "$SB" "skipdom" "skip"
+rc=0
+dispatch "$SB" "skipdom" >/dev/null 2>&1 || rc=$?
+per="$SB/.prod-check/skipdom/status.json"
+if [ "$rc" = "0" ] && [ -f "$per" ]; then
+    skip_n=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("skip",-1))' "$per")
+    skip_state=$(python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("yes" if any(r.get("state")=="SKIP" for r in d.get("results",[])) else "no")' "$per")
+    fail_n=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("fail",-1))' "$per")
+    if [ "$skip_n" = "1" ] && [ "$skip_state" = "yes" ] && [ "$fail_n" = "0" ]; then
+        report_pass "case 11 — rc=3 → SKIP: status.json skip=1, results[] state=SKIP, not a FAIL"
+    else
+        report_fail "case 11 — expected skip=1/SKIP-row/fail=0, got skip=$skip_n state=$skip_state fail=$fail_n rc=$rc"
+    fi
+else
+    report_fail "case 11 — expected rc=0 (SKIP is not FAIL) and per-domain status.json, got rc=$rc"
+fi
+
+# ─── Case 12: --all aggregates SKIP; root mirror carries skip counter ──
+SB=$TMPDIR_BASE/c12
+make_sandbox "$SB"
+make_module "$SB" "optiscript" "skip"
+make_module "$SB" "other"      "pass"
+dispatch "$SB" "--all" >/dev/null 2>&1 || true
+ws="$SB/.prod-check/workspace.json"
+root="$SB/.prod-check/status.json"
+if [ -f "$ws" ] && [ -f "$root" ]; then
+    ws_skip=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["totals"].get("skip",-1))' "$ws")
+    # Root mirror (optiscript domain = skip mode) must carry a `skip`
+    # counter for internal consistency with its verbatim SKIP results[] row.
+    root_skip=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("skip",-1))' "$root")
+    if [ "$ws_skip" = "1" ] && [ "$root_skip" = "1" ]; then
+        report_pass "case 12 — --all: workspace totals.skip=1 + legacy mirror skip=1 (internal consistency)"
+    else
+        report_fail "case 12 — expected workspace skip=1 + mirror skip=1, got ws=$ws_skip mirror=$root_skip"
+    fi
+else
+    report_fail "case 12 — missing workspace.json or root mirror"
 fi
 
 # ─── Summary ───────────────────────────────────────────────────────────

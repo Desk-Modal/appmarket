@@ -120,7 +120,7 @@ Dedicated cleanup wave sweeps all 5 axes workspace-wide; deletes stale files; co
 
 User directive 2026-05-17 (verbatim — preserved per §1 honesty rule): "we do not publish to NPM. Remove any reference to NPM. plugins, services, crates etc are published to our market git. They need to be signed, manifested, icons, descriptions, etc. Our local CICD should handle this for now and we can evolve the experience for non-deskmodal employees later, but we want to build state of the art docs etc."
 
-Every plugin/service/SDK/crate ships as a signed `.dmpkg` (Ed25519 + manifest + icon + description) via `scripts/build-dist.sh --sign` → marketplace git. `@deskmodal/*` names retained as identity but NEVER pushed to npmjs.org/crates.io. Deps in `plugin.toml [sdk_dependencies]`/`[plugin_dependencies]`, not package.json. Docs target SOTA (TypeDoc + rustdoc + JSON Schema + llms.txt at `docs.deskmodal.io`).
+Every plugin/service/SDK/crate ships as a signed `.dmpkg` (Ed25519 + manifest + icon + description) via `scripts/build-dist.sh --sign` → marketplace git. `@deskmodal/*` names retained as identity but NEVER pushed to npmjs.org/crates.io. Cross-capability deps in `plugin.toml [dependencies]` (required/recommended/optional — the implemented §27.10 mechanism; R-SDKDEPS-POLICY 2026-06-12 retired the never-implemented `[sdk_dependencies]`/`[plugin_dependencies]` vocabulary in favour of this single block), not package.json. Docs target SOTA (TypeDoc + rustdoc + JSON Schema + llms.txt at `docs.deskmodal.io`).
 
 ### 18.5 Wiki + MCP synchronization
 

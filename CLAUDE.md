@@ -2,6 +2,8 @@
 
 **SessionStart hook `context-load.sh` surfaces active feature, branch, gate state, and current handoff. Read that before asking the user anything. See `.claude/rules/core.md` §13 (Autonomy protocol).**
 
+**Mesh resume contract (any new/cleared session, PRIMARY or SISTER): read `specs/SOTA-MASTER/SESSION-BOOTSTRAP.md` → `DELIVERY-LEDGER.md` (durable anti-scrap backlog; rows exit only as DONE-<sha>/resolved/retired) → `PROGRESS-TRACKER.md` BEFORE any dispatch. Every integration commit updates its ledger+tracker rows atomically; new scope-transfers add a ledger row in the creating commit.**
+
 ## What's native vs augmentation
 
 Claude Code (May 2026) provides natively: `Agent` tool for sub-agents, the dynamic `Workflow` tool (graph-driven background orchestration; see `.claude/rules/parallelism.md §4.1`), hook events (SessionStart/PreToolUse/PostToolUse/Stop/SubagentStop), plugin marketplaces, MCP servers, auto memory, CLAUDE.md, custom skills, `/loop` and `/schedule` scheduling primitives, routines, native `/review` and `/security-review`.

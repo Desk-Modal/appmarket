@@ -81,6 +81,20 @@ The native **Workflow** tool moves orchestration OUT of the main conversation in
 
 **Pairs with:** §4 (single-agent default + pod cap 3 + single-writer) · §4.1 (Workflow fan-out + worktree isolation + verify-never-mid-mutation) · §15 (evolve-and-fix-forward — red verify closes forward) · `quality.md §18.7.1` (Tier A advisory / Tier C gate) · `quality.md §18.7` (always-parallel always-verify) · `architecture.md §29` (incremental cache discipline) · `parallel-sessions.md` (8 disjoint repos) · `discipline.md §26` (durable state — native task list + handoff) · `core.md §11` autonomous-primitive matrix.
 
+## 4.3 Small work-packets + batched long-runs (user 2026-06-10 — NEVER FORGOTTEN)
+
+**Cardinal directive (user verbatim):** "we need to plan better with smaller tasks to not lost progress, ensure nothing is lost and we're not doing long builds and tests continuously, we should only test and build what's changed, and we should do any long running tasks so they are batched, using the optimal claude model for the tasks in our dynamic workflow."
+
+**Origin:** 2026-06-10 — a monolithic ~2h workflow agent was quota-killed at 90%-done (recovered only via live-tree forensics + `refs/wip` checkpoints), and the same day 3 full `build-dist --sign` gates + repeated `cargo test --workspace` batteries ran where scoped runs sufficed.
+
+**4 invariants:**
+1. **Work-packet ceiling:** decompose every lane into packets a single agent completes in ≤ ~45 min, each with its OWN integrate-point (main-loop commit, or `refs/wip/<lane>` checkpoint when reviewers need a stable HEAD diff). Loss radius of any kill (quota / disk / harness) = ONE packet, never a lane.
+2. **Changed-scope-only builds/tests:** every verification names its scope from the diff (`cargo test -p <crate> --test <name>`, `pnpm --filter`, affected-mode per `architecture.md §29`). Workspace batteries + `build-dist --sign` run ONCE per logical-impact batch as the push gate (`quality.md §18.7.1` Tier C) — never per cycle, never per reviewer. Reviewers NEVER re-run workspace batteries (delta-review: verify own findings via scoped spot-checks + the gate's persisted log).
+3. **Batch long-runs:** queue every >5-min run (signed build, workspace battery, GUI verify, launch-health) to the NEXT impact boundary and run them together on the warm cache; impl never waits on them (background + verify-gates-push §4.2).
+4. **Optimal model per packet:** pick per `agents.md` §Model tiering task-class table (`haiku` mechanical / `sonnet` delta-review+scoped-verify+docs / `opus`-`fable` deep impl+architecture). Workflow scripts pass `model:` per `agent()` call.
+
+**Pairs with:** §4.1/§4.2 · `quality.md §18.7.1` · `architecture.md §29` · `agents.md` §Model tiering. Memory: `feedback_small_packets_batched_longruns_model_tiering`.
+
 ## 15. Wave discipline — evolve-and-fix-forward (NEVER ROLL BACK)
 
 **Cardinal rule: every wave moves forward.** Reviewer REWORK / BLOCK / HIGH findings close via a **subsequent commit on top of the current HEAD**, never via `git reset --hard`, `git revert`, or any destructive rewind. Rollback is banned as a wave-mechanic because it discards partial-value work the next wave would otherwise build on.
