@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-10T22:34:46Z",
+  "generated_at": "2026-06-10T23:52:07Z",
   "generator": {
     "name": "build_appmarket_catalog.py",
     "version": "1.0.0"
@@ -30,14 +30,14 @@
           "asset_manifest_url": "plugins/deskmodal-altdata-onchain/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "441c15543324fe6d0544f7d7b9d35e0fec2a37930d55b6b00984c8cdfd42840c",
-          "size_bytes": 8212603
+          "size_bytes": 8212987
         }
       },
       "has_app": true,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -59,8 +59,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 8212603
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 8212987
         },
         {
           "version": "0.4.0",
@@ -118,7 +118,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -146,7 +146,7 @@
       "versions": [
         {
           "version": "0.5.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 4282429
         },
         {
@@ -195,14 +195,14 @@
           "asset_manifest_url": "plugins/deskmodal-brand-service/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "94aa363a3a5bffea40019ce9c03ab9617da9380ffe72ec0340f02e4f0d51d624",
-          "size_bytes": 6056181
+          "size_bytes": 6086821
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "required",
       "resources": {
@@ -224,8 +224,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 6056181
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 6086821
         },
         {
           "version": "0.4.0",
@@ -268,14 +268,14 @@
           "asset_manifest_url": "plugins/deskmodal-chart-indicator-host/0.5.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "9eaa1043e40c3b01ca1c9a2d148c9f03c8791edcdacda5e8ccc94b780eb06e42",
-          "size_bytes": 6765662
+          "size_bytes": 6765742
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "required",
       "resources": {
@@ -297,8 +297,8 @@
       "versions": [
         {
           "version": "0.5.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 6765662
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 6765742
         },
         {
           "version": "0.3.0",
@@ -344,14 +344,14 @@
           "asset_manifest_url": "plugins/deskmodal-collab/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "17cf0fda35297764d9f896aa5c33eb1cdd90ce4d5d5ed40993db5355054c469a",
-          "size_bytes": 3587034
+          "size_bytes": 3587066
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -379,8 +379,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 3587034
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 3587066
         },
         {
           "version": "0.4.0",
@@ -431,14 +431,14 @@
           "asset_manifest_url": "plugins/deskmodal-copilot/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "e6ada74e0d932eb2f141a198cd524d3e826be4963e250fc5bfa74bdd93b19ccb",
-          "size_bytes": 34178392
+          "size_bytes": 34178712
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -466,8 +466,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 34178392
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 34178712
         },
         {
           "version": "0.4.0",
@@ -518,14 +518,14 @@
           "asset_manifest_url": "plugins/deskmodal-footprint/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "4c307e62a49081e0e3f5c9b55d6ac7dfcb1b502fd3563c17c10738571db570c2",
-          "size_bytes": 3847723
+          "size_bytes": 3847771
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -547,8 +547,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 3847723
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 3847771
         },
         {
           "version": "0.4.0",
@@ -601,14 +601,14 @@
           "asset_manifest_url": "plugins/deskmodal-orderflow/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "d045eb3058685d78325f3eb37f450e56b1f8eea0b359fc70e7a559a91e1b5c9e",
-          "size_bytes": 56399436
+          "size_bytes": 56388268
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -636,8 +636,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 56399436
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 56388268
         },
         {
           "version": "0.4.0",
@@ -688,14 +688,14 @@
           "asset_manifest_url": "plugins/deskmodal-pattern-detection/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "4c2c6f45985f5cad94d9d8a05f31853d8abdcc578ea9fe1ecfde89bce698c307",
-          "size_bytes": 3845812
+          "size_bytes": 3845940
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -717,8 +717,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 3845812
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 3845940
         },
         {
           "version": "0.4.0",
@@ -769,14 +769,14 @@
           "asset_manifest_url": "plugins/deskmodal-tpo/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "0a2505076f4fcae1b159453d42bd35b36b182dad975efc0bb911bed4c76b6a17",
-          "size_bytes": 3844537
+          "size_bytes": 3844809
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -798,8 +798,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 3844537
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 3844809
         },
         {
           "version": "0.4.0",
@@ -850,14 +850,14 @@
           "asset_manifest_url": "plugins/deskmodal-volume-profile/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "e5923006e915d73800186f9be812d32490221887f1bacd05bde7a44db683152a",
-          "size_bytes": 3844771
+          "size_bytes": 3845011
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -879,8 +879,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 3844771
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 3845011
         },
         {
           "version": "0.4.0",
@@ -940,7 +940,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "required",
       "resources": {
@@ -962,7 +962,7 @@
       "versions": [
         {
           "version": "0.7.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 270798895
         },
         {
@@ -1028,7 +1028,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -1050,7 +1050,7 @@
       "versions": [
         {
           "version": "0.7.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 222036181
         },
         {
@@ -1116,7 +1116,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -1138,7 +1138,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 213206374
         }
       ],
@@ -1179,7 +1179,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -1207,7 +1207,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 493836
         },
         {
@@ -1268,7 +1268,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "required",
       "resources": {
@@ -1290,7 +1290,7 @@
       "versions": [
         {
           "version": "0.8.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 588962001
         },
         {
@@ -1359,7 +1359,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -1381,7 +1381,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 53296555
         },
         {
@@ -1442,7 +1442,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -1464,7 +1464,7 @@
       "versions": [
         {
           "version": "0.7.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 251927865
         },
         {
@@ -1528,7 +1528,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -1556,7 +1556,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 8406347
         },
         {
@@ -1618,7 +1618,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -1640,7 +1640,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 175102759
         },
         {
@@ -1706,7 +1706,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -1734,7 +1734,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 8436100
         },
         {
@@ -1800,7 +1800,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "required",
       "resources": {
@@ -1822,7 +1822,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 244090569
         },
         {
@@ -1866,7 +1866,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -1894,7 +1894,7 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 7485077
         }
       ],
@@ -1935,7 +1935,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -1957,7 +1957,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 171430872
         },
         {
@@ -2023,7 +2023,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -2051,7 +2051,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 10008069
         },
         {
@@ -2115,7 +2115,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "required",
       "resources": {
@@ -2137,7 +2137,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 30412242
         },
         {
@@ -2191,14 +2191,14 @@
           "asset_manifest_url": "plugins/deskmodal.optiscript.alert-service/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "fb234d1b4aeddd9c2a5d63690bfe2e1cc6b0cd3308b0da476d66d5122261358e",
-          "size_bytes": 4948034
+          "size_bytes": 4948066
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -2220,8 +2220,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 4948034
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 4948066
         }
       ],
       "owner": "Desk-Modal",
@@ -2261,7 +2261,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "optional",
       "resources": {
@@ -2289,7 +2289,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 4569770
         },
         {
@@ -2350,7 +2350,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -2372,7 +2372,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 242691956
         }
       ],
@@ -2414,7 +2414,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -2436,7 +2436,7 @@
       "versions": [
         {
           "version": "0.7.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 4107210
         },
         {
@@ -2502,7 +2502,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -2524,7 +2524,7 @@
       "versions": [
         {
           "version": "0.2.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 208850283
         }
       ],
@@ -2565,7 +2565,7 @@
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "required",
       "resources": {
@@ -2587,7 +2587,7 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 7193835
         },
         {
@@ -2648,7 +2648,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -2670,7 +2670,7 @@
       "versions": [
         {
           "version": "0.8.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 265254195
         },
         {
@@ -2732,14 +2732,14 @@
           "asset_manifest_url": "plugins/deskmodal.settings/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "db6f08692a3685f477eead0fc7c421e45c86f4ddcfd4c4b9d53490a04be9388d",
-          "size_bytes": 813315
+          "size_bytes": 1072949
         }
       },
       "has_app": true,
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "required",
       "resources": {
@@ -2761,8 +2761,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 813315
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 1072949
         }
       ],
       "owner": "Desk-Modal",
@@ -2802,7 +2802,7 @@
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -2824,7 +2824,7 @@
       "versions": [
         {
           "version": "0.7.0",
-          "published_at": "2026-06-10T22:34:46Z",
+          "published_at": "2026-06-10T23:52:07Z",
           "size_bytes": 278364052
         },
         {
@@ -2883,14 +2883,14 @@
           "asset_manifest_url": "plugins/optiscript.editor/0.1.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "e8f87c7d429a8521d9160fef9f7d5b546f5466b7c3924b35618c70e7e7a58e8f",
-          "size_bytes": 65743693
+          "size_bytes": 65743850
         }
       },
       "has_app": true,
       "has_services": false,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -2912,8 +2912,8 @@
       "versions": [
         {
           "version": "0.1.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 65743693
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 65743850
         }
       ],
       "owner": "Desk-Modal",
@@ -2946,14 +2946,14 @@
           "asset_manifest_url": "plugins/optiscript.engine/0.6.0/darwin-arm64/plugin.toml",
           "checksums": "darwin-arm64/checksums.txt",
           "sha256": "db2bbf7538d5a6857e8da2615e5291ab3ec725cecc0331a16492780961780d77",
-          "size_bytes": 4419779
+          "size_bytes": 5033427
         }
       },
       "has_app": false,
       "has_services": true,
       "dependencies": [],
       "min_deskmodal_version": "",
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Apache-2.0",
       "capability_tier": "recommended",
       "resources": {
@@ -2975,8 +2975,8 @@
       "versions": [
         {
           "version": "0.6.0",
-          "published_at": "2026-06-10T22:34:46Z",
-          "size_bytes": 4419779
+          "published_at": "2026-06-10T23:52:07Z",
+          "size_bytes": 5033427
         },
         {
           "version": "0.4.0",
@@ -3033,7 +3033,7 @@
         }
       },
       "dependencies": [],
-      "published_at": "2026-06-10T22:34:46Z",
+      "published_at": "2026-06-10T23:52:07Z",
       "license": "Proprietary",
       "tags": [
         "theme",
