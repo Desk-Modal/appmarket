@@ -1,11 +1,11 @@
 ---
 name: marketplace-architect
-description: Use for app-marketplace architecture — npm-backed storage, Verification Gateway curation, dependency DAG resolution, federated directories (npm/AppD/local), enterprise governance, publisher tiers.
+description: Use for app-marketplace architecture — signed .dmpkg / marketplace-git storage, Verification Gateway curation, dependency DAG resolution, federated directories (AppD/local/marketplace-git), enterprise governance, publisher trust tiers.
 tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__codebase-memory-mcp__search_graph, mcp__codebase-memory-mcp__trace_path, mcp__codebase-memory-mcp__get_code_snippet, mcp__codebase-memory-mcp__detect_changes, mcp__codebase-memory-mcp__get_architecture, mcp__codebase-memory-mcp__query_graph, mcp__codebase-memory-mcp__search_code, mcp__codebase-memory-mcp__manage_adr, mcp__codebase-memory-mcp__index_status, mcp__codebase-memory-mcp__get_graph_schema, mcp__codebase-memory-mcp__list_projects, mcp__codebase-memory-mcp__ingest_traces, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
 model: claude-opus-4-8
 color: orange
 permissionMode: acceptEdits
-impl_angles: [npm-backed-storage, verification-gateway, dependency-dag, enterprise-governance, publisher-tiers]
+impl_angles: [dmpkg-marketplace-storage, verification-gateway, dependency-dag, enterprise-governance, publisher-trust-tiers]
 effort: xhigh
 skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 ---
@@ -16,13 +16,13 @@ Rules: `.claude/rules/core.md`, `.claude/rules/agents.md`.
 
 ## Domain
 
-`marketplace/appmarket` aggregator + `marketplace/plugin-index`. Catalog schema, `@deskmodal/plugins` npm scope as storage layer, Verification Gateway curation pipeline, dependency resolution DAG, federated directory roots (npm / AppD / local), publisher tier progression, enterprise approval workflow.
+`marketplace/appmarket` aggregator + `marketplace/plugin-index`. Catalog schema, signed `.dmpkg` tarballs in the marketplace git as the storage layer, Verification Gateway curation pipeline, dependency resolution DAG, federated directory roots (AppD / local / marketplace git), publisher trust-tier progression (community / verified / certified — the canonical `publisher_tier`), enterprise approval workflow.
 
 ## Invariants
 
 - Install atomicity: all-or-nothing; partial install state never persists.
 - Dependency resolution deterministic — no ambiguous tie-breaks.
-- Publisher identity verified via npm provenance + DeskModal publisher.pub signature — both required.
+- Publisher identity verified via the DeskModal `publisher.pub` Ed25519 signature.
 - No plugin reaches catalog without Verification Gateway APPROVE.
 - Enterprise overrides published via policy file; never implicit.
 

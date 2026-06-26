@@ -6,6 +6,23 @@ Personas live in `.claude/agents/<name>.md` with YAML frontmatter (`name`, `desc
 
 Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. Claude's native router matches task wording against each agent's `description`.
 
+## Standing impl-agent contract (design-first — fed to EVERY dispatch, up front)
+
+**Every impl dispatch (Agent or Workflow `agent()`) carries this contract UP FRONT as the design-time quality bar — NEVER re-asked per task, NEVER a reactive after-the-fact fix.** Operationalises `core.md §1` · `quality.md §5`/`§18.1`/`§18.8` · `architecture.md §16`/`§24`/`§28`. Reusable copy (lane template, also the persona exit-criteria reference): `plugins/optiscript/specs/impl-agent-contract.md`. Embed it verbatim in every `Workflow` impl prompt; cite it in persona exit-criteria.
+
+- **DESIGN-FIRST decomposition (§24 — proactive, never reactive-split):** before writing, decompose into cohesive concerns, assign each to its own sibling module (`mod.rs` + `<concern>.rs`) targeted ≤300 LOC carrying COMPLETE logic; implement INTO that layout from line one. Every file is BORN ≤300 + complete — never monolith-then-split, never a latent "decomp later" task (a pre-existing-over file you touch → split it in the SAME diff). `over_ceiling_files` MUST be empty; critique REWORKs on any breach.
+- **Production-grade (§5):** zero stub/TODO/FIXME/placeholder/demo; complete error handling + every edge case; no `unwrap`/`expect` on fallible runtime paths; no versioned interfaces (evolve in place).
+- **Non-blocking (§16):** loops in their own `tokio::spawn`; bounded channels (≥4096, drop-on-overflow, never `unbounded_channel`); no `Mutex`/`RwLock` across `.await` on hot paths (ArcSwap/DashMap/atomics/actors); no sync HTTP/WS in service code; NO fallbacks (hard-fail `rc≠0` on unmet precondition).
+- **Mission-critical/deterministic (§28) + SOTA (§18.8 + `scope.html`):** correct under concurrency, no lost updates; best-in-field approach that BEATS the named competitor on the axis — not a minimal pass.
+- **CRITIQUE COLLABORATES UP FRONT — not a latent gate; minimise gates (user 2026-06-20: "why are they not collaborating up front… minimise unnecessary gates"):** the reviewer lenses — the exact things a critic REWORKs on (§24 over-ceiling, dead-helper vs DEPLOYED-seam, compat-shim/versioned-alias, dishonest gate rc, trivially-true tests, capability-cut) — are a **design INPUT the impl agent self-satisfies BEFORE returning**, never a downstream stage that finds the problem after the fact (the same anti-pattern as a post-hoc verify). A separate adversarial-critique agent is reserved for **load-bearing** changes — subtle correctness / security / deployed-seam / financial-math — where a genuine second set of eyes catches what self-review can't (closure-capture semantics, signing/ACL, intent-registration-on-the-deployed-service, PnL). For **mechanical** changes (rename, decomp, test/fixture authoring, config/manifest, docs) the self-run scoped gate + the BATCHED mechanical audit gates (loc-ceiling, clippy `-D`, tests, no-stub grep) already cover it — a per-lane opus critique there is ceremony. **Every gate must be LOAD-BEARING:** if a cheap deterministic script already checks it, don't spend an agent; if the contract already mandated it, verify it ONCE at the batch boundary, not per-lane. Memory: `feedback_critique_up_front_minimise_gates`.
+
+**Verify-discipline (CORRECT-UP-FRONT, then anti-waste — NEVER block, NEVER repeat a long run; §4.2/§4.3/§18.7.1):**
+- **CORRECT UP FRONT — every impl agent runs the SCOPED REAL GATE before returning, fixing to green IN ITS WORKTREE:** `cargo fmt -p <crates>` + `cargo clippy -p <crates> --all-targets -- -D warnings` + `cargo test -p <crates>`. **`cargo check` is NOT the gate, and a no-cargo draft is FALSE economy** — both let fmt drift, clippy `-D` unused-imports (incl. test-only re-exports), and test breaks escape to the integration Tier-C as expensive post-event fix-forwards. Scoped to the agent's crates on the warm cache this is ~1 min. The agent returns its scoped-gate rc; the detached workspace-Tier-C is then a cross-crate CONFIRMATION, not a bug-finder. (New crate / wide ripple: run the scoped gate iteratively to chase compile+lint clean.)
+- **NEVER run the workspace battery on the LIVE tree.** Always a detached worktree (`git worktree add --detach <tmp> <sha>` + `Bash run_in_background`); the live tree stays free so impl + next-dispatch pipeline (shares the warm cache, §29; needs `--offline`+copied lock only when the repo gitignores `Cargo.lock`).
+- **Scoped fix-forwards:** `cargo -p <changed-crate> --all-targets -- -D warnings` (seconds) for small fixes — NOT the full battery. The full `clippy --workspace + test --workspace` battery runs ONCE per impact boundary.
+- **Batch across units:** let N completed units land, then ONE Tier-C covers all N — never one verify per unit/fix.
+- `cargo check` is NOT the gate (it misses clippy `-D warnings` unused-imports + test-only re-exports → keep those `#[cfg(test)]`-gated). Memory: `feedback_section24_split_in_wave_agent_contract`.
+
 ## Model tiering
 
 **Policy (2026-05-14; reaffirmed 2026-05-16; bumped 4.7→4.8 on 2026-05-31 — Claude Code CLI is now Opus 4.8, 1M ctx): every persona runs on `claude-opus-4-8`.** Quality dominates cost for the DeskModal-beats-TradingView mandate; the 1M ctx lets one agent own cross-stack work (Rust + TS + CSS) end-to-end so contract-edge violations become impossible. The multi-tier rationale + the throughput-estimate prose live in `wiki/governance/rules-charter.md`.
@@ -16,7 +33,7 @@ Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. Claude's native router 
 
 **disallowedTools (F157 Layer 3):** review-only personas declare `disallowedTools: [Write, Edit, NotebookEdit]` as belt-and-braces beyond their `tools` allowlist.
 
-**Per-task model tiering (user 2026-06-10 verbatim — supersedes all-opus-always: "using the optimal claude model for the tasks in our dynamic workflow"):** persona frontmatter pins (`claude-opus-4-8`) are the DEFAULT; every `Workflow agent()` / `Agent()` dispatch picks the CHEAPEST model that fully serves the task class. Cost is a real constraint (2026-06-10 monthly-spend-limit incident killed a 90%-done lane).
+**Per-task model tiering (user 2026-06-10 + 2026-06-20: "using the optimal claude model for the tasks in our dynamic workflow" + "we don't worry about the cost, we want the RIGHT model for the job"):** persona frontmatter pins (`claude-opus-4-8`) are the DEFAULT; every `Workflow agent()` / `Agent()` dispatch picks the **RIGHT model for the task class — best FIT, NOT cheapest. Cost is NOT a constraint (ultracode); under-powering a task to save spend is the error.** The table below is the *fitness floor* (the lightest model that is genuinely the right tool for that class), not a budget cap — task-fit governs, and model-tiering is also what lets many lanes run concurrently (lighter classes don't hit the opus-concurrency limit).
 
 | Task class | Model |
 |---|---|
@@ -24,7 +41,7 @@ Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. Claude's native router 
 | Delta re-reviews (owner-scoped findings), scoped Tier-A verify runs, doc/tracker/ledger updates | `sonnet` |
 | Cross-stack impl, type-system/runtime features, architecture, adversarial full-lane review, deployed-seam changes | `opus` / `fable` (default) |
 
-When unsure, one tier up — a rework cycle costs more than the tier saved.
+When unsure, go MORE capable (up a tier) — the right model for the job, never the cheapest; cost is not the constraint, an under-powered output + rework cycle is.
 
 ## Dispatch patterns
 

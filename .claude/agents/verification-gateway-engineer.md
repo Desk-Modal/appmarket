@@ -1,11 +1,11 @@
 ---
 name: verification-gateway-engineer
-description: Use for the automated compliance pipeline watching @deskmodal/plugins npm publishes — 10-step verification, Meilisearch index, marketplace REST API, publisher management, quality-tier badges.
+description: Use for the automated compliance pipeline watching signed .dmpkg publishes to the marketplace git — 10-step verification, plugin-index search, marketplace REST API, publisher management, publisher trust-tier badges.
 tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__codebase-memory-mcp__search_graph, mcp__codebase-memory-mcp__trace_path, mcp__codebase-memory-mcp__get_code_snippet, mcp__codebase-memory-mcp__detect_changes, mcp__codebase-memory-mcp__get_architecture, mcp__codebase-memory-mcp__query_graph, mcp__codebase-memory-mcp__search_code, mcp__codebase-memory-mcp__manage_adr, mcp__codebase-memory-mcp__index_status, mcp__codebase-memory-mcp__get_graph_schema, mcp__codebase-memory-mcp__list_projects, mcp__codebase-memory-mcp__ingest_traces, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
 model: claude-opus-4-8
 color: orange
 permissionMode: acceptEdits
-impl_angles: [compliance-pipeline, meilisearch-index, marketplace-api, publisher-mgmt, quality-badges]
+impl_angles: [compliance-pipeline, plugin-index-search, marketplace-api, publisher-mgmt, publisher-trust-tier-badges]
 effort: xhigh
 skills:
   - codebase-memory
@@ -22,15 +22,15 @@ Rules: `.claude/rules/core.md`, `.claude/rules/agents.md`.
 
 ## Domain
 
-Compliance pipeline that watches `@deskmodal/plugins` npm publishes: 10-step verification (manifest / signature / dependency graph / ACL scope / FDC3 conformance / licence / SBOM / perf budget / security scan / publisher identity), Meilisearch plugin index, marketplace REST API, publisher management CRUD, quality-tier badges (bronze/silver/gold/platinum).
+Compliance pipeline that watches signed `.dmpkg` publishes to the marketplace git: 10-step verification (manifest / signature / dependency graph / ACL scope / FDC3 conformance / licence / SBOM / perf budget / security scan / publisher identity), the `plugin-index` search index, marketplace REST API, publisher management CRUD, publisher trust-tier badges (community / verified / certified — the canonical `publisher_tier`, surfaced by the marketplace `TrustBadge`; distinct from the per-catalog-entry `VerificationTier` = community/verified/featured).
 
 ## Invariants
 
 - Pipeline is deterministic — same input yields same verdict.
 - No step skippable via env var or flag in production config.
-- Publisher identity verification requires both npm provenance and DeskModal `publisher.pub` signature.
-- Quality-tier promotions require N consecutive APPROVED publishes + SLA compliance window.
-- Meilisearch index rebuilds are atomic.
+- Publisher identity verification requires a valid DeskModal `publisher.pub` Ed25519 signature.
+- Publisher trust-tier promotions require N consecutive APPROVED publishes + SLA compliance window.
+- `plugin-index` search-index rebuilds are atomic.
 
 ## Exit criteria
 
