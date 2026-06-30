@@ -92,7 +92,7 @@ When surfaces conflict, walk down: source code → gate scripts → lodestar sym
 
 ## Mirror discipline
 
-`.claude/rules/**` is canonical at root + mirrored to 7 sub-repos via `scripts/_deprecated-2026-04-23/sync-specs.sh --apply` (on-demand, advisory; rsync `--delete` propagates drops). After editing any rule file or moving content to a wiki playbook: run `sync-specs.sh --apply` from a clean root with no sub-repo session mid-edit on canonical paths. See [`parallel-sessions.md`](parallel-sessions.md) §Canonical file ownership.
+`.claude/rules/**` is canonical at root + mirrored to 7 sub-repos via `scripts/sync-specs.sh --apply` (on-demand, advisory; rsync `--delete` propagates drops). After editing any rule file or moving content to a wiki playbook: run `sync-specs.sh --apply` from a clean root with no sub-repo session mid-edit on canonical paths. See [`parallel-sessions.md`](parallel-sessions.md) §Canonical file ownership.
 
 ## Audit gate
 

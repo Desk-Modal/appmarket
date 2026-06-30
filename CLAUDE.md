@@ -23,7 +23,7 @@ Claude Code (May 2026) provides natively: `Agent` tool for sub-agents, the dynam
 - `.claude/rules/agents.md` — dispatch patterns (workflow policy on native `Agent`), return contract.
 - `.claude/rules/parallel-sessions.md` — multi-session isolation (`CLAUDE_PROJECT_DIR`, branch discipline, canonical-file ownership, launch-lockfile).
 
-Legacy 12 rule files preserved under `.claude/rules-archive/2026-04-23/` (NOT auto-loaded — reference only; restored 2026-05-19 to drop ~82K chars from SessionStart context).
+The legacy 12 rule files (superseded 2026-04-23 by the lean topic-file split, then kept under `.claude/rules-archive/2026-04-23/` until they were removed in W5 legacy cleanup) live only in git history now — recover via `git log --diff-filter=D -- .claude/rules-archive` if ever needed.
 
 ## Structure
 
@@ -140,7 +140,7 @@ Dispatch: `Agent(subagent_type=<name>, model=<pinned>)`. All reviewers for a tas
 
 ## Cross-repo coordination
 
-- Canonical files (`.claude/`, `CLAUDE.md`, `.mcp.json`, `specs/personas/`) live at root + mirror to 7 sub-repos via `scripts/_deprecated-2026-04-23/sync-specs.sh` (on-demand, not pre-commit-gated).
+- Canonical files (`.claude/`, `CLAUDE.md`, `.mcp.json`, `specs/personas/`) live at root + mirror to 7 sub-repos via `scripts/sync-specs.sh` (on-demand, not pre-commit-gated).
 - Platform's `.claude/` is gitignored — its working tree is the mirror; don't try to commit platform's `.claude/`.
 - Before `sync-specs.sh --apply`, verify no sub-repo has uncommitted canonical edits (would be overwritten).
 

@@ -237,7 +237,9 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **Anti-patterns banned:** Grep on `.rs/.ts/.tsx/.py` before lodestar; Grep/Read on `wiki/**` before wiki-mcp; manual `cargo check` parse loop when `rust_analyzer_workspace_diagnostics` answers in ~500ms; manual screenshot when `browser_take_screenshot` is 2 tool calls.
 
-**Pairs with:** core.md §1 + §2 + §3, §28, §29, agents.md return contract, quality.md §18.7.1, parallelism.md §4.
+**lodestar visual-knowledge limitation (2026-06-29):** lodestar's deterministic visual gates (`design:token` / `a11y:contrast`) score ONLY inline `style={{}}` literals — DeskModal's CSS-class + OKLCH-live-theme styling makes most components DEFER (`not_applicable`), and `a11y:contrast` is NOT computable (OKLCH `var()` has no concrete color). Use `design:token` as an inline-literal DRIFT detector (off-token backlog = a unification list); rely on the brand-adherence gate (§25 / F152 `quality:design-tokens-complete`) for `.css` tokenization; `a11y:contrast` stays unused pending a concrete-color-resolution lodestar enhancement. lodestar `CROSS_*` edges model HTTP only — NOT FDC3 / Tauri-IPC seams.
+
+**Pairs with:** core.md §1 + §2 + §3, §25, §28, §29, agents.md return contract, quality.md §18.7.1, parallelism.md §4.
 
 ## 31. Cloud-lane operational rules — monitoring + aggregator + visual critique
 
@@ -273,18 +275,12 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **Pairs with:** F155 master spec, parallelism.md §4 + §15, quality.md §7 + §18.1 + §18.7, parallel-sessions.md, discipline.md §9 + §13 + §26, §16 + §21 + §27 + §28 + §29 + §30 + §31.
 
-## 33. Session Mesh — multi-session coordination (F157 Layer 11)
+## 33. Multi-session coordination — native worktree + lodestar findings-bus (F157 Layer 11)
 
-**Full:** [wiki/playbooks/architecture/orchestration.md](../../wiki/playbooks/architecture/orchestration.md) §33.
+**Full:** [orchestration.md](../../wiki/playbooks/architecture/orchestration.md) §33. **Canonical:** discipline.md §33 (native-primitive detail).
 
 **Cardinal directive (user 2026-05-18 verbatim):** "evolve this so we can run multiple parallel claude sessions across deskmodal so they do not create loss, interrupt, or ideally they somehow learn and collaborate, it's critical we're not creating too much expense, unnecessary replication, and we want to deliver code and outcomes fast"
 
-**The Session Mesh at `.session-state/mesh/`** is the filesystem-backed coordination layer for parallel Claude sessions on the same machine. Sessions don't directly message each other (agent-teams' role, high cost); they SHARE a ledger of claims + findings + heartbeats.
+**Bespoke Session Mesh retired 2026-06-07.** Coordination is native worktree isolation + single-session default + `parallel-sessions.md` canonical-file ownership. The **cross-session findings bus (the mesh's successor) = lodestar**: its in-repo committed-knowledge event log (`.lodestar/knowledge/`; git-committed, content-addressed, conflict-free set-union merge — `discipline.md §26` tier 2) carries verified claims across sessions/devs, and its same-machine shared store (cross-process lock: reads concurrent, same-project writes serialise) lets concurrent sessions query one graph safely. Live findings ride memory tier 3 + handoff tier 4 (§26).
 
-**8 mesh scripts at `scripts/session-mesh/`:** `claim-write-set.sh` (declare bounds + check conflicts) / `release-write-set.sh` / `heartbeat.sh` (called per Stop hook) / `share-finding.sh` (write to findings bus) / `list-findings.sh` (read from other sessions) / `find-conflicts.sh` (pairwise overlap check) / `check-concurrency.sh` (report active sessions vs cap).
-
-**Discipline:** SessionStart hook calls claim + list-findings 24h; Stop hook calls heartbeat (renews claim); PreCompact releases claim; PostCompact re-claims; SessionEnd releases. Other sessions see this session via heartbeat; respect write-set.
-
-**Session-scoped twin of §32 cross-session continuous-lane orchestration.** §32 owns cross-session coordination (cloud lanes, audit gates); §33 owns local-session coordination (work-claim, findings bus, heartbeat).
-
-**Pairs with:** §32, F157 spec at `specs/157-autonomous-delivery-operating-model/spec.md`, `feedback_api_load_concurrent_agents`, `feedback_f157_autonomous_delivery`.
+**Pairs with:** §32, F157 spec (`specs/157-autonomous-delivery-operating-model/spec.md`), parallelism.md §4, parallel-sessions.md, discipline.md §26 + §33, `feedback_f157_autonomous_delivery`.

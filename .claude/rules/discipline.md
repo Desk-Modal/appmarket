@@ -60,14 +60,15 @@ Default output style is `concise`:
 
 **Cardinal directive (user 2026-05-17 verbatim — preserved per §1 honesty rule):** "you should be optimally managing your context windows to minimize token usage, you can clear, compress or whatever is optimal to ensure no hallucincations, no data loss, across sessions, restarts, but optimally planny context clears, research and critique the optimal approache then update our directives, ensure our directives are cohesive"
 
-**Persistence-tier hierarchy** (all 4 tiers used together; never collapse to fewer):
+**Persistence-tier hierarchy** (all 5 tiers used together; never collapse to fewer):
 
 | Tier | Mechanism | Survives | Use for |
 |---|---|---|---|
 | **1. CANONICAL git** | `.claude/rules/*.md`, `specs/**`, `wiki/**`, committed memory | Everything (machine, dev, `/clear`, time) | Rules, specs, architectural reasoning, agent defs |
-| **2. DURABLE auto-memory** | `~/.claude/projects/.../memory/feedback_*.md` + `MEMORY.md` index | `/clear`, restart, multi-session, cross-dev `git pull` (per-user copy) | User prefs, anti-pattern discoveries, durable critique rules |
-| **3. EPHEMERAL handoffs** | `.session-state/handoffs/<feature>.md` (gitignored; per-repo-dir) | Session restart; not cross-dev | Live in-flight state: findings, agent IDs, dispatch plans, BLOCKING dispositions |
-| **4. CONVERSATIONAL window** | Current turn-by-turn chat | Until `/clear` or auto-compact ~95% | Active reasoning + tool calls + just-returned reports being processed |
+| **2. LODESTAR committed-knowledge** | in-repo `.lodestar/knowledge/` verified-claim event log (content-addressed; self-invalidating; conflict-free set-union merge; git-committed via `eol=lf` + `graph.db.zst merge=ours`) | Git-everything + cross-session/cross-dev (in-repo) | Verified "why" — invariants, decisions, deliverable roll-ups (`knowledge_get`/`knowledge_claims`) |
+| **3. DURABLE auto-memory** | `~/.claude/projects/.../memory/feedback_*.md` + `MEMORY.md` index | `/clear`, restart, multi-session, cross-dev `git pull` (per-user copy) | User prefs, anti-pattern discoveries, durable critique rules |
+| **4. EPHEMERAL handoffs** | `.session-state/handoffs/<feature>.md` (gitignored; per-repo-dir) | Session restart; not cross-dev | Live in-flight state: findings, agent IDs, dispatch plans, BLOCKING dispositions |
+| **5. CONVERSATIONAL window** | Current turn-by-turn chat | Until `/clear` or auto-compact ~95% | Active reasoning + tool calls + just-returned reports being processed |
 
 **Edit-verification discipline (durable; 2026-05-17 incident — Edit "success" ≠ persisted to disk; full narrative in playbook):**
 1. After ANY Edit on a canonical/rule/spec/commit-bound file, IMMEDIATELY verify via `grep -n "<distinctive-new-string>" <file>` OR `wc -l <file>`.
@@ -127,6 +128,6 @@ Built-in commands (`/clear`, `/compact`, `/review`, `/security-review`, `/goal`)
 
 ## 33. Multi-session coordination — native worktree + single-session default
 
-**Stub (Session Mesh retired 2026-06-07 per `feedback_sdlc_lean_toward_native`).** The bespoke filesystem mesh (`.session-state/mesh/` + 8 `scripts/session-mesh/*.sh` + the `deskmodal-mesh-claim`/`deskmodal-mesh-findings` skills) is replaced by native Claude Code primitives: **per-agent/Workflow `isolation:"worktree"`** for FS-level write-set isolation, **single-session default** as the operating posture, and **native auto-memory** as the cross-session findings bus. Cross-session write-set conflict avoidance is handled by worktree isolation + the `parallel-sessions.md` canonical-file-ownership contract; live findings persist via memory tier 2 + handoff tier 3 (§26). No mesh-claim/heartbeat machinery to run.
+**Stub (Session Mesh retired 2026-06-07 per `feedback_sdlc_lean_toward_native`).** The bespoke filesystem mesh (`.session-state/mesh/` + 8 `scripts/session-mesh/*.sh` + the `deskmodal-mesh-claim`/`deskmodal-mesh-findings` skills) is replaced by native Claude Code primitives: **per-agent/Workflow `isolation:"worktree"`** for FS-level write-set isolation, **single-session default** as the operating posture, and **lodestar's in-repo committed-knowledge log (`discipline.md §26` tier 2) + native auto-memory** as the cross-session findings bus. Cross-session write-set conflict avoidance is handled by worktree isolation + the `parallel-sessions.md` canonical-file-ownership contract; live findings persist via memory tier 3 + handoff tier 4 (§26). No mesh-claim/heartbeat machinery to run.
 
-**Pairs with:** parallelism.md §4 (worktree isolation per dispatch) · parallel-sessions.md (canonical-file ownership) · §26 (persistence tiers 2+3 carry findings).
+**Pairs with:** parallelism.md §4 (worktree isolation per dispatch) · parallel-sessions.md (canonical-file ownership) · architecture.md §33 · §26 (persistence tiers 2+3+4 carry findings).
