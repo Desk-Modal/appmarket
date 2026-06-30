@@ -8,7 +8,6 @@ permissionMode: acceptEdits
 impl_angles: [reference-impl, fdc3-bridge-use, service-lifecycle, error-patterns, docs-example]
 effort: xhigh
 skills:
-  - codebase-memory
   - deskmodal-mesh-claim
   - deskmodal-mesh-findings
   - deskmodal-handoff-write

@@ -6,7 +6,7 @@ model: claude-opus-4-8
 color: yellow
 permissionMode: acceptEdits
 effort: xhigh
-skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+skills: [deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 ---
 
 # Orchestrator (deprecated)

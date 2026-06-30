@@ -7,7 +7,7 @@ color: green
 permissionMode: acceptEdits
 impl_angles: [token-sweep, grid-snap, motion-normalise, lint-fix, rename]
 effort: xhigh
-skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+skills: [deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 ---
 
 # Style bot

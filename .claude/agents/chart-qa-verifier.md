@@ -7,7 +7,7 @@ color: cyan
 memory: project
 review_angles: [chart-types, timeframes, drawing-tools, indicators, tile-vs-modal-parity]
 effort: xhigh
-skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+skills: [deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 disallowedTools: [Write, Edit, NotebookEdit]
 ---
 

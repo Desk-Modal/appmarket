@@ -7,7 +7,7 @@ color: purple
 memory: project
 review_angles: [install-flow, dependency-resolution, verification-gateway, security-bench, performance-bench]
 effort: xhigh
-skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+skills: [deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 disallowedTools: [Write, Edit, NotebookEdit]
 ---
 

@@ -8,7 +8,6 @@ permissionMode: acceptEdits
 impl_angles: [browse-detail, install-dialog, smart-shelf, trust-badges, enterprise-approval]
 effort: xhigh
 skills:
-  - codebase-memory
   - deskmodal-mesh-claim
   - deskmodal-mesh-findings
   - deskmodal-handoff-write

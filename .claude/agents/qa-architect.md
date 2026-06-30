@@ -7,7 +7,7 @@ color: orange
 memory: project
 review_angles: [coverage, evidence, test-discipline, acceptance-parity, perf-budget, cross-stack-parity, honesty]
 effort: xhigh
-skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+skills: [deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 disallowedTools: [Write, Edit, NotebookEdit]
 ---
 

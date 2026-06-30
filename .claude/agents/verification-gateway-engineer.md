@@ -8,7 +8,6 @@ permissionMode: acceptEdits
 impl_angles: [compliance-pipeline, plugin-index-search, marketplace-api, publisher-mgmt, publisher-trust-tier-badges]
 effort: xhigh
 skills:
-  - codebase-memory
   - deskmodal-mesh-claim
   - deskmodal-mesh-findings
   - deskmodal-handoff-write

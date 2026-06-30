@@ -5,7 +5,7 @@
 # Invariants this test pins:
 #   1. Clean repo (no arch-surface commits) → exit 0.
 #   2. Commit that adds a new `migrations/*.sql` without updating
-#      `.codebase-memory/adr.md` → drift detected.
+#      `docs/adr.md` → drift detected.
 #   3. Same commit + ADR update in the same commit → clean.
 #   4. Same drift + `[adr:not-applicable]` trailer → clean.
 #   5. `--strict` escalates drift to exit 1.
@@ -96,8 +96,8 @@ fi
 # ----------------------------------------------------------------------
 # Case 5: next commit updates ADR → clean.
 # ----------------------------------------------------------------------
-mkdir -p "$REPO/.codebase-memory"
-cat > "$REPO/.codebase-memory/adr.md" <<'ADR'
+mkdir -p "$REPO/docs"
+cat > "$REPO/docs/adr.md" <<'ADR'
 ## PURPOSE
 Test ADR.
 
@@ -105,7 +105,7 @@ Test ADR.
 - AD-1: Users table added in migrations/001_users.sql.
 ADR
 echo "CREATE TABLE roles (id UUID);" > "$REPO/migrations/002_roles.sql"
-(cd "$REPO" && git add migrations/002_roles.sql .codebase-memory/adr.md \
+(cd "$REPO" && git add migrations/002_roles.sql docs/adr.md \
   && git commit -q -m "feat: roles table + ADR update")
 "$SCRIPT" --repo "$REPO" --range HEAD~1..HEAD --strict >/dev/null 2>&1
 rc=$?

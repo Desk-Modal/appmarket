@@ -7,7 +7,7 @@ color: orange
 permissionMode: acceptEdits
 impl_angles: [dmpkg-marketplace-storage, verification-gateway, dependency-dag, enterprise-governance, publisher-trust-tiers]
 effort: xhigh
-skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+skills: [deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 ---
 
 # Marketplace architect

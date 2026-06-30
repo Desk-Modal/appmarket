@@ -8,7 +8,6 @@ memory: project
 review_angles: [glassmorphism, oklch-tokens, typography-motion, density-grid, overlay-frame, component-patterns]
 effort: xhigh
 skills:
-  - codebase-memory
   - deskmodal-mesh-claim
   - deskmodal-mesh-findings
   - deskmodal-handoff-write

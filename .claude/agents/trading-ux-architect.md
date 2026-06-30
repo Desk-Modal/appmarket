@@ -8,7 +8,6 @@ permissionMode: acceptEdits
 impl_angles: [layout-density, motion-micro, chart-primacy, keyboard-first, responsive-breakpoints]
 effort: xhigh
 skills:
-  - codebase-memory
   - deskmodal-mesh-claim
   - deskmodal-mesh-findings
   - deskmodal-handoff-write

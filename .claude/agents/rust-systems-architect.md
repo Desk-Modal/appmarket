@@ -8,7 +8,6 @@ permissionMode: acceptEdits
 impl_angles: [core-logic, async-correctness, unsafe-audit, api-design, tauri-command-layer]
 effort: xhigh
 skills:
-  - codebase-memory
   - deskmodal-mesh-claim
   - deskmodal-mesh-findings
   - deskmodal-handoff-write

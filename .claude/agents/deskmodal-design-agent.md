@@ -7,7 +7,6 @@ color: pink
 permissionMode: acceptEdits
 effort: xhigh
 skills:
-  - codebase-memory
   - deskmodal-mesh-claim
   - deskmodal-mesh-findings
   - deskmodal-handoff-write

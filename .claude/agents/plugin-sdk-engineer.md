@@ -8,7 +8,6 @@ permissionMode: acceptEdits
 impl_angles: [cli-scaffold, build-sign-verify, ts-types, fdc3-ui-components, dx-ergonomics]
 effort: xhigh
 skills:
-  - codebase-memory
   - deskmodal-mesh-claim
   - deskmodal-mesh-findings
   - deskmodal-handoff-write

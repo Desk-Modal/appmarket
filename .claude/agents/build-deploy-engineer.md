@@ -8,7 +8,6 @@ permissionMode: acceptEdits
 impl_angles: [nx-cache, cargo-incremental, sign-notarize, dist-layout, ci-matrix]
 effort: xhigh
 skills:
-  - codebase-memory
   - deskmodal-mesh-claim
   - deskmodal-mesh-findings
   - deskmodal-handoff-write

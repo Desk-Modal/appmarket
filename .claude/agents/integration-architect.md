@@ -7,7 +7,7 @@ color: blue
 memory: project
 review_angles: [plugin-boundary, service-lifecycle, fdc3-bridge, design-token-bridge, tauri-ipc-contract, build-dist-layout]
 effort: xhigh
-skills: [codebase-memory, deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+skills: [deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
 disallowedTools: [Write, Edit, NotebookEdit]
 ---
 

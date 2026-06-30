@@ -8,7 +8,6 @@ permissionMode: acceptEdits
 impl_angles: [claude-md, memory-index, spec-docs, adrs, cross-repo-sync]
 effort: xhigh
 skills:
-  - codebase-memory
   - deskmodal-mesh-claim
   - deskmodal-mesh-findings
   - deskmodal-handoff-write
