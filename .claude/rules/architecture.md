@@ -191,7 +191,7 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 12. Cascading rule amendments (discipline.md / parallelism.md / agents.md / quality.md / settings.json deny-git-stash)
 13. Session-coherent invariant (first 3 actions per wake: Read handoff / git status / nudge stalled agents; last 3 actions: dispatch / push / ScheduleWakeup)
 
-**Pairs with:** §1 honesty, §3 CBM-first, §29, §30, parallelism.md §4 + §15, quality.md §18.7, discipline.md §26.
+**Pairs with:** §1 honesty, §3 lodestar-first, §29, §30, parallelism.md §4 + §15, quality.md §18.7, discipline.md §26.
 
 ## 29. Incremental-only verification — never rebuild what hasn't changed
 
@@ -223,9 +223,9 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **The principle:** every code-discovery / diagnostic / library-docs / visual-verification question dispatches to the MCP whose latency × correctness × scope is optimal for that question shape. Per-question-shape routing, NOT one-MCP-rules-all.
 
-**7 registered MCP servers:** codebase-memory-mcp (50-500ms; symbol graph) / wiki-mcp (100-300ms; synthesis) / rust-analyzer (100-500ms; LSP) / playwright (1-3s; browser) / github (200-800ms; PR/CI) / context7 (500ms-2s; library docs) / chrome-devtools-mcp (5-15s; Lighthouse/perf/memory at Tier C only). <!-- audit:allow-naming: product-name-chrome-devtools-mcp -->
+**7 registered MCP servers:** lodestar (50-500ms; symbol graph) / wiki-mcp (100-300ms; synthesis) / rust-analyzer (100-500ms; LSP) / playwright (1-3s; browser) / github (200-800ms; PR/CI) / context7 (500ms-2s; library docs) / chrome-devtools-mcp (5-15s; Lighthouse/perf/memory at Tier C only). <!-- audit:allow-naming: product-name-chrome-devtools-mcp -->
 
-**Extended MCP discovery matrix (§30.2):** type/coercion/borrow-check → rust-analyzer; symbol/calls/impact → CBM; cross-cutting synthesis → wiki-mcp; library docs → context7; visual+a11y → playwright; Lighthouse/heap/perf → chrome-devtools-mcp; PR/CI → github; plain markdown/TOML/YAML → Grep/Read. <!-- audit:allow-naming: product-name-chrome-devtools-mcp -->
+**Extended MCP discovery matrix (§30.2):** type/coercion/borrow-check → rust-analyzer; symbol/calls/impact → lodestar; cross-cutting synthesis → wiki-mcp; library docs → context7; visual+a11y → playwright; Lighthouse/heap/perf → chrome-devtools-mcp; PR/CI → github; plain markdown/TOML/YAML → Grep/Read. <!-- audit:allow-naming: product-name-chrome-devtools-mcp -->
 
 **3-tier Rust prevention discipline (§30.3):** Tier 1 pre-write `rust_analyzer_hover` (OPT-IN); Tier 2 `rust_analyzer_workspace_diagnostics` (MANDATORY in Rust agent return); Tier 3 `cargo check -p <crate>` (MANDATORY). Combined budget 5-30s per agent; saves minutes of compile retry.
 
@@ -235,7 +235,7 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **3 BLOCKING audit gates queued:** rust-agent-return-contract / mcp-routing-discipline / ui-agent-visual-evidence.
 
-**Anti-patterns banned:** Grep on `.rs/.ts/.tsx/.py` before CBM; Grep/Read on `wiki/**` before wiki-mcp; manual `cargo check` parse loop when `rust_analyzer_workspace_diagnostics` answers in ~500ms; manual screenshot when `browser_take_screenshot` is 2 tool calls.
+**Anti-patterns banned:** Grep on `.rs/.ts/.tsx/.py` before lodestar; Grep/Read on `wiki/**` before wiki-mcp; manual `cargo check` parse loop when `rust_analyzer_workspace_diagnostics` answers in ~500ms; manual screenshot when `browser_take_screenshot` is 2 tool calls.
 
 **Pairs with:** core.md §1 + §2 + §3, §28, §29, agents.md return contract, quality.md §18.7.1, parallelism.md §4.
 
@@ -247,7 +247,7 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **Operational rules for 3 lane types:** per-app research / cohesion-aggregator / visual-critique.
 
-**Lane creation contract (§31.1):** fresh-clone start (no CBM continuity) / bounded write-set / self-contained brief / NO source-file edits (`.rs/.tsx/.ts/.py/.toml` forbidden) / NO canonical-file edits / push to main via `git pull --rebase` (3 retries).
+**Lane creation contract (§31.1):** fresh-clone start (no lodestar continuity) / bounded write-set / self-contained brief / NO source-file edits (`.rs/.tsx/.ts/.py/.toml` forbidden) / NO canonical-file edits / push to main via `git pull --rebase` (3 retries).
 
 **Cohesion-aggregator authority (§31.2):** ONLY lane authorised to propose CROSS-app contracts; reads ALL per-app spec-suggests + SDK manifest + cohesion contract; cadence 6-hourly +3h offset; 10 cohesion dimensions × N apps per cycle.
 

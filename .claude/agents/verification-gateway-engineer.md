@@ -1,7 +1,7 @@
 ---
 name: verification-gateway-engineer
 description: Use for the automated compliance pipeline watching signed .dmpkg publishes to the marketplace git — 10-step verification, plugin-index search, marketplace REST API, publisher management, publisher trust-tier badges.
-tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__codebase-memory-mcp__search_graph, mcp__codebase-memory-mcp__trace_path, mcp__codebase-memory-mcp__get_code_snippet, mcp__codebase-memory-mcp__detect_changes, mcp__codebase-memory-mcp__get_architecture, mcp__codebase-memory-mcp__query_graph, mcp__codebase-memory-mcp__search_code, mcp__codebase-memory-mcp__manage_adr, mcp__codebase-memory-mcp__index_status, mcp__codebase-memory-mcp__get_graph_schema, mcp__codebase-memory-mcp__list_projects, mcp__codebase-memory-mcp__ingest_traces, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
+tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__lodestar__search_graph, mcp__lodestar__trace_path, mcp__lodestar__get_code_snippet, mcp__lodestar__detect_changes, mcp__lodestar__get_architecture, mcp__lodestar__query_graph, mcp__lodestar__search_code, mcp__lodestar__manage_adr, mcp__lodestar__index_status, mcp__lodestar__get_graph_schema, mcp__lodestar__list_projects, mcp__lodestar__ingest_traces, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
 model: claude-opus-4-8
 color: orange
 permissionMode: acceptEdits

@@ -100,7 +100,7 @@ Every `open_concern` returned by every Agent dispatch closes as exactly one of t
 
 **Full:** [hygiene-discipline.md](../../wiki/playbooks/quality/hygiene-discipline.md) §18.2.
 
-5 hygiene axes audited every wave; debt never accumulates: **Plugins** (per-capability `.dmpkg`, 3 tiers REQ/REC/OPT) / **MCPs** (5 live + latest; CBM-first) / **Specs** (≥1200 LOC carrying SOTA+target+gap+wave-plan) / **Legacy assets** (no `*V2*` / `legacyMode` / TODO-FIXME-HACK / stray `console.log`; stale docs DELETED) / **SOTA refactoring** (native async-fn-in-traits, UUIDv7, simd-json, cap-std, PGO+LTO+codegen-units=1, criterion 0.5, cargo-llvm-cov).
+5 hygiene axes audited every wave; debt never accumulates: **Plugins** (per-capability `.dmpkg`, 3 tiers REQ/REC/OPT) / **MCPs** (5 live + latest; lodestar-first) / **Specs** (≥1200 LOC carrying SOTA+target+gap+wave-plan) / **Legacy assets** (no `*V2*` / `legacyMode` / TODO-FIXME-HACK / stray `console.log`; stale docs DELETED) / **SOTA refactoring** (native async-fn-in-traits, UUIDv7, simd-json, cap-std, PGO+LTO+codegen-units=1, criterion 0.5, cargo-llvm-cov).
 
 ### 18.3 Per-wake hygiene sanity check (5 questions, ~5 seconds)
 

@@ -28,12 +28,12 @@ Strict priority. **Two MCPs share top tier** — pick by question shape:
 
 | Question shape | First MCP |
 |---|---|
-| "Where is symbol X / what calls Y / what does Z look like / impact analysis" — **code-structure facts** | `mcp__codebase-memory-mcp__*` (CBM symbol graph) |
+| "Where is symbol X / what calls Y / what does Z look like / impact analysis" — **code-structure facts** | `mcp__lodestar__*` (lodestar symbol graph) |
 | "How does the FDC3 bridge work / what's the brand voice / which persona owns Y / what playbook covers Z / what governance applies / cross-cutting synthesis" — **synthesis facts** | `mcp__wiki-mcp__*` (wiki synthesis layer) |
 
 Then in priority order:
 
-1. **`mcp__codebase-memory-mcp__*`** — code symbol graph; first stop for every code-structure question for `.rs`, `.ts`, `.tsx`, `.py`.
+1. **`mcp__lodestar__*`** — code symbol graph; first stop for every code-structure question for `.rs`, `.ts`, `.tsx`, `.py`.
 2. **`mcp__wiki-mcp__*`** — cross-cutting synthesis from `wiki/`. First stop for any synthesis question. Tools: `wiki_search`, `wiki_get_page`, `wiki_get_links`, `wiki_check_staleness`, `wiki_get_visual`.
 3. **`mcp__rust-analyzer__*`** — for Rust only. Symbol references, hover, diagnostics, rename prep.
 4. **`mcp__playwright__browser_*`** — for visual / CDP / DOM verification.
@@ -43,12 +43,12 @@ Then in priority order:
 Non-code, non-wiki (markdown specs, TOML, YAML, JSON, shell): Grep/Read directly.
 
 **Anti-patterns flagged by hooks:**
-- Grep on `.rs` / `.ts` / `.tsx` / `.py` before CBM = hallucination vector.
+- Grep on `.rs` / `.ts` / `.tsx` / `.py` before lodestar = hallucination vector.
 - Grep / Read on `wiki/**` paths before wiki-mcp = same.
 
-**CBM team-shared graph artifact — explicitly NOT used** (decision 2026-05-17). The 5-reason rationale lives in `wiki/governance/rules-charter.md`. The local CBM cache (`~/.cache/codebase-memory-mcp/*.db`) + on-demand reindex (auto_index ~30s/repo) is sufficient.
+**lodestar indexing is automatic** (2026-06-29 — supersedes the prior CBM "team-shared graph artifact — NOT used" note; rationale `wiki/governance/rules-charter.md`). The engine indexes on MCP connect and a native filesystem watcher keeps the graph fresh — no manual `index_repository` unless a project is provably unindexed. Its store is in-repo under `.lodestar/` (the append-only knowledge event log is committable; the `*.db` / `graph.db.zst` are regenerable caches).
 
-Specs and rules are *cited from*, not *discovered through*. Use the active feature spec for current intent; rules/agents for workflow contract; CBM for code; wiki-mcp for synthesis.
+Specs and rules are *cited from*, not *discovered through*. Use the active feature spec for current intent; rules/agents for workflow contract; lodestar for code; wiki-mcp for synthesis.
 
 ## 10. Stop signals
 
@@ -88,7 +88,7 @@ Section numbers are **stable anchors** — `core.md §17` and `architecture.md �
 
 ## Authority order
 
-When surfaces conflict, walk down: source code → gate scripts → CBM symbol graph → compat ladder + plugin manifests → `.claude/rules/*.md` + `.specify/memory/constitution.md` → `.claude/agents/*.md` → CBM ADR ledgers → active feature `specs/NNN/spec.md` → wiki → CLAUDE.md → free-form docs. A wiki page conflicting with cited canonical source means the wiki page is stale.
+When surfaces conflict, walk down: source code → gate scripts → lodestar symbol graph → compat ladder + plugin manifests → `.claude/rules/*.md` + `.specify/memory/constitution.md` → `.claude/agents/*.md` → lodestar ADR ledgers → active feature `specs/NNN/spec.md` → wiki → CLAUDE.md → free-form docs. A wiki page conflicting with cited canonical source means the wiki page is stale.
 
 ## Mirror discipline
 

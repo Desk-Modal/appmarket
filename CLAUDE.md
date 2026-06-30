@@ -49,29 +49,29 @@ Each sub-directory is a **separate git repo**, not a submodule. Parallel session
 
 | MCP | Use for | Tool prefix |
 |---|---|---|
-| `codebase-memory-mcp` | Code symbol / call-chain / impact analysis | `mcp__codebase-memory-mcp__*` |
+| `lodestar` | Code symbol / call-chain / impact analysis | `mcp__lodestar__*` |
 | `wiki-mcp` | Cross-cutting **synthesis** layer — governance, brand, naming, design-system, capabilities, playbooks, risks, operations, inventory, targets, entities | `mcp__wiki-mcp__*` |
 | `rust-analyzer` | Rust symbol refs, diagnostics, rename prep | `mcp__rust-analyzer__*` |
 | `playwright` | Headless browser for GUI / CDP / DOM verification | `mcp__playwright__browser_*` |
 | `github` | PR / issue / workflow queries | `mcp__github__*` |
 
-Discovery order per `core.md` §3: **CBM** (code-structure facts) → **wiki-mcp** (cross-cutting synthesis facts) → rust-analyzer → playwright → github → Grep/Read. Never skip MCPs for code files; never use Grep/Read on `wiki/**` when wiki-mcp answers it. **For any SDK question** (`@deskmodal/sdk-*`, `deskmodal-service-sdk`, `dmpkg` CLI), the SDK's wiki entity page (`wiki/entities/sdk-*.md`) is the symbolic reference — query via `wiki_get_page entities/sdk-<name>` before reading source files. **For lifecycle questions** (install/update/uninstall/start/stop/drain/reload), `wiki_get_page entities/lifecycle-protocol` is the symbolic reference entry point (F125 SOTA).
+Discovery order per `core.md` §3: **lodestar** (code-structure facts) → **wiki-mcp** (cross-cutting synthesis facts) → rust-analyzer → playwright → github → Grep/Read. Never skip MCPs for code files; never use Grep/Read on `wiki/**` when wiki-mcp answers it. **For any SDK question** (`@deskmodal/sdk-*`, `deskmodal-service-sdk`, `dmpkg` CLI), the SDK's wiki entity page (`wiki/entities/sdk-*.md`) is the symbolic reference — query via `wiki_get_page entities/sdk-<name>` before reading source files. **For lifecycle questions** (install/update/uninstall/start/stop/drain/reload), `wiki_get_page entities/lifecycle-protocol` is the symbolic reference entry point (F125 SOTA).
 
 ## Wiki — synthesis layer over canonical sources
 
 `wiki/` (root) + 7 sub-repo `wiki/` mirrors. Built on Karpathy "LLM Wiki" pattern. Schema authority: `wiki/CLAUDE.md`. Currency: per-page `last_verified_against_sha` frontmatter + `evidence_sources`. Gates: `scripts/wiki-lint.sh` + `scripts/wiki-coverage.sh`. Generators: `scripts/wiki-gen-{personas,mcps,compat-ladder,hooks,plugins,tokens,apis,dependencies,cost-model,kpis,migrations,surfaces}.sh` (14 total). Mirror: `scripts/wiki-mirror.sh`. **Reading-order entry points** by audience in `wiki/index.md`.
 
-The wiki is **synthesis over canonical sources, not replacement**. Canonical sources (`.claude/rules/`, `.claude/agents/`, `.specify/memory/constitution.md`, CBM ADR ledgers, `specs/compat-ladder.yml`, plugin manifests) remain authoritative. Wiki indexes, cross-links, and contextualises them.
+The wiki is **synthesis over canonical sources, not replacement**. Canonical sources (`.claude/rules/`, `.claude/agents/`, `.specify/memory/constitution.md`, lodestar ADR ledgers, `specs/compat-ladder.yml`, plugin manifests) remain authoritative. Wiki indexes, cross-links, and contextualises them.
 
 ## Authority order (when surfaces conflict)
 
 1. **Source code** — ultimate truth.
 2. **Gate scripts** (`scripts/local-ci.sh`, `scripts/launch.sh --verify`, `wiki-lint.sh`, `wiki-coverage.sh`) — pass/fail truth.
-3. **CBM symbol graph** — code-structure facts.
+3. **lodestar symbol graph** — code-structure facts.
 4. **Compat ladder + plugin manifests** — cross-stack contracts.
 5. **`.claude/rules/*.md` + `.specify/memory/constitution.md`** — workflow + governance.
 6. **`.claude/agents/*.md`** — persona scope + tool allowlist.
-7. **CBM ADR ledgers** — architectural rationale.
+7. **lodestar ADR ledgers** — architectural rationale.
 8. **Active feature `specs/NNN/spec.md`** — current intent.
 9. **Wiki** — cross-cutting synthesis (gate-checked, MCP-served).
 10. **CLAUDE.md** — onboarding pointers.

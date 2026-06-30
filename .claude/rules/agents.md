@@ -120,7 +120,7 @@ Reviewers return:
 }
 ```
 
-`grep_calls_on_code` MUST be 0 — reviewers use CBM on code files. Non-zero rejects the return.
+`grep_calls_on_code` MUST be 0 — reviewers use lodestar on code files. Non-zero rejects the return.
 
 ## Review-only personas
 

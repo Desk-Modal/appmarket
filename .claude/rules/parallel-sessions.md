@@ -46,7 +46,7 @@ Sub-repo sessions **never edit their local mirrored copies** — the next sync o
 
 On-demand only. Run it when the root session has finished a batch of canonical-file edits AND no sub-repo session has uncommitted changes in its canonical paths. **Verify the latter first** with the per-repo `git status` pre-flight loop — full snippet + multi-session capacity reference table now live in `wiki/playbooks/onboard-new-developer.md`. If any sub-repo prints BLOCKED, resolve before `--apply`. The pre-commit hook does NOT enforce sync-specs — manual discipline.
 
-## CBM server (codebase-memory-mcp)
+## lodestar server (code graph)
 
 Shared across sessions. `auto_index` is on — do not call `index_repository` manually unless the index is provably stale. Concurrent sessions querying the same project is safe.
 
@@ -62,5 +62,5 @@ Cloud lanes are DISABLED for impl/docs/audit/spec/research per quality.md §18.7
 | `/tmp/deskmodal-launch.lock` | One `launch.sh --verify` at a time | Lockfile with stale-check |
 | `origin/main` push | Standard git race; second pushes rebase | `git pull --rebase` + retry |
 | pre-commit hook | Serialised per repo | `flock` in `pre-commit-guard.sh` |
-| CBM index writes | Single-writer per project | Server-enforced |
+| lodestar index writes | Single-writer per project | Server-enforced |
 | Per-repo `CARGO_TARGET_DIR` | Shared warm cache; same-repo builds serialise | Per-repo dir (architecture.md §29 no-duplicate-builds) |

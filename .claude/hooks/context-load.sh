@@ -8,7 +8,7 @@
 #   - Latest gate state (.prod-check/status.json if present)
 #   - Active feature (from .session-state/active-feature if present)
 #
-# Silent on clean state. Fast (<50ms). No network, no grep, no CBM calls.
+# Silent on clean state. Fast (<50ms). No network, no grep, no MCP calls.
 
 set -u
 
@@ -62,25 +62,11 @@ except: sys.exit(0)
     [ -n "$summary" ] && print_section "gate state ($(basename $(dirname $st)))" "$summary"
 done
 
-# 4. CBM index health — flag stale/missing project indices so the orchestrator
-#    can call index_repository before code-discovery queries fan out.
-CBM_BIN="$ROOT/tools/codebase-memory-mcp"
-if [ -x "$CBM_BIN" ]; then
-    # 100ms budget — quick stat-only call against each sub-repo's cache db.
-    stale=$(python3 - <<'PY' 2>/dev/null
-import os, glob, time
-cache=os.path.expanduser("~/.cache/codebase-memory-mcp")
-if not os.path.isdir(cache): exit(0)
-now=time.time()
-out=[]
-for db in sorted(glob.glob(os.path.join(cache, "Users-adrian-deskmodal*.db"))):
-    age_h=(now-os.path.getmtime(db))/3600
-    name=os.path.basename(db).removesuffix(".db")
-    if age_h>168: out.append(f"{name} ({age_h:.0f}h old)")
-print(" | ".join(out))
-PY
-)
-    [ -n "$stale" ] && print_section "cbm: stale indices (>7 days)" "$stale  — call index_repository before code queries"
+# 4. lodestar (code graph) presence — the engine auto-indexes on MCP connect and a
+#    native filesystem watcher keeps the graph fresh, so there is no manual
+#    index_repository nudge. Just flag if the binary is missing so /mcp isn't empty.
+if ! command -v lodestar >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/lodestar" ]; then
+    print_section "lodestar" "code-graph MCP not on PATH — install: curl -fsSL https://raw.githubusercontent.com/soarsa/lodestar/main/install.sh | bash"
 fi
 
 # 5. Active handoff — show path + last 2 entries of "What this iteration closed"

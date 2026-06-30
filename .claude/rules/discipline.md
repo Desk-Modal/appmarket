@@ -98,7 +98,7 @@ Forbidden: committing a change without verifying the diff landed (`git diff --st
 | 2 | Auto-loaded CLAUDE.md | > 15K chars OR mirrored rule content | Pointer + cross-ref only |
 | 3 | Agent prompts (`.claude/agents/*.md`) | > 35-line body OR re-stated workflow rules | Frontmatter + ≤35-line body; cite `.claude/rules/<file>.md §N` |
 | 4 | Sub-agent dispatch | Inline-quoting audit/spec/finding | Audit-by-path; agent reads source once (core.md §4) |
-| 5 | Code discovery | Grep/Read on `.rs/.ts/.tsx/.py` OR `wiki/**` | CBM-first / wiki-mcp first per question shape |
+| 5 | Code discovery | Grep/Read on `.rs/.ts/.tsx/.py` OR `wiki/**` | lodestar-first / wiki-mcp first per question shape |
 | 6 | Verification | Workspace-wide rebuild when scope unchanged | Affected-mode + last-green-SHA diff base (architecture.md §29) |
 | 7 | Memory | MEMORY.md > 24KB OR entries > 200 chars | Index ≤ one-line entries; detail in topic memory files |
 

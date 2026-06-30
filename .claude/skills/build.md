@@ -23,7 +23,7 @@ Build DeskModal components. Only rebuilds what changed.
 ## Execution Steps
 
 1. **Parse target** from user request. Default to smallest scope.
-2. **Graph-first scope detection** — use codebase-memory-mcp to understand impact:
+2. **Graph-first scope detection** — use lodestar to understand impact:
    - `detect_changes(project=<platform-project>  # resolve via list_projects())` → which symbols/crates changed
    - `get_architecture(project=<platform-project>  # resolve via list_projects())` → crate dependency overview
    - This avoids rebuilding crates that aren't affected by the change.
