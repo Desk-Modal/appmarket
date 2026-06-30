@@ -368,5 +368,6 @@
   "outputStyle": "concise",
   "effortLevel": "xhigh",
   "ultracode": true,
+  "enableAllProjectMcpServers": true,
   "maxSkillDescriptionChars": 1536
 }

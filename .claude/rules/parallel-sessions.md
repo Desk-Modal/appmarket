@@ -46,9 +46,17 @@ Sub-repo sessions **never edit their local mirrored copies** — the next sync o
 
 On-demand only. Run it when the root session has finished a batch of canonical-file edits AND no sub-repo session has uncommitted changes in its canonical paths. **Verify the latter first** with the per-repo `git status` pre-flight loop — full snippet + multi-session capacity reference table now live in `wiki/playbooks/onboard-new-developer.md`. If any sub-repo prints BLOCKED, resolve before `--apply`. The pre-commit hook does NOT enforce sync-specs — manual discipline.
 
-## lodestar server (code graph)
+## lodestar — shared code graph + cross-session knowledge bus
 
-Shared across sessions. `auto_index` is on — do not call `index_repository` manually unless the index is provably stale. Concurrent sessions querying the same project is safe.
+lodestar is the cross-session findings bus (`architecture.md §33`; `discipline.md §26` tier 2). Two sharing planes:
+
+**Same machine (real-time).** All sessions share ONE in-repo store per project; cross-process lock = concurrent reads, serialised same-project writes. `auto_index` is on — never call `index_repository` manually unless a project is provably unindexed. A second session sees the first's graph + knowledge immediately, no git round-trip. `mcp__lodestar__distributed_status` reporting `origin_collisions:1` confirms a single shared cache (`>1` = split cache — re-resolve before trusting reads).
+
+**Across machines / collaborators (git-paced).** Knowledge rides the committed, append-only event log `.lodestar/knowledge/events/*.json` — content-addressed + conflict-free (set-union: distinct events are distinct files; a pull always folds cleanly, no merge conflict). Committed (text `eol=lf`): `events/**` + `snapshot.json`. Gitignored (regenerable cache): `*.db`, `graph.db.zst`. The `ours` merge driver (`.gitattributes merge=ours` on the cache) is registered per-clone by `setup.sh` step 8a. A peer sees a claim only after `push`→`pull`; `distributed_status.peer_digest` proves convergence WITHOUT folding (equal digest across two checkouts ⇒ identical knowledge set).
+
+**Capture discipline (how knowledge evolves + is shared).** When a session verifies a durable fact (invariant, decision, deliverable roll-up), write a claim via `mcp__lodestar__knowledge_put` (anchored to real symbols), then commit `.lodestar/knowledge/` + push — so the next session/dev cites it via `knowledge_get`/`knowledge_claims` instead of re-deriving (~21× fewer tokens; mitigates relearning + keeps everyone aligned on the same anchored facts). `invariant:pure` claims auto-activate (Stage-1 deterministic gate, no model). Subjective claims (design/a11y/decision/usage) stay `draft` until a cross-FAMILY Stage-2 judge affirms them — NOT configured today (no ollama/API judge), so they remain `draft`: still readable via `knowledge_claims`, just not served as `active` by `knowledge_get`'s default. The full code-knowledge GRAPH (symbols/calls/impact) shares regardless of judge.
+
+**Anti-drift.** Each claim anchors to a `node_content_hash`; when that code changes the claim auto-transitions `stale`/`contradicted` (never silently wrong), with `dead_active` detection for claims that no longer anchor live code. `mcp__lodestar__knowledge_coverage` is the lifecycle dashboard (active/draft/stale/contradicted/dead_active). A `projection_fresh:false` in `distributed_status` means the SQLite projection needs a refold (lazy, self-heals on next index) — it is NOT drift.
 
 ## Cloud-scheduled lanes
 
