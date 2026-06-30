@@ -168,7 +168,7 @@ Every claim in a wiki page must trace to one of these typed references.
 | Prefix | Form | Resolution |
 |---|---|---|
 | `file:` | `file:<path>:<lineN>-<lineM>` | file exists; line range non-empty |
-| `cbm:` | `cbm:<project-name>/<qualified-name>` | `mcp__codebase-memory-mcp__get_code_snippet` returns content |
+| `cbm:` | `cbm:<project-name>/<qualified-name>` | `mcp__lodestar__get_code_snippet` returns content |
 | `canonical:` | `canonical:<path>#<anchor?>` | shorthand for `references_canonical`; same resolution rules as §4.1 |
 | `log:` | `log:<path>` (under `wiki-sources/` or `.session-state/`) | file exists |
 | `bench:` | `bench:<path>` (under `wiki-sources/bench-runs/`) | file exists; criterion JSON parse OK |
@@ -343,7 +343,7 @@ Schema amendments are governance changes:
 
 Extends `.claude/rules/core.md §3` for sessions working at any scope:
 
-1. `mcp__codebase-memory-mcp__*` — code graph (unchanged).
+1. `mcp__lodestar__*` — code graph (unchanged).
 2. `mcp__rust-analyzer__*` — Rust diagnostics (unchanged).
 3. **`wiki-mcp__*` — wiki retrieval (new, Wave 3+).** Slots in here because
    durable synthesis beats raw screenshots for governance / inventory /

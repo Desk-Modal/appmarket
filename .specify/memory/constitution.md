@@ -32,7 +32,7 @@
 
 (Source: `.claude/rules/code-discovery.md`)
 
-- **Graph-first is MANDATORY** for every code question. The indexed graph (codebase-memory-mcp) carries function signatures, call chains, type relations, and cross-file dependencies — text search does not.
+- **Graph-first is MANDATORY** for every code question. The indexed graph (lodestar) carries function signatures, call chains, type relations, and cross-file dependencies — text search does not.
 - **Tool precedence**: (1) `search_graph` for finding functions/types/routes by keyword or regex, (2) `trace_path` for call chains and impact analysis, (3) `get_code_snippet` to read source by qualified name (~500 tokens, not ~80K), (4) `detect_changes` to map git diffs to impacted symbols, (5) `get_architecture` for crate-level overview, (6) `Grep`/`Read`/`Glob` only for non-code content (markdown, YAML, TOML, JSON, string literals) or as fallback when the graph is empty.
 - **Session bootstrap** (every new session): `list_projects()` → `index_status(project=<platform>)` → `index_status(project=<tradesurface>)` → `manage_adr(project=<platform>, mode="get")`. Re-index with `mode="fast"` if stale.
 - **Project names are path-derived, per-developer**: CBM encodes the absolute repo path into the project name (e.g. `Users-alice-deskmodal-platform` vs `home-bob-deskmodal-platform`). Never hardcode project names in skills, rules, specs, or prompts — always resolve via `list_projects()`.

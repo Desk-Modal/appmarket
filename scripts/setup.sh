@@ -305,7 +305,7 @@ record_drift_hash() {
 # rust-analyzer-mcp (https://github.com/zeenix/rust-analyzer-mcp) — MCP
 # bridge over the rust-analyzer LSP. Gives Claude Code semantic Rust
 # queries (hover, references, workspace diagnostics, code actions) that
-# the tree-sitter-based codebase-memory-mcp can't answer — trait
+# the lodestar code graph can't answer — trait
 # dispatch, generic monomorphization, macro expansion. Installed via
 # `cargo install --root $ROOT_DIR/tools` so the binary lands at
 # $ROOT_DIR/tools/bin/rust-analyzer-mcp and the rest of the workspace
@@ -719,35 +719,33 @@ fi
 fi  # end "if [ \"$CONFIG_ONLY\" = 0 ]" — steps 3-7 run only in full mode
 
 # ---------------------------------------------------------------------------
-# 8. Claude Code tooling — codebase-memory-mcp + sub-repo scaffolding
+# 8. Claude Code tooling — lodestar + sub-repo scaffolding
 #
 # ALWAYS RUNS, even in --config-only mode: this is the target of
-# drift-driven re-runs. The steps below are idempotent; the CBM binary
+# drift-driven re-runs. The steps below are idempotent; the lodestar binary
 # self-updates and sub-repo scaffolds re-apply cleanly.
 # ---------------------------------------------------------------------------
 echo ""
-echo "[8/10] Claude Code tooling — codebase-memory-mcp + knowledge graph..."
+echo "[8/10] Claude Code tooling — lodestar + knowledge graph..."
 
 # ---------------------------------------------------------------------------
-# 8. Claude Code integration — codebase-memory-mcp
+# 8. Claude Code integration — lodestar
 #
-# codebase-memory-mcp (CBM) builds a persistent tree-sitter knowledge graph
-# of every repo in the workspace and serves it to Claude Code over stdio.
-# search_graph / trace_path / get_code_snippet replace dozens of grep+read
-# cycles with single structural queries, reducing context-window burn by
-# ~99% on typical dev flows.
+# lodestar is a deterministic code-knowledge-graph MCP server. It builds a
+# persistent graph of every repo in the workspace and serves it to Claude
+# Code over stdio. search_graph / trace_path / get_code_snippet replace
+# dozens of grep+read cycles with single structural queries, reducing
+# context-window burn by ~21x on typical dev flows.
 #
-# The MCP binary is a self-contained static binary — no Rust / Node / Python
-# runtime required. Installed into <workspace>/tools/ so every developer
-# runs the exact same binary and every config can reference it via a
-# workspace-relative path. Works identically on macOS, Linux, and Git Bash
-# on Windows.
+# Installed via lodestar's official installer to $HOME/.local/bin/lodestar
+# — the same path the workspace .mcp.json references. Works identically on
+# macOS, Linux, and (via the PowerShell installer) Windows.
 # ---------------------------------------------------------------------------
-CBM_BIN_NAME="codebase-memory-mcp"
+LODESTAR_BIN_NAME="lodestar"
 case "$(uname -s 2>/dev/null || echo unknown)" in
-    MINGW*|MSYS*|CYGWIN*) CBM_BIN_NAME="codebase-memory-mcp.exe" ;;
+    MINGW*|MSYS*|CYGWIN*) LODESTAR_BIN_NAME="lodestar.exe" ;;
 esac
-CBM_BIN="$ROOT_DIR/tools/$CBM_BIN_NAME"
+LODESTAR_BIN="$HOME/.local/bin/$LODESTAR_BIN_NAME"
 
 mkdir -p "$ROOT_DIR/tools"
 
@@ -761,14 +759,14 @@ if [ -d "$ROOT_DIR/.claude/hooks" ]; then
     chmod +x "$ROOT_DIR/.claude/hooks/"*.sh 2>/dev/null || true
 fi
 
-# Install or self-update CBM into the workspace tools dir. Idempotent —
-# the binary self-updates when present, bootstraps from GitHub releases
-# when not.
-if [ -x "$SCRIPT_DIR/install-codebase-memory-mcp.sh" ]; then
-    "$SCRIPT_DIR/install-codebase-memory-mcp.sh" --quiet "--dir=$ROOT_DIR/tools" || \
-        err "codebase-memory-mcp install failed"
+# Install or self-update lodestar at $HOME/.local/bin. Idempotent — the
+# official installer self-updates to the latest release when present and
+# bootstraps when not. Non-fatal if offline.
+if [ -x "$SCRIPT_DIR/install-lodestar.sh" ]; then
+    "$SCRIPT_DIR/install-lodestar.sh" --quiet || \
+        err "lodestar install failed"
 else
-    err "scripts/install-codebase-memory-mcp.sh missing — cannot install CBM"
+    err "scripts/install-lodestar.sh missing — cannot install lodestar"
 fi
 
 # uv is needed by install_spec_kit. Install it
@@ -940,9 +938,10 @@ scaffold_sub_repo_claude() {
     local rel_to_root
     rel_to_root=$(workspace_relative_prefix "$repo")
 
-    # Per-project MCP config — command is expressed as
-    # ${CLAUDE_PROJECT_DIR}/<rel>/tools/codebase-memory-mcp, which Claude
-    # Code expands at runtime to an absolute path rooted at this sub-repo.
+    # Per-project MCP config — lodestar is a home-global binary at
+    # ${HOME}/.local/bin/lodestar (the same path the workspace-root
+    # .mcp.json uses), while rust-analyzer/github stay vendored under
+    # <workspace>/tools/ and are addressed via ${CLAUDE_PROJECT_DIR}/<rel>.
     # Identical content shape on macOS, Linux, Windows.
     # Regenerate .mcp.json whenever upstream doesn't track it — the file
     # is git-ignored per-clone scaffolding, so adding or removing an MCP
@@ -952,8 +951,9 @@ scaffold_sub_repo_claude() {
     # future-proofs the script).
     if ! git -C "$repo" ls-files --error-unmatch .mcp.json >/dev/null 2>&1; then
         # Self-contained .mcp.json that mirrors the workspace-root set
-        # (codebase-memory-mcp, rust-analyzer, github) with paths
-        # relative from the sub-repo back to <workspace>/tools/. Every
+        # (lodestar, rust-analyzer, github). lodestar resolves from
+        # ${HOME}/.local/bin; rust-analyzer/github use paths relative from
+        # the sub-repo back to <workspace>/tools/. Every
         # env var the commands reference is declared in the `env` block
         # so Claude Code's `/doctor` static check doesn't warn about
         # "missing environment variables" — CLAUDE_PROJECT_DIR is
@@ -963,12 +963,9 @@ scaffold_sub_repo_claude() {
         cat > "$repo/.mcp.json" <<MCP
 {
   "mcpServers": {
-    "codebase-memory-mcp": {
+    "lodestar": {
       "type": "stdio",
-      "command": "\${CLAUDE_PROJECT_DIR}/${rel_to_root}tools/codebase-memory-mcp",
-      "env": {
-        "CLAUDE_PROJECT_DIR": "\${CLAUDE_PROJECT_DIR}"
-      }
+      "command": "\${HOME}/.local/bin/lodestar"
     },
     "rust-analyzer": {
       "type": "stdio",

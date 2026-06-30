@@ -33,7 +33,7 @@ PLUGINS=(
 #   rust-analyzer-lsp    — custom rust-analyzer-mcp binary in tools/ (user-scope
 #                          install of the marketplace variant is OK as belt-
 #                          and-braces but not required)
-#   serena, sourcegraph, greptile — overlap codebase-memory-mcp
+#   serena, sourcegraph, greptile — overlap lodestar
 #   remember             — overlaps commit-driven handoff (core.md §13)
 #   feature-dev, ralph-loop — overlap /loop + maestro-orchestrator
 #   coderabbit, code-review, pr-review-toolkit, optibot — custom review matrix
