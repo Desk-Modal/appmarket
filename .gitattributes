@@ -1,0 +1,3 @@
+.lodestar/knowledge/events/** text eol=lf
+.lodestar/knowledge/snapshot.json text eol=lf
+.lodestar/graph.db.zst merge=ours -text -diff

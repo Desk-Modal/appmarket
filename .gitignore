@@ -22,3 +22,7 @@ DESKMODAL_SIGNING_KEY
 # in GitHub Actions secrets.
 .signing-key.hex
 .signing-key.bin
+
+# lodestar regenerable caches (knowledge/ is durable — NOT ignored)
+.lodestar/*.db
+.lodestar/graph.db.zst
