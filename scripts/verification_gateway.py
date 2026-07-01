@@ -29,6 +29,7 @@ lowercase to match `plugin.toml [bundle] tier = "..."` and the Rust serde repr.
 
 from __future__ import annotations
 
+import hashlib
 import re
 from typing import Any, Optional
 
@@ -388,6 +389,52 @@ def verify_release_signature(
         f"Ed25519 SIGNATURE does not verify over checksums.txt for publisher_key_id "
         f"'{key_id}' (tampered artifact/checksums, wrong key, or corrupt signature)"
     )
+
+
+def verify_manifest_checksum_binding(
+    *,
+    manifest_bytes: Optional[bytes],
+    expected_sha256: Optional[str],
+) -> tuple[bool, str]:
+    """
+    Transitively bind a fetched manifest (plugin.toml) to the signature-verified
+    checksums, so the catalog fields DERIVED from it (capability_tier / offering /
+    script_pack) inherit the Ed25519 signature's trust rather than being taken on
+    the publisher's word.
+
+    Call this ONLY after `verify_release_signature` returned ok=True: at that point
+    the parsed checksums map was produced from the exact `checksums.txt` bytes the
+    detached SIGNATURE cryptographically covered, so any entry in that map is
+    itself signature-bound. `expected_sha256` is the checksums entry for the
+    manifest's path (the caller resolves it against how checksums.txt lists the
+    file). A manifest whose sha256 equals `expected_sha256` is therefore covered by
+    the release signature; its displayed fields can be trusted.
+
+    Fail-closed (mirrors the [drop] contract in `verify_release_signature`):
+      - no manifest bytes         -> (False, ...) — nothing to bind;
+      - manifest not in checksums -> (False, coverage-gap) — its bytes are NOT
+        covered by the signature, so its tier/license/offering cannot be trusted;
+      - sha256 mismatch           -> (False, tampered) — a validly-signed artifact
+        set served alongside a manifest carrying false tier/license/offering.
+    Only a byte-exact match returns (True, reason). Pure + deterministic; needs no
+    crypto backend (the signature itself was already verified upstream).
+    """
+    if not isinstance(manifest_bytes, (bytes, bytearray)):
+        return False, "no fetched manifest bytes to bind to the signature-verified checksums"
+    if not isinstance(expected_sha256, str) or not expected_sha256.strip():
+        return False, (
+            "manifest is not listed in the signature-verified checksums.txt — its "
+            "capability_tier/license/offering are not covered by the release signature"
+        )
+    actual = hashlib.sha256(bytes(manifest_bytes)).hexdigest()
+    want = expected_sha256.strip().lower()
+    if actual.lower() != want:
+        return False, (
+            f"manifest sha256 {actual} does not match the signature-verified checksums "
+            f"entry {want} (manifest tampered — false capability_tier/license/offering "
+            "served alongside a validly-signed artifact set)"
+        )
+    return True, "manifest bytes match the signature-verified checksums entry"
 
 
 def validate_capability_tier(

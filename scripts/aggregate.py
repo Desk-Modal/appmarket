@@ -54,6 +54,7 @@ from typing import Any, Optional
 
 from verification_gateway import (
     SIGNATURE_TOOL_AVAILABLE,
+    verify_manifest_checksum_binding,
     verify_release_signature,
 )
 
@@ -131,13 +132,10 @@ def fetch_json(url: str, token: Optional[str] = None) -> Any:
     return json.loads(http_get(url, token).decode("utf-8"))
 
 
-def fetch_text(url: str, token: Optional[str] = None) -> str:
-    # Release asset downloads need the octet-stream accept header
-    return http_get(url, token, accept="application/octet-stream").decode("utf-8", errors="replace")
-
-
 def fetch_binary(url: str, token: Optional[str] = None) -> bytes:
-    """Same as fetch_text but returns raw bytes for binary asset mirroring."""
+    """Fetch a release asset's raw bytes (octet-stream) — for both binary asset
+    mirroring and content whose exact bytes must be hashed (checksums.txt,
+    plugin.toml) against the signature-verified checksums."""
     return http_get(url, token, accept="application/octet-stream")
 
 
@@ -182,6 +180,27 @@ def parse_checksums(text: str) -> dict[str, str]:
             name = name[1:]
         out[name.strip()] = h.strip().lower()
     return out
+
+
+def checksum_for(checksums: dict[str, str], asset_name: str) -> Optional[str]:
+    """
+    Resolve an asset's sha256 from a parsed checksums map, tolerating the
+    `sha256sum` leading `./` path prefix.
+
+    Real dmpkg `checksums.txt` lists `./plugin.toml` while the GitHub release asset
+    is named `plugin.toml`, so a bare `checksums[asset_name]` lookup misses. Match
+    by exact key first, then by `./`-stripped equality. Returns None when the asset
+    is not listed at all — a coverage gap the caller treats as fail-closed (the
+    manifest's bytes are then not covered by the signature over checksums.txt).
+    """
+    if asset_name in checksums:
+        return checksums[asset_name]
+    want = asset_name[2:] if asset_name.startswith("./") else asset_name
+    for key, sha in checksums.items():
+        stripped = key[2:] if key.startswith("./") else key
+        if stripped == want:
+            return sha
+    return None
 
 
 def parse_toml_minimal(text: str) -> dict[str, Any]:
@@ -283,20 +302,6 @@ class ReleaseAsset:
     url: str           # browser_download_url — what we publish to index.json
     api_url: str       # api.github.com/.../releases/assets/{id} — what we fetch with
     size: int
-
-    def fetch_text(self, token: Optional[str]) -> str:
-        """
-        Pull asset contents using the API endpoint with `Accept:
-        application/octet-stream`. This path works for BOTH public and
-        private repos with a token, whereas browser_download_url only
-        works for public repos OR when the asset doesn't redirect to
-        a signed URL. Using the API endpoint uniformly means the
-        aggregator's auth path is identical for every source repo
-        regardless of visibility.
-        """
-        return http_get(self.api_url, token, accept="application/octet-stream").decode(
-            "utf-8", errors="replace"
-        )
 
 
 @dataclass
@@ -797,16 +802,20 @@ def build_entry_single(
     owner = source["owner"]
     repo = source["repo"]
 
-    # Pull plugin.toml
+    # Pull plugin.toml — keep the RAW bytes so the manifest cross-check below can
+    # sha256 the exact bytes the signature-covered checksums entry pins (a lossy
+    # utf-8 decode would change the hash). Parse from the same bytes.
     manifest_asset = release.asset_by_name("plugin.toml")
     manifest_data: dict[str, Any] = {}
     manifest_url: Optional[str] = None
+    manifest_raw: Optional[bytes] = None
     if manifest_asset:
         manifest_url = manifest_asset.url
         try:
-            manifest_data = parse_toml_minimal(manifest_asset.fetch_text(token))
+            manifest_raw = fetch_binary(manifest_asset.api_url, token)
+            manifest_data = parse_toml_minimal(manifest_raw.decode("utf-8", errors="replace"))
         except Exception as e:
-            print(f"  [warn] {owner}/{repo}: failed to parse plugin.toml: {e}", file=sys.stderr)
+            print(f"  [warn] {owner}/{repo}: failed to fetch/parse plugin.toml: {e}", file=sys.stderr)
 
     # Pull checksums.txt — keep the RAW bytes (the SIGNATURE is over the exact
     # bytes; a lossy utf-8 decode would break verification) AND the parsed map.
@@ -854,6 +863,23 @@ def build_entry_single(
     if not ok:
         print(f"  [drop] {owner}/{repo}: signature verification failed — {reason}", file=sys.stderr)
         return None
+
+    # Transitively bind the DISPLAYED capability_tier/offering (+ script_pack) to
+    # the just-verified signature: `checksums` was parsed from the exact bytes the
+    # SIGNATURE covered (ok above), so a fetched manifest whose sha256 matches its
+    # checksums entry is signature-covered. A coverage gap or byte mismatch DROPS
+    # the entry — a validly-signed artifact set can no longer present a manifest
+    # with false tier/offering. Skipped only when NO manifest was fetched: those
+    # fields then come from the catalog-side sources.json (trusted), not a manifest.
+    manifest_sha256: Optional[str] = None
+    if manifest_raw is not None:
+        manifest_sha256 = checksum_for(checksums, manifest_asset.name)
+        mf_ok, mf_reason = verify_manifest_checksum_binding(
+            manifest_bytes=manifest_raw, expected_sha256=manifest_sha256
+        )
+        if not mf_ok:
+            print(f"  [drop] {owner}/{repo}: {mf_reason}", file=sys.stderr)
+            return None
 
     # Extract optional manifest fields with safe fallbacks
     min_dm = (
@@ -904,7 +930,10 @@ def build_entry_single(
         "platforms": platforms,
         "manifest": {
             "url": manifest_url,
-            "sha256": checksums.get("plugin.toml"),
+            # The signature-verified checksums entry for the fetched manifest bytes
+            # (None only when no manifest was fetched). Cross-checked above, so this
+            # sha256 is transitively covered by the release SIGNATURE.
+            "sha256": manifest_sha256,
         },
         "signature": {
             "algorithm": "ed25519",
@@ -948,15 +977,18 @@ def build_entries_multi(
             except Exception as e:
                 print(f"  [warn] {owner}/{repo}/{slug}: failed to fetch {cs_name}: {e}", file=sys.stderr)
 
-        # Per-plugin manifest
+        # Per-plugin manifest — RAW bytes so the sha256 cross-check hashes exactly
+        # what the signature-covered checksums entry pins (see build_entry_single).
         mf_name = source.get("per_plugin_manifest_template", "{slug}-plugin.toml").format(**subs)
         mf_asset = release.asset_by_name(mf_name)
         manifest_data: dict[str, Any] = {}
+        manifest_raw: Optional[bytes] = None
         if mf_asset:
             try:
-                manifest_data = parse_toml_minimal(mf_asset.fetch_text(token))
+                manifest_raw = fetch_binary(mf_asset.api_url, token)
+                manifest_data = parse_toml_minimal(manifest_raw.decode("utf-8", errors="replace"))
             except Exception as e:
-                print(f"  [warn] {owner}/{repo}/{slug}: failed to parse {mf_name}: {e}", file=sys.stderr)
+                print(f"  [warn] {owner}/{repo}/{slug}: failed to fetch/parse {mf_name}: {e}", file=sys.stderr)
 
         # Per-plugin signature
         sig_name = source.get("per_plugin_signature_template", "{slug}-SIGNATURE").format(**subs)
@@ -995,6 +1027,19 @@ def build_entries_multi(
                 file=sys.stderr,
             )
             continue
+
+        # Bind the per-plugin manifest to its just-verified signature (same contract
+        # as build_entry_single): drop a bundle whose tier/offering would be derived
+        # from a manifest not covered by the signed per-plugin checksums.
+        manifest_sha256: Optional[str] = None
+        if manifest_raw is not None:
+            manifest_sha256 = checksum_for(checksums, mf_asset.name)
+            mf_ok, mf_reason = verify_manifest_checksum_binding(
+                manifest_bytes=manifest_raw, expected_sha256=manifest_sha256
+            )
+            if not mf_ok:
+                print(f"  [drop] {owner}/{repo}/{slug}: {mf_reason}", file=sys.stderr)
+                continue
 
         min_dm = (
             manifest_data.get("compat", {}).get("min_deskmodal")
@@ -1044,7 +1089,9 @@ def build_entries_multi(
             "platforms": platforms,
             "manifest": {
                 "url": mf_asset.url if mf_asset else None,
-                "sha256": checksums.get(mf_name),
+                # Signature-verified checksums entry for the fetched manifest bytes
+                # (cross-checked above); transitively covered by the SIGNATURE.
+                "sha256": manifest_sha256,
             },
             "signature": {
                 "algorithm": "ed25519",

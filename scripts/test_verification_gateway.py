@@ -10,11 +10,18 @@ import hashlib
 import os
 import sys
 import unittest
+from unittest import mock
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import aggregate  # noqa: E402
 from aggregate import (  # noqa: E402
+    Release,
+    ReleaseAsset,
+    build_entries_multi,
+    build_entry_single,
     capability_metadata,
+    checksum_for,
     offering_metadata,
     script_pack_metadata,
 )
@@ -34,6 +41,7 @@ from verification_gateway import (  # noqa: E402
     validate_script_pack,
     validate_signature_presence,
     verify_ed25519_signature_bytes,
+    verify_manifest_checksum_binding,
     verify_release_signature,
 )
 
@@ -950,6 +958,220 @@ class VerifyReleaseSignatureTests(unittest.TestCase):
         )
         self.assertFalse(ok)
         self.assertIn(str(ED25519_SIGNATURE_LEN), reason)
+
+
+# --------------------------------------------------------------------- #
+# B3 follow-up — fetched-manifest fields bound to the verified signature  #
+# --------------------------------------------------------------------- #
+class ManifestChecksumBindingTests(unittest.TestCase):
+    """The pure cross-check: does a fetched manifest's sha256 match the
+    signature-verified checksums entry? (No crypto backend needed — the SIGNATURE
+    was already verified upstream; this binds the manifest bytes to that map.)"""
+
+    def test_exact_match_passes(self):
+        b = b'[bundle]\ntier = "required"\n'
+        ok, reason = verify_manifest_checksum_binding(
+            manifest_bytes=b, expected_sha256=hashlib.sha256(b).hexdigest()
+        )
+        self.assertTrue(ok, reason)
+        self.assertIn("match", reason)
+
+    def test_uppercase_expected_still_matches(self):
+        b = b"data"
+        ok, _ = verify_manifest_checksum_binding(
+            manifest_bytes=b, expected_sha256=hashlib.sha256(b).hexdigest().upper()
+        )
+        self.assertTrue(ok)
+
+    def test_byte_mismatch_fails(self):
+        ok, reason = verify_manifest_checksum_binding(
+            manifest_bytes=b"tampered", expected_sha256="0" * 64
+        )
+        self.assertFalse(ok)
+        self.assertIn("does not match", reason)
+
+    def test_coverage_gap_none_expected_fails(self):
+        # Manifest not listed in the signed checksums — fail-closed.
+        ok, reason = verify_manifest_checksum_binding(
+            manifest_bytes=b"data", expected_sha256=None
+        )
+        self.assertFalse(ok)
+        self.assertIn("not listed", reason)
+
+    def test_empty_expected_fails(self):
+        ok, _ = verify_manifest_checksum_binding(
+            manifest_bytes=b"data", expected_sha256="   "
+        )
+        self.assertFalse(ok)
+
+    def test_no_manifest_bytes_fails(self):
+        ok, _ = verify_manifest_checksum_binding(
+            manifest_bytes=None, expected_sha256="a" * 64
+        )
+        self.assertFalse(ok)
+
+
+class ChecksumForTests(unittest.TestCase):
+    """checksum_for tolerates the real `./`-prefixed sha256sum path format."""
+
+    def test_dotslash_prefixed_key_resolves_by_asset_name(self):
+        cs = {"./plugin.toml": "a" * 64, "./services/x.dylib": "b" * 64}
+        self.assertEqual(checksum_for(cs, "plugin.toml"), "a" * 64)
+
+    def test_exact_key_resolves(self):
+        cs = {"plugin.toml": "c" * 64}
+        self.assertEqual(checksum_for(cs, "plugin.toml"), "c" * 64)
+
+    def test_slug_prefixed_manifest_resolves(self):
+        cs = {"./widget-plugin.toml": "e" * 64}
+        self.assertEqual(checksum_for(cs, "widget-plugin.toml"), "e" * 64)
+
+    def test_absent_returns_none(self):
+        cs = {"./other.toml": "d" * 64}
+        self.assertIsNone(checksum_for(cs, "plugin.toml"))
+
+
+def _make_single_release(*, manifest_in_checksums=True, served_manifest=None):
+    """Fake single_release Release + fetch_map for aggregate.fetch_binary.
+
+    checksums.txt is signed with the REAL DeskModal primary key so
+    verify_release_signature passes; only the manifest cross-check varies.
+    `served_manifest` overrides the plugin.toml bytes the aggregator fetches
+    (tamper); `manifest_in_checksums=False` omits plugin.toml from the signed
+    checksums (coverage gap). The manifest is listed as `./plugin.toml` to
+    exercise checksum_for's `./`-tolerant lookup (real dmpkg format)."""
+    manifest_bytes = (
+        b'[bundle]\ntier = "required"\n\n'
+        b'[license]\nspdx = "MIT"\n\n'
+        b'[license.commercial]\nmodel = "subscription"\nprice = "$29/mo"\ntrial_days = 14\n'
+    )
+    manifest_sha = hashlib.sha256(manifest_bytes).hexdigest()
+    tarball_name = "deskmodal-foo-0.1.0-darwin-arm64.tar.gz"
+    tarball_bytes = b"FAKE_TARBALL_BYTES"
+    tarball_sha = hashlib.sha256(tarball_bytes).hexdigest()
+
+    lines = [f"{tarball_sha}  ./{tarball_name}"]
+    if manifest_in_checksums:
+        lines.append(f"{manifest_sha}  ./plugin.toml")
+    checksums_bytes = ("\n".join(lines) + "\n").encode("utf-8")
+    sig_bytes = _sign_with_primary_key(checksums_bytes)
+
+    fetched = served_manifest if served_manifest is not None else manifest_bytes
+    fetch_map = {
+        "api://manifest": fetched,
+        "api://tarball": tarball_bytes,
+        "api://checksums": checksums_bytes,
+        "api://sig": sig_bytes,
+    }
+    assets = [
+        ReleaseAsset(name="plugin.toml", url="https://dl/plugin.toml", api_url="api://manifest", size=len(fetched)),
+        ReleaseAsset(name=tarball_name, url=f"https://dl/{tarball_name}", api_url="api://tarball", size=len(tarball_bytes)),
+        ReleaseAsset(name="checksums.txt", url="https://dl/checksums.txt", api_url="api://checksums", size=len(checksums_bytes)),
+        ReleaseAsset(name="SIGNATURE", url="https://dl/SIGNATURE", api_url="api://sig", size=len(sig_bytes)),
+    ]
+    release = Release(
+        tag="foo-v0.1.0", version="0.1.0", html_url="https://gh/foo",
+        published_at="2026-07-01T00:00:00Z", assets=assets,
+    )
+    src = {
+        "owner": "Desk-Modal", "repo": "foo", "id": "deskmodal.foo",
+        "display_name": "Foo", "content_type": "app",
+        "asset_name_template": "deskmodal-foo-{version}-{platform}.tar.gz",
+    }
+    return src, release, fetch_map, manifest_sha
+
+
+def _make_multi_release(*, served_manifest=None):
+    """Fake multi_plugin_release with one plugin `widget`, signed by the real key."""
+    slug = "widget"
+    manifest_bytes = b'[bundle]\ntier = "optional"\n\n[license]\nspdx = "MIT"\n'
+    manifest_sha = hashlib.sha256(manifest_bytes).hexdigest()
+    tarball_name = f"{slug}-1.0.0-darwin-arm64.tar.gz"
+    tarball_bytes = b"MULTI_TARBALL"
+    tarball_sha = hashlib.sha256(tarball_bytes).hexdigest()
+    mf_name = f"{slug}-plugin.toml"
+    checksums_bytes = (
+        f"{tarball_sha}  ./{tarball_name}\n{manifest_sha}  ./{mf_name}\n"
+    ).encode("utf-8")
+    sig_bytes = _sign_with_primary_key(checksums_bytes)
+
+    fetched = served_manifest if served_manifest is not None else manifest_bytes
+    fetch_map = {
+        "api://mf": fetched,
+        "api://tb": tarball_bytes,
+        "api://cs": checksums_bytes,
+        "api://sig": sig_bytes,
+    }
+    assets = [
+        ReleaseAsset(name=mf_name, url=f"https://dl/{mf_name}", api_url="api://mf", size=len(fetched)),
+        ReleaseAsset(name=tarball_name, url=f"https://dl/{tarball_name}", api_url="api://tb", size=len(tarball_bytes)),
+        ReleaseAsset(name=f"{slug}-checksums.txt", url="https://dl/cs", api_url="api://cs", size=len(checksums_bytes)),
+        ReleaseAsset(name=f"{slug}-SIGNATURE", url="https://dl/sig", api_url="api://sig", size=len(sig_bytes)),
+    ]
+    release = Release(
+        tag="ts-v1.0.0", version="1.0.0", html_url="https://gh/ts",
+        published_at="2026-07-01T00:00:00Z", assets=assets,
+    )
+    src = {
+        "owner": "Desk-Modal", "repo": "ts", "content_type": "app",
+        "asset_name_template": "{slug}-{version}-{platform}.tar.gz",
+        "plugins": [{"slug": slug, "id": "deskmodal.widget", "display_name": "Widget"}],
+    }
+    return src, release, fetch_map, manifest_sha
+
+
+@unittest.skipUnless(SIGNATURE_TOOL_AVAILABLE, "cryptography backend not installed")
+class BuildEntryManifestBindingE2ETests(unittest.TestCase):
+    """End-to-end: build_entry_single / build_entries_multi drop an entry whose
+    displayed tier/offering come from a manifest not covered by the verified
+    signature; build it when the manifest bytes match the signed checksums."""
+
+    def setUp(self):
+        if not os.path.exists(os.path.join(_REPO_ROOT, ".signing-key.hex")):
+            self.skipTest("no .signing-key.hex fixture")
+
+    def _single(self, **kw):
+        src, release, fetch_map, manifest_sha = _make_single_release(**kw)
+        with mock.patch.object(aggregate, "fetch_binary", lambda url, token=None: fetch_map[url]):
+            entry = build_entry_single(src, release, token=None, publisher_keys=_PRIMARY_REGISTRY)
+        return entry, manifest_sha
+
+    def test_matching_manifest_builds_entry_with_bound_fields(self):
+        entry, manifest_sha = self._single()
+        self.assertIsNotNone(entry)
+        # capability_tier + offering are DERIVED FROM the manifest — now bound.
+        self.assertEqual(entry["capability_tier"], "required")
+        self.assertEqual(entry["offering"]["model"], "subscription")
+        self.assertEqual(entry["offering"]["price"], "$29/mo")
+        # manifest.sha256 is the signature-verified checksums entry.
+        self.assertEqual(entry["manifest"]["sha256"], manifest_sha)
+
+    def test_tampered_manifest_dropped(self):
+        entry, _ = self._single(
+            served_manifest=b'[bundle]\ntier = "required"\n# TAMPERED-BYTES\n'
+        )
+        self.assertIsNone(entry)
+
+    def test_manifest_absent_from_checksums_dropped(self):
+        entry, _ = self._single(manifest_in_checksums=False)
+        self.assertIsNone(entry)
+
+    def test_multi_matching_builds_and_tampered_dropped(self):
+        # Matching manifest → entry built with bound tier + sha.
+        src, release, fetch_map, manifest_sha = _make_multi_release()
+        with mock.patch.object(aggregate, "fetch_binary", lambda url, token=None: fetch_map[url]):
+            entries = build_entries_multi(src, release, token=None, publisher_keys=_PRIMARY_REGISTRY)
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["capability_tier"], "optional")
+        self.assertEqual(entries[0]["manifest"]["sha256"], manifest_sha)
+
+        # Tampered manifest → bundle dropped.
+        src, release, fetch_map, _ = _make_multi_release(
+            served_manifest=b'[bundle]\ntier = "required"\n# TAMPER\n'
+        )
+        with mock.patch.object(aggregate, "fetch_binary", lambda url, token=None: fetch_map[url]):
+            entries = build_entries_multi(src, release, token=None, publisher_keys=_PRIMARY_REGISTRY)
+        self.assertEqual(entries, [])
 
 
 if __name__ == "__main__":
