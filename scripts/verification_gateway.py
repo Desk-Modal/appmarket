@@ -7,7 +7,15 @@ The §27 capability contract requires every published capability to declare:
   - `[bundle] tier` ∈ {required, recommended, optional} — §27
   - `[resources]` footprint (disk_mb, ram_mb_idle, ram_mb_peak, cpu_pct_steady) — §27.11
 
-This module is the pure, dependency-free validation core shared by:
+The presence/validity validators below are pure + dependency-free. The genuine
+Ed25519 sign/verify functions (`verify_ed25519_signature_bytes`,
+`resolve_trusted_public_key`, `verify_release_signature`) additionally require
+the `cryptography` package and are used by the aggregator to cryptographically
+verify a release's detached `SIGNATURE` over its `checksums.txt` before a catalog
+entry is emitted — they FAIL LOUD (never a silent pass) when the backend is
+absent.
+
+This module is the validation core shared by:
   - the publisher pre-publish gate (`validate_catalog.py --category capability
     --manifest plugin.toml`), which enforces FULL PRESENCE — a publish missing
     license/tier/resources is rejected (rc≠0); and
@@ -22,7 +30,7 @@ lowercase to match `plugin.toml [bundle] tier = "..."` and the Rust serde repr.
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing import Any, Optional
 
 # Lowercase to match plugin.toml `[bundle] tier` + plugin-index serde repr.
 VALID_CAPABILITY_TIERS = frozenset({"required", "recommended", "optional"})
@@ -226,6 +234,160 @@ def validate_signature_presence(
             issues.append(_err(f"{path}.{field}", f"{field} must be a non-empty string"))
 
     return issues
+
+
+# --------------------------------------------------------------------- #
+# Genuine Ed25519 cryptographic sign/verify — the roundtrip this module   #
+# docstring promises. `validate_signature_presence` above only checks the #
+# SHAPE of the `signature{}` pointer block (algorithm literal + non-empty #
+# key_id). The functions below actually verify signature bytes against a   #
+# TRUSTED publisher public key over the artifact's checksums, closing the  #
+# gap where any tampered/unsigned release passed the gateway as "signed".  #
+#                                                                          #
+# Trust chain (PUBLISHING.md §"Required release assets"):                  #
+#   detached `SIGNATURE` (raw 64-byte Ed25519 sig) --verifies-->           #
+#   `checksums.txt` (sha256 of every artifact) --pins--> each artifact.    #
+# The DeskModal client re-verifies each artifact's sha256 at install; this #
+# gate proves the FIRST link cryptographically. The public key is the      #
+# CATALOG-side trust anchor (`publisher_keys` registry, edited only via    #
+# the approved publisher-signup PR flow) — NEVER the `publisher.pub`        #
+# shipped inside the release, which an attacker controls.                   #
+try:
+    from cryptography.exceptions import InvalidSignature
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+
+    _SIGNATURE_TOOL_IMPORT_ERROR: Optional[str] = None
+except ImportError as _import_err:  # pragma: no cover - env-dependent
+    Ed25519PublicKey = None  # type: ignore[assignment,misc]
+    InvalidSignature = Exception  # type: ignore[assignment,misc]
+    _SIGNATURE_TOOL_IMPORT_ERROR = str(_import_err) or "cryptography package not importable"
+
+# True when the Ed25519 backend is importable. Callers MUST fail loud (never a
+# silent pass) when this is False and a signed package is being verified.
+SIGNATURE_TOOL_AVAILABLE = _SIGNATURE_TOOL_IMPORT_ERROR is None
+
+ED25519_PUBLIC_KEY_LEN = 32
+ED25519_SIGNATURE_LEN = 64
+# 64 hex chars == 32 raw bytes; the canonical registry encoding for a raw
+# Ed25519 public key (matches `.signing-key.hex` / CATALOG_PUBKEY hex form).
+_ED25519_PUBKEY_HEX = re.compile(r"^[0-9a-fA-F]{64}$")
+
+
+class SignatureToolUnavailable(RuntimeError):
+    """Ed25519 verification requested but the `cryptography` backend is absent.
+
+    Fail-loud per the honest-gate contract: a missing crypto backend must NEVER
+    silently pass a package through as "verified". Callers surface this reason
+    and drop the entry (or abort the run) rather than emit an unverified entry.
+    """
+
+
+def verify_ed25519_signature_bytes(
+    message: bytes, signature: bytes, public_key: bytes
+) -> bool:
+    """
+    Genuine Ed25519 verify: does `signature` prove `message` was signed by the
+    holder of the private key matching `public_key`?
+
+    Pure + deterministic. Returns True ONLY for a cryptographically valid
+    signature; returns False for a forged/corrupt signature or malformed-length
+    inputs. Raises `SignatureToolUnavailable` when the `cryptography` backend is
+    missing — never a silent False-that-reads-as-pass, never a silent True.
+    """
+    if not SIGNATURE_TOOL_AVAILABLE:
+        raise SignatureToolUnavailable(
+            "Ed25519 verification requires the 'cryptography' package: "
+            + str(_SIGNATURE_TOOL_IMPORT_ERROR)
+        )
+    if not isinstance(message, (bytes, bytearray)):
+        return False
+    if not isinstance(signature, (bytes, bytearray)) or len(signature) != ED25519_SIGNATURE_LEN:
+        return False
+    if not isinstance(public_key, (bytes, bytearray)) or len(public_key) != ED25519_PUBLIC_KEY_LEN:
+        return False
+    try:
+        Ed25519PublicKey.from_public_bytes(bytes(public_key)).verify(
+            bytes(signature), bytes(message)
+        )
+        return True
+    except InvalidSignature:
+        return False
+    except ValueError:
+        # Backend rejected the key/signature bytes as structurally invalid.
+        return False
+
+
+def resolve_trusted_public_key(
+    publisher_keys: Any, key_id: Any
+) -> tuple[Optional[bytes], Optional[str]]:
+    """
+    Resolve the trusted raw Ed25519 public key (32 bytes) bound to `key_id` in
+    the catalog `publisher_keys` registry (sources.json / index.json).
+
+    The registry is the TRUST ANCHOR: it is edited only via the approved
+    publisher-signup PR flow (PUBLISHING.md Layer 1), so a key that appears here
+    is one DeskModal has vouched for. A release's bundled `publisher.pub` is
+    NEVER trusted for this decision — an attacker ships their own.
+
+    Returns `(key_bytes, None)` on success or `(None, reason)` when no trusted
+    key resolves (fail-closed: an unregistered publisher cannot be verified).
+    """
+    if not isinstance(key_id, str) or not key_id.strip():
+        return None, "entry declares no publisher_key_id"
+    if not isinstance(publisher_keys, dict):
+        return None, "catalog carries no publisher_keys registry"
+    entry = publisher_keys.get(key_id)
+    if not isinstance(entry, dict):
+        return None, f"no trusted key registered for publisher_key_id '{key_id}'"
+    algo = entry.get("algorithm")
+    if algo is not None and algo != "ed25519":
+        return None, f"publisher_key_id '{key_id}' algorithm '{algo}' is not ed25519"
+    hex_key = entry.get("public_key_hex")
+    if not isinstance(hex_key, str) or not _ED25519_PUBKEY_HEX.match(hex_key.strip()):
+        return None, (
+            f"publisher_key_id '{key_id}' has no valid 64-hex-char public_key_hex "
+            "in the registry (provision it via the publisher-signup flow)"
+        )
+    return bytes.fromhex(hex_key.strip()), None
+
+
+def verify_release_signature(
+    *,
+    checksums_bytes: Optional[bytes],
+    signature_bytes: Optional[bytes],
+    publisher_keys: Any,
+    key_id: Any,
+) -> tuple[bool, str]:
+    """
+    The load-bearing publish-gate decision: is the release's detached
+    `SIGNATURE` a genuine Ed25519 signature over its `checksums.txt`, by the
+    trusted key bound to `key_id`?
+
+    Fail-closed — a missing trusted key / checksums / SIGNATURE, a wrong-length
+    signature, or a signature that does not verify all return `(False, reason)`.
+    Only a cryptographically valid signature returns `(True, reason)`. Propagates
+    `SignatureToolUnavailable` (fail-loud) if the crypto backend is absent.
+
+    Returns `(ok, human_reason)` so the caller can log an honest drop reason.
+    """
+    pubkey, key_reason = resolve_trusted_public_key(publisher_keys, key_id)
+    if pubkey is None:
+        return False, key_reason or "no trusted publisher key"
+    if not checksums_bytes:
+        return False, "missing checksums.txt asset (nothing for the signature to cover)"
+    if not signature_bytes:
+        return False, "missing SIGNATURE asset (release is unsigned)"
+    if len(signature_bytes) != ED25519_SIGNATURE_LEN:
+        return False, (
+            f"SIGNATURE is {len(signature_bytes)} bytes; expected a raw "
+            f"{ED25519_SIGNATURE_LEN}-byte Ed25519 signature"
+        )
+    if verify_ed25519_signature_bytes(bytes(checksums_bytes), bytes(signature_bytes), pubkey):
+        return True, f"Ed25519 SIGNATURE verified over checksums.txt by '{key_id}'"
+    return False, (
+        f"Ed25519 SIGNATURE does not verify over checksums.txt for publisher_key_id "
+        f"'{key_id}' (tampered artifact/checksums, wrong key, or corrupt signature)"
+    )
 
 
 def validate_capability_tier(

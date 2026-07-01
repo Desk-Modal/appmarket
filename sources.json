@@ -1,9 +1,15 @@
 {
   "comment": "Declarative source list for the DeskModal App Market. The aggregator reads GitHub Releases from these repos and builds the catalog. CODEOWNERS-gated — third parties submit a publisher-signup issue, Desk-Modal adds their entry.",
   "publisher_keys": {
+    "deskmodal-primary": {
+      "algorithm": "ed25519",
+      "public_key_hex": "629f5a25328468e9d55c22e2b48182cd9f91889cbc3027de583bbc5837cfcc80",
+      "source": "DeskModal primary publisher signing key (public half of .signing-key.hex; the same key that signs index.json — see CATALOG_PUBKEY.md). Trust anchor for the genuine Ed25519 SIGNATURE-over-checksums verification in aggregate.py.",
+      "owner": "Desk-Modal"
+    },
     "deskmodal-ci": {
       "algorithm": "ed25519",
-      "source": "GitHub App (deskmodal-ci) signing key",
+      "source": "GitHub App (deskmodal-ci) signing key — NOT YET PROVISIONED: add public_key_hex before any release signs under this id, otherwise its entries fail-closed (dropped) at the aggregator gate.",
       "owner": "Desk-Modal"
     }
   },

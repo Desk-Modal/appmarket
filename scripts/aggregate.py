@@ -52,8 +52,20 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Optional
 
+from verification_gateway import (
+    SIGNATURE_TOOL_AVAILABLE,
+    verify_release_signature,
+)
+
 AGGREGATOR_NAME = "appmarket-aggregator"
 AGGREGATOR_VERSION = "1.2.0"
+
+# The catalog-side trust anchor id for DeskModal-first-party releases. The
+# matching Ed25519 public key lives in `sources.json publisher_keys`; a source
+# may override per-entry via `publisher_key_id`. This is the id the emitted
+# `signature{}` block carries AND the id used to resolve the trusted key for the
+# genuine Ed25519 SIGNATURE-over-checksums verification (verification_gateway).
+DESKMODAL_PRIMARY_KEY_ID = "deskmodal-primary"
 
 # Native platforms DeskModal targets. Order matters: when the aggregator
 # walks release assets, it tries each key in turn and picks the first
@@ -779,6 +791,7 @@ def build_entry_single(
     source: dict,
     release: Release,
     token: Optional[str],
+    publisher_keys: Optional[dict] = None,
 ) -> Optional[dict]:
     """Build a catalog entry for a repo that ships ONE plugin per release."""
     owner = source["owner"]
@@ -795,12 +808,15 @@ def build_entry_single(
         except Exception as e:
             print(f"  [warn] {owner}/{repo}: failed to parse plugin.toml: {e}", file=sys.stderr)
 
-    # Pull checksums.txt
+    # Pull checksums.txt — keep the RAW bytes (the SIGNATURE is over the exact
+    # bytes; a lossy utf-8 decode would break verification) AND the parsed map.
     checksums: dict[str, str] = {}
+    checksums_raw: Optional[bytes] = None
     checksums_asset = release.asset_by_name("checksums.txt")
     if checksums_asset:
         try:
-            checksums = parse_checksums(checksums_asset.fetch_text(token))
+            checksums_raw = fetch_binary(checksums_asset.api_url, token)
+            checksums = parse_checksums(checksums_raw.decode("utf-8", errors="replace"))
         except Exception as e:
             print(f"  [warn] {owner}/{repo}: failed to fetch checksums.txt: {e}", file=sys.stderr)
 
@@ -817,6 +833,27 @@ def build_entry_single(
         return None
 
     sig_asset = release.asset_by_name("SIGNATURE")
+
+    # Genuine Ed25519 gate: the detached SIGNATURE must cryptographically verify
+    # over checksums.txt using the TRUSTED registry key for this publisher.
+    # Fail-closed — an unsigned/tampered release, or one from a publisher with no
+    # trusted key, is DROPPED (it may never appear as "signed" in the catalog).
+    key_id = source.get("publisher_key_id") or DESKMODAL_PRIMARY_KEY_ID
+    sig_raw: Optional[bytes] = None
+    if sig_asset:
+        try:
+            sig_raw = fetch_binary(sig_asset.api_url, token)
+        except Exception as e:
+            print(f"  [warn] {owner}/{repo}: failed to fetch SIGNATURE: {e}", file=sys.stderr)
+    ok, reason = verify_release_signature(
+        checksums_bytes=checksums_raw,
+        signature_bytes=sig_raw,
+        publisher_keys=publisher_keys or {},
+        key_id=key_id,
+    )
+    if not ok:
+        print(f"  [drop] {owner}/{repo}: signature verification failed — {reason}", file=sys.stderr)
+        return None
 
     # Extract optional manifest fields with safe fallbacks
     min_dm = (
@@ -843,7 +880,7 @@ def build_entry_single(
         "publisher": {
             "display_name": owner,
             "verified": True,
-            "key_id": "deskmodal-primary",
+            "key_id": key_id,
         },
         "latest_version": release.version,
         "min_deskmodal_version": min_dm,
@@ -871,9 +908,10 @@ def build_entry_single(
         },
         "signature": {
             "algorithm": "ed25519",
-            "publisher_key_id": "deskmodal-primary",
+            "publisher_key_id": key_id,
             "checksums_url": checksums_asset.url if checksums_asset else None,
             "signature_url": sig_asset.url if sig_asset else None,
+            "verified": True,
         },
     }
 
@@ -882,6 +920,7 @@ def build_entries_multi(
     source: dict,
     release: Release,
     token: Optional[str],
+    publisher_keys: Optional[dict] = None,
 ) -> list[dict]:
     """
     Build one catalog entry PER declared plugin for a monorepo-style
@@ -896,13 +935,16 @@ def build_entries_multi(
         slug = plugin["slug"]
         subs = {"version": release.version, "slug": slug}
 
-        # Per-plugin checksums
+        # Per-plugin checksums — keep RAW bytes for signature verification plus
+        # the parsed map (see build_entry_single for why the raw bytes matter).
         cs_name = source.get("per_plugin_checksums_template", "{slug}-checksums.txt").format(**subs)
         cs_asset = release.asset_by_name(cs_name)
         checksums: dict[str, str] = {}
+        checksums_raw: Optional[bytes] = None
         if cs_asset:
             try:
-                checksums = parse_checksums(cs_asset.fetch_text(token))
+                checksums_raw = fetch_binary(cs_asset.api_url, token)
+                checksums = parse_checksums(checksums_raw.decode("utf-8", errors="replace"))
             except Exception as e:
                 print(f"  [warn] {owner}/{repo}/{slug}: failed to fetch {cs_name}: {e}", file=sys.stderr)
 
@@ -931,6 +973,29 @@ def build_entries_multi(
             )
             continue
 
+        # Genuine Ed25519 gate (per-plugin) — fail-closed, same contract as the
+        # single-release path: drop any bundle whose SIGNATURE does not verify
+        # over its checksums against a trusted registry key.
+        key_id = plugin.get("publisher_key_id") or source.get("publisher_key_id") or DESKMODAL_PRIMARY_KEY_ID
+        sig_raw: Optional[bytes] = None
+        if sig_asset:
+            try:
+                sig_raw = fetch_binary(sig_asset.api_url, token)
+            except Exception as e:
+                print(f"  [warn] {owner}/{repo}/{slug}: failed to fetch {sig_name}: {e}", file=sys.stderr)
+        ok, reason = verify_release_signature(
+            checksums_bytes=checksums_raw,
+            signature_bytes=sig_raw,
+            publisher_keys=publisher_keys or {},
+            key_id=key_id,
+        )
+        if not ok:
+            print(
+                f"  [drop] {owner}/{repo}/{slug}: signature verification failed — {reason}",
+                file=sys.stderr,
+            )
+            continue
+
         min_dm = (
             manifest_data.get("compat", {}).get("min_deskmodal")
             if isinstance(manifest_data.get("compat"), dict)
@@ -955,7 +1020,7 @@ def build_entries_multi(
             "publisher": {
                 "display_name": owner,
                 "verified": True,
-                "key_id": "deskmodal-primary",
+                "key_id": key_id,
             },
             "latest_version": release.version,
             "min_deskmodal_version": min_dm,
@@ -983,9 +1048,10 @@ def build_entries_multi(
             },
             "signature": {
                 "algorithm": "ed25519",
-                "publisher_key_id": "deskmodal-primary",
+                "publisher_key_id": key_id,
                 "checksums_url": cs_asset.url if cs_asset else None,
                 "signature_url": sig_asset.url if sig_asset else None,
+                "verified": True,
             },
         })
 
@@ -1005,8 +1071,26 @@ def aggregate(sources_path: str, out_path: str, token: Optional[str], mirror: bo
     Returns True if the output file changed (or was newly created),
     False otherwise. Callers use this to decide whether to commit.
     """
+    # Fail loud (never a silent pass) if the Ed25519 backend is missing: a
+    # catalog whose entries cannot be cryptographically verified must not be
+    # built. Honest gate — registered ⇔ runnable.
+    if not SIGNATURE_TOOL_AVAILABLE:
+        print(
+            "[FATAL] Ed25519 signature verification is unavailable — the 'cryptography' "
+            "package is not importable. Refusing to build a catalog whose release "
+            "signatures cannot be verified. Install it: pip install cryptography",
+            file=sys.stderr,
+        )
+        raise SystemExit(3)
+
     with open(sources_path, "r", encoding="utf-8") as f:
         sources_doc = json.load(f)
+
+    # Catalog-side trust anchor: publisher_key_id -> {algorithm, public_key_hex}.
+    # The genuine SIGNATURE-over-checksums verify resolves keys from here.
+    publisher_keys: dict = sources_doc.get("publisher_keys", {})
+    if not isinstance(publisher_keys, dict):
+        publisher_keys = {}
 
     catalog: list[dict] = []
     seen_ids: set[str] = set()
@@ -1046,10 +1130,10 @@ def aggregate(sources_path: str, out_path: str, token: Optional[str], mirror: bo
             release = source_release
 
         if mode == "single_release":
-            entry = build_entry_single(src, release, token)
+            entry = build_entry_single(src, release, token, publisher_keys)
             entries = [entry] if entry else []
         elif mode == "multi_plugin_release":
-            entries = build_entries_multi(src, release, token)
+            entries = build_entries_multi(src, release, token, publisher_keys)
         else:
             print(f"  [skip] unknown mode '{mode}'", file=sys.stderr)
             continue

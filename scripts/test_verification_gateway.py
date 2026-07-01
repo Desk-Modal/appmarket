@@ -6,6 +6,7 @@ Run: python3 -m unittest discover -s scripts -p 'test_*.py'
 
 from __future__ import annotations
 
+import hashlib
 import os
 import sys
 import unittest
@@ -18,7 +19,10 @@ from aggregate import (  # noqa: E402
     script_pack_metadata,
 )
 from verification_gateway import (  # noqa: E402
+    ED25519_SIGNATURE_LEN,
+    SIGNATURE_TOOL_AVAILABLE,
     VALID_OFFERING_MODELS,
+    resolve_trusted_public_key,
     validate_capability_entry,
     validate_capability_tier,
     validate_license,
@@ -29,7 +33,62 @@ from verification_gateway import (  # noqa: E402
     validate_script_entry,
     validate_script_pack,
     validate_signature_presence,
+    verify_ed25519_signature_bytes,
+    verify_release_signature,
 )
+
+# Repo root = parent of scripts/. Real Ed25519 fixtures live under releases/**
+# and .signing-key.hex (the DeskModal primary publisher key).
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_DESKMODAL_PRIMARY_PUB_HEX = (
+    "629f5a25328468e9d55c22e2b48182cd9f91889cbc3027de583bbc5837cfcc80"
+)
+_PRIMARY_REGISTRY = {
+    "deskmodal-primary": {
+        "algorithm": "ed25519",
+        "public_key_hex": _DESKMODAL_PRIMARY_PUB_HEX,
+    }
+}
+
+
+def _collect_real_dylib_fixtures():
+    """Collect (public_key, message, signature) triples from in-repo release
+    fixtures that ship publisher.pub + services/*.dylib + matching .sig. The
+    dmpkg scheme signs sha256(artifact).digest(), so message = that digest.
+    Returns a list (possibly empty). Some committed fixtures are intentionally
+    stale (artifact rebuilt after signing) — those are genuine tamper cases."""
+    triples = []
+    rel = os.path.join(_REPO_ROOT, "releases")
+    for dirpath, _dirs, files in os.walk(rel):
+        if "publisher.pub" not in files:
+            continue
+        svc = os.path.join(dirpath, "services")
+        if not os.path.isdir(svc):
+            continue
+        svc_files = set(os.listdir(svc))
+        with open(os.path.join(dirpath, "publisher.pub"), "rb") as f:
+            pub = f.read()
+        for name in sorted(svc_files):
+            if name.endswith(".dylib") and (name + ".sig") in svc_files:
+                with open(os.path.join(svc, name), "rb") as f:
+                    artifact = f.read()
+                with open(os.path.join(svc, name + ".sig"), "rb") as f:
+                    sig = f.read()
+                triples.append((pub, hashlib.sha256(artifact).digest(), sig))
+    return triples
+
+
+def _sign_with_primary_key(message: bytes) -> bytes:
+    """Sign `message` with the DeskModal primary private key (.signing-key.hex).
+
+    Produces a genuine Ed25519 signature that the primary registry pubkey
+    verifies — the exact SIGNATURE-over-checksums relationship the aggregator
+    checks. Skips (via caller) if the crypto backend or key file is absent."""
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    with open(os.path.join(_REPO_ROOT, ".signing-key.hex"), "r", encoding="utf-8") as f:
+        seed = bytes.fromhex(f.read().strip())
+    return Ed25519PrivateKey.from_private_bytes(seed).sign(message)
 
 GOOD_RESOURCES = {
     "disk_mb": 80,
@@ -728,6 +787,169 @@ class TestOfferingAggregatorEmission(unittest.TestCase):
         # End-to-end: what the aggregator emits passes the gateway validator.
         off = offering_metadata({}, {"offering": dict(GOOD_OFFERING)})
         self.assertEqual(validate_offering(off), [])
+
+
+@unittest.skipUnless(SIGNATURE_TOOL_AVAILABLE, "cryptography backend not installed")
+class Ed25519VerifyPrimitiveTests(unittest.TestCase):
+    """Genuine Ed25519 sign/verify roundtrip — the crypto primitive itself."""
+
+    def test_generated_keypair_roundtrip_pass_and_fail(self):
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+            Ed25519PrivateKey,
+        )
+
+        sk = Ed25519PrivateKey.generate()
+        pub = sk.public_key().public_bytes_raw()
+        msg = b"deskmodal-verification-gateway"
+        sig = sk.sign(msg)
+        # PASS: valid signature over the exact message by the matching key.
+        self.assertTrue(verify_ed25519_signature_bytes(msg, sig, pub))
+        # FAIL: any tamper of message / signature / key breaks verification.
+        self.assertFalse(verify_ed25519_signature_bytes(msg + b"!", sig, pub))
+        self.assertFalse(
+            verify_ed25519_signature_bytes(msg, bytes([sig[0] ^ 0xFF]) + sig[1:], pub)
+        )
+        other = Ed25519PrivateKey.generate().public_key().public_bytes_raw()
+        self.assertFalse(verify_ed25519_signature_bytes(msg, sig, other))
+
+    def test_malformed_lengths_return_false_not_raise(self):
+        self.assertFalse(verify_ed25519_signature_bytes(b"m", b"short", b"x" * 32))
+        self.assertFalse(verify_ed25519_signature_bytes(b"m", b"y" * 64, b"shortkey"))
+        self.assertFalse(verify_ed25519_signature_bytes("not-bytes", b"y" * 64, b"x" * 32))
+
+    def test_real_in_repo_dylib_signatures(self):
+        triples = _collect_real_dylib_fixtures()
+        if not triples:
+            self.skipTest("no in-repo releases/**/services/*.dylib(.sig) fixture found")
+        # At least one committed (pubkey, sha256(dylib), .sig) triple must verify —
+        # proving the primitive against REAL committed Ed25519 material.
+        good = [(p, m, s) for (p, m, s) in triples if verify_ed25519_signature_bytes(m, s, p)]
+        self.assertTrue(good, "expected >=1 real committed signature to verify")
+        # A one-byte tamper of a genuinely-good digest must fail verification.
+        pub, message, sig = good[0]
+        bad = bytes([message[0] ^ 0x01]) + message[1:]
+        self.assertFalse(verify_ed25519_signature_bytes(bad, sig, pub))
+
+
+class ResolveTrustedKeyTests(unittest.TestCase):
+    """The trust anchor: publisher_key_id -> registry public key."""
+
+    def test_good_registry_returns_32_bytes(self):
+        key, reason = resolve_trusted_public_key(_PRIMARY_REGISTRY, "deskmodal-primary")
+        self.assertIsNone(reason)
+        self.assertEqual(key, bytes.fromhex(_DESKMODAL_PRIMARY_PUB_HEX))
+
+    def test_unknown_key_id_fails_closed(self):
+        key, reason = resolve_trusted_public_key(_PRIMARY_REGISTRY, "attacker")
+        self.assertIsNone(key)
+        self.assertIn("no trusted key", reason)
+
+    def test_missing_or_bad_hex_fails_closed(self):
+        self.assertIsNone(resolve_trusted_public_key({"k": {}}, "k")[0])
+        self.assertIsNone(
+            resolve_trusted_public_key({"k": {"public_key_hex": "zz"}}, "k")[0]
+        )
+
+    def test_non_ed25519_algorithm_rejected(self):
+        reg = {"k": {"algorithm": "rsa", "public_key_hex": _DESKMODAL_PRIMARY_PUB_HEX}}
+        key, reason = resolve_trusted_public_key(reg, "k")
+        self.assertIsNone(key)
+        self.assertIn("not ed25519", reason)
+
+    def test_empty_or_missing_registry(self):
+        self.assertIsNone(resolve_trusted_public_key({}, "k")[0])
+        self.assertIsNone(resolve_trusted_public_key(None, "k")[0])
+        self.assertIsNone(resolve_trusted_public_key(_PRIMARY_REGISTRY, "")[0])
+
+
+@unittest.skipUnless(SIGNATURE_TOOL_AVAILABLE, "cryptography backend not installed")
+class VerifyReleaseSignatureTests(unittest.TestCase):
+    """The load-bearing publish-gate decision: SIGNATURE over checksums.txt."""
+
+    def setUp(self):
+        if not os.path.exists(os.path.join(_REPO_ROOT, ".signing-key.hex")):
+            self.skipTest("no .signing-key.hex fixture")
+        self.checksums = (
+            b"67a4e1807c1bd287ced96f7acf595fbe4d2617dab901f86aa780c6fa4be52980  "
+            b"./services/x.dylib\n"
+        )
+        self.sig = _sign_with_primary_key(self.checksums)
+
+    def test_good_sample_passes(self):
+        ok, reason = verify_release_signature(
+            checksums_bytes=self.checksums,
+            signature_bytes=self.sig,
+            publisher_keys=_PRIMARY_REGISTRY,
+            key_id="deskmodal-primary",
+        )
+        self.assertTrue(ok, reason)
+        self.assertIn("verified", reason)
+
+    def test_tampered_checksums_dropped(self):
+        ok, reason = verify_release_signature(
+            checksums_bytes=self.checksums + b"tamper\n",
+            signature_bytes=self.sig,
+            publisher_keys=_PRIMARY_REGISTRY,
+            key_id="deskmodal-primary",
+        )
+        self.assertFalse(ok)
+        self.assertIn("does not verify", reason)
+
+    def test_wrong_publisher_key_dropped(self):
+        # Signature made by primary key, but registry binds a DIFFERENT key.
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+            Ed25519PrivateKey,
+        )
+
+        other = Ed25519PrivateKey.generate().public_key().public_bytes_raw().hex()
+        reg = {"deskmodal-primary": {"algorithm": "ed25519", "public_key_hex": other}}
+        ok, _reason = verify_release_signature(
+            checksums_bytes=self.checksums,
+            signature_bytes=self.sig,
+            publisher_keys=reg,
+            key_id="deskmodal-primary",
+        )
+        self.assertFalse(ok)
+
+    def test_missing_signature_asset_dropped(self):
+        ok, reason = verify_release_signature(
+            checksums_bytes=self.checksums,
+            signature_bytes=None,
+            publisher_keys=_PRIMARY_REGISTRY,
+            key_id="deskmodal-primary",
+        )
+        self.assertFalse(ok)
+        self.assertIn("unsigned", reason)
+
+    def test_missing_checksums_dropped(self):
+        ok, reason = verify_release_signature(
+            checksums_bytes=None,
+            signature_bytes=self.sig,
+            publisher_keys=_PRIMARY_REGISTRY,
+            key_id="deskmodal-primary",
+        )
+        self.assertFalse(ok)
+        self.assertIn("checksums", reason)
+
+    def test_no_trusted_key_dropped(self):
+        ok, reason = verify_release_signature(
+            checksums_bytes=self.checksums,
+            signature_bytes=self.sig,
+            publisher_keys={},
+            key_id="deskmodal-primary",
+        )
+        self.assertFalse(ok)
+        self.assertIn("no trusted key", reason)
+
+    def test_wrong_length_signature_dropped(self):
+        ok, reason = verify_release_signature(
+            checksums_bytes=self.checksums,
+            signature_bytes=self.sig[:-1],
+            publisher_keys=_PRIMARY_REGISTRY,
+            key_id="deskmodal-primary",
+        )
+        self.assertFalse(ok)
+        self.assertIn(str(ED25519_SIGNATURE_LEN), reason)
 
 
 if __name__ == "__main__":
