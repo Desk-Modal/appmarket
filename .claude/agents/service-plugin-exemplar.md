@@ -1,16 +1,13 @@
 ---
 name: service-plugin-exemplar
 description: Use for reference/example plugins (Fear & Greed, Heartbeat Monitor, Spread Detector) that prove every marketplace flow end-to-end. Copy-paste quality.
-tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__lodestar__search_graph, mcp__lodestar__trace_path, mcp__lodestar__get_code_snippet, mcp__lodestar__detect_changes, mcp__lodestar__get_architecture, mcp__lodestar__query_graph, mcp__lodestar__search_code, mcp__lodestar__manage_adr, mcp__lodestar__index_status, mcp__lodestar__get_graph_schema, mcp__lodestar__list_projects, mcp__lodestar__ingest_traces, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
+tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__lodestar__search_graph, mcp__lodestar__trace_path, mcp__lodestar__get_code_snippet, mcp__lodestar__detect_changes, mcp__lodestar__get_architecture, mcp__lodestar__query_graph, mcp__lodestar__search_code, mcp__lodestar__manage_adr, mcp__lodestar__index_status, mcp__lodestar__get_graph_schema, mcp__lodestar__list_projects, mcp__lodestar__ingest_traces, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read, mcp__lodestar__knowledge_get, mcp__lodestar__knowledge_coverage, mcp__lodestar__evidence_pack, mcp__lodestar__knowledge_claims, mcp__lodestar__knowledge_put, mcp__lodestar__knowledge_propose, mcp__lodestar__knowledge_todo, mcp__rust-analyzer__rust_analyzer_workspace_diagnostics, mcp__rust-analyzer__rust_analyzer_diagnostics, mcp__rust-analyzer__rust_analyzer_hover, mcp__rust-analyzer__rust_analyzer_references, mcp__rust-analyzer__rust_analyzer_definition
 model: claude-opus-4-8
 color: green
 permissionMode: acceptEdits
 impl_angles: [reference-impl, fdc3-bridge-use, service-lifecycle, error-patterns, docs-example]
 effort: xhigh
 skills:
-  - deskmodal-mesh-claim
-  - deskmodal-mesh-findings
-  - deskmodal-handoff-write
   - deskmodal-verify-tier-a
 ---
 

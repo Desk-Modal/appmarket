@@ -29,11 +29,11 @@ Strict priority. **Two MCPs share top tier** — pick by question shape:
 | Question shape | First MCP |
 |---|---|
 | "Where is symbol X / what calls Y / what does Z look like / impact analysis" — **code-structure facts** | `mcp__lodestar__*` (lodestar symbol graph) |
-| "How does the FDC3 bridge work / what's the brand voice / which persona owns Y / what playbook covers Z / what governance applies / cross-cutting synthesis" — **synthesis facts** | `mcp__wiki-mcp__*` (wiki synthesis layer) |
+| "How does the FDC3 bridge work / brand voice / who owns Y / what playbook covers Z / cross-cutting synthesis" — **synthesis facts** | `mcp__wiki-mcp__*` (wiki synthesis layer) |
 
 Then in priority order:
 
-1. **`mcp__lodestar__*`** — code symbol graph; first stop for every code-structure question for `.rs`, `.ts`, `.tsx`, `.py`.
+1. **`mcp__lodestar__*`** — code symbol graph (all repos); first stop for every code-structure question for `.rs`, `.ts`, `.tsx`, `.py`. Prefer `evidence_pack` (rebuild context ~21× fewer tokens) + `knowledge_get`/`knowledge_coverage` (verified rationale/status) over re-reading/re-deriving.
 2. **`mcp__wiki-mcp__*`** — cross-cutting synthesis from `wiki/`. First stop for any synthesis question. Tools: `wiki_search`, `wiki_get_page`, `wiki_get_links`, `wiki_check_staleness`, `wiki_get_visual`.
 3. **`mcp__rust-analyzer__*`** — for Rust only. Symbol references, hover, diagnostics, rename prep.
 4. **`mcp__playwright__browser_*`** — for visual / CDP / DOM verification.
@@ -42,11 +42,10 @@ Then in priority order:
 
 Non-code, non-wiki (markdown specs, TOML, YAML, JSON, shell): Grep/Read directly.
 
-**Anti-patterns flagged by hooks:**
-- Grep on `.rs` / `.ts` / `.tsx` / `.py` before lodestar = hallucination vector.
-- Grep / Read on `wiki/**` paths before wiki-mcp = same.
+**Anti-patterns enforced by `pre-tool-lodestar-gate.sh` (PreToolUse):**
+- Grep/Glob on `.rs`/`.ts`/`.tsx`/`.py` (→ `search_graph`/`search_code`) or `wiki/**` (→ `wiki_search`) = **DENIED**; Read of code/wiki is advisory (Read-before-Edit is fine). Escape: `DESKMODAL_LAX=1`.
 
-**lodestar indexing is automatic** (2026-06-29 — supersedes the prior CBM "team-shared graph artifact — NOT used" note; rationale `wiki/governance/rules-charter.md`). The engine indexes on MCP connect and a native filesystem watcher keeps the graph fresh — no manual `index_repository` unless a project is provably unindexed. Its store is in-repo under `.lodestar/` (the append-only knowledge event log is committable; the `*.db` / `graph.db.zst` are regenerable caches).
+**lodestar indexing is automatic** — indexes on MCP connect; a filesystem watcher keeps it fresh; no manual `index_repository` unless provably unindexed. Store in-repo under `.lodestar/` (knowledge event log committable; `*.db`/`*.zst` regenerable).
 
 Specs and rules are *cited from*, not *discovered through*. Use the active feature spec for current intent; rules/agents for workflow contract; lodestar for code; wiki-mcp for synthesis.
 

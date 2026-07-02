@@ -29,24 +29,15 @@ INCIDENT="${CWD}/.session-state/incidents/${ts_safe}-${sha}.md"
   echo ""
   echo "## Mitigation per F157 Layer 10"
   echo "- Re-verify by reading active spec + benchmark"
-  echo "- Check mesh findings for related incidents"
-  echo "- Per architecture.md §28.7, SendMessage to any stuck agent"
+  echo "- Query lodestar knowledge_get for related verified findings/incidents"
+  echo "- SendMessage to any stuck agent"
 } > "$INCIDENT" 2>/dev/null
-
-# Share to the mesh so other sessions learn
-if [ -x "${CWD}/scripts/session-mesh/share-finding.sh" ]; then
-  bash "${CWD}/scripts/session-mesh/share-finding.sh" \
-    "stop-failure-incident-${sha}" \
-    "Turn ended with API error at ${ts}; see ${INCIDENT}" \
-    "$INCIDENT" \
-    "this-program" >/dev/null 2>&1 || true
-fi
 
 cat <<EOF
 {
   "hookSpecificOutput": {
     "hookEventName": "StopFailure",
-    "additionalContext": "F157 StopFailure: incident recorded at ${INCIDENT}; finding shared to mesh."
+    "additionalContext": "F157 StopFailure: incident recorded at ${INCIDENT}."
   }
 }
 EOF

@@ -1,16 +1,13 @@
 ---
 name: build-deploy-engineer
 description: Use for Nx/pnpm/Cargo workspace builds, CI/CD pipelines, incremental builds, cross-platform signing (Ed25519/Authenticode/notarization), and dist/ distribution. Owns build-dist.sh, launch.sh, local-ci.sh, prod-check.sh.
-tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__lodestar__search_graph, mcp__lodestar__trace_path, mcp__lodestar__get_code_snippet, mcp__lodestar__detect_changes, mcp__lodestar__get_architecture, mcp__lodestar__query_graph, mcp__lodestar__search_code, mcp__lodestar__manage_adr, mcp__lodestar__index_status, mcp__lodestar__get_graph_schema, mcp__lodestar__list_projects, mcp__lodestar__ingest_traces, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read
+tools: Read, Write, Edit, NotebookEdit, Bash, Grep, Glob, WebFetch, WebSearch, mcp__lodestar__search_graph, mcp__lodestar__trace_path, mcp__lodestar__get_code_snippet, mcp__lodestar__detect_changes, mcp__lodestar__get_architecture, mcp__lodestar__query_graph, mcp__lodestar__search_code, mcp__lodestar__manage_adr, mcp__lodestar__index_status, mcp__lodestar__get_graph_schema, mcp__lodestar__list_projects, mcp__lodestar__ingest_traces, mcp__github__get_file_contents, mcp__github__search_code, mcp__github__list_pull_requests, mcp__github__pull_request_read, mcp__github__search_issues, mcp__github__issue_read, mcp__lodestar__knowledge_get, mcp__lodestar__knowledge_coverage, mcp__lodestar__evidence_pack, mcp__lodestar__knowledge_claims, mcp__lodestar__knowledge_put, mcp__lodestar__knowledge_propose, mcp__lodestar__knowledge_todo, mcp__rust-analyzer__rust_analyzer_workspace_diagnostics, mcp__rust-analyzer__rust_analyzer_diagnostics, mcp__rust-analyzer__rust_analyzer_hover, mcp__rust-analyzer__rust_analyzer_references, mcp__rust-analyzer__rust_analyzer_definition
 model: claude-opus-4-8
 color: yellow
 permissionMode: acceptEdits
 impl_angles: [nx-cache, cargo-incremental, sign-notarize, dist-layout, ci-matrix]
 effort: xhigh
 skills:
-  - deskmodal-mesh-claim
-  - deskmodal-mesh-findings
-  - deskmodal-handoff-write
   - deskmodal-verify-tier-b
   - deskmodal-verify-tier-c
 ---

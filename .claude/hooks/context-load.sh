@@ -20,15 +20,12 @@ print_section() {
     printf '\n▸ %s\n%s\n' "$1" "$2"
 }
 
-# 0. Mesh bootstrap — the durable resume contract (anti-scrap; 2026-06-10).
-# A fresh/cleared session re-adopts every standing approach from these
-# three files BEFORE dispatching anything. Ledger NEXT row surfaced inline
-# so the next unit of work is visible without a read.
-if [ -f "$ROOT/specs/SOTA-MASTER/SESSION-BOOTSTRAP.md" ]; then
-    next_row=$(grep -m1 '^| 1 | S-' "$ROOT/specs/SOTA-MASTER/DELIVERY-LEDGER.md" 2>/dev/null | cut -c1-160)
-    print_section "mesh bootstrap (READ FIRST)" "specs/SOTA-MASTER/SESSION-BOOTSTRAP.md → DELIVERY-LEDGER.md + PROGRESS-TRACKER.md before ANY dispatch${next_row:+
-ledger next: $next_row}"
-fi
+# 0. Resume reference — lodestar-first (mesh trackers retired 2026-07-01).
+# The cross-session reference is lodestar verified-knowledge (knowledge_get /
+# knowledge_claims / knowledge_coverage) + native auto-memory + the active
+# handoff below. Capability state is FACT-derived from code, never a
+# hand-maintained tracker. Do NOT restore specs/SOTA-MASTER/* mesh plans.
+print_section "resume (lodestar-first)" "lodestar knowledge_* = fact-based capability reference · read the active handoff below · native memory carries prefs · sessions coordinate disjoint-by-repo"
 
 # 1. Active feature
 if [ -f "$STATE/active-feature" ]; then

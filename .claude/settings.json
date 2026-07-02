@@ -9,7 +9,9 @@
     "DESKMODAL_MAX_CONCURRENT_SESSIONS": "3",
     "DESKMODAL_MAX_CONCURRENT_AGENTS_PER_SESSION": "8",
     "DESKMODAL_MAX_CONCURRENT_OPUS_PER_SESSION": "3",
-    "DESKMODAL_TOTAL_CONCURRENT_AGENT_CAP": "16"
+    "DESKMODAL_TOTAL_CONCURRENT_AGENT_CAP": "16",
+    "LODESTAR_JUDGE_PROVIDER": "claude-subagent",
+    "LODESTAR_AUTHOR": "claude-code"
   },
   "permissions": {
     "allow": [
@@ -348,6 +350,15 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-tool-build-cadence.sh\""
+          }
+        ]
+      },
+      {
+        "matcher": "Grep|Glob|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/pre-tool-lodestar-gate.sh\""
           }
         ]
       }

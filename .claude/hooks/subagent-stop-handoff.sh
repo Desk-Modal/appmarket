@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# F157 Layer 4 SubagentStop hook: capture subagent deliverable to handoff,
-# unmark IN-FLIGHT, and optionally share a finding to the mesh.
+# F157 Layer 4 SubagentStop hook: capture subagent deliverable to handoff
+# and unmark IN-FLIGHT.
 
 set -uo pipefail
 

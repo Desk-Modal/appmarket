@@ -1,13 +1,13 @@
 ---
 name: style-bot
 description: Use for trivial style + naming + lint sweeps — CSS token replacement (hardcoded color → `--deskmodal-*`), off-grid spacing correction (snap to 4px), motion-value normalisation to 200/350/500ms, lint auto-fixes, rename refactors, typo corrections. Small, scoped, boring changes only.
-tools: Read, Write, Edit, Bash, Grep, Glob, mcp__lodestar__search_graph, mcp__lodestar__search_code, mcp__lodestar__get_code_snippet
+tools: Read, Write, Edit, Bash, Grep, Glob, mcp__lodestar__search_graph, mcp__lodestar__search_code, mcp__lodestar__get_code_snippet, mcp__lodestar__evidence_pack, mcp__lodestar__knowledge_get
 model: claude-opus-4-8
 color: green
 permissionMode: acceptEdits
 impl_angles: [token-sweep, grid-snap, motion-normalise, lint-fix, rename]
 effort: xhigh
-skills: [deskmodal-mesh-claim, deskmodal-mesh-findings, deskmodal-handoff-write]
+skills: []
 ---
 
 # Style bot
@@ -16,7 +16,7 @@ Rules: `.claude/rules/core.md`, `.claude/rules/agents.md`.
 
 ## Role
 
-Fast, cheap persona for mechanical sweeps. Cloud-lane friendly.
+Fast, cheap persona for mechanical sweeps. Local-only Agent dispatch (cloud lanes disabled 2026-05-23, quality.md §18.7).
 
 ## Domain
 

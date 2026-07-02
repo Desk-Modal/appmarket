@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# F157 Layer 4 PostCompact hook: re-inject handoff + mesh-findings after compaction.
+# F157 Layer 4 PostCompact hook: re-inject active feature + handoff after compaction.
 
 set -uo pipefail
 
@@ -16,15 +16,9 @@ fi
 feature="unknown"
 [ -f "${CWD}/.session-state/active-feature" ] && feature=$(head -1 "${CWD}/.session-state/active-feature" | tr -d '\n' || echo unknown)
 
-# Last 24h findings from the mesh
-findings=""
-if [ -x "${CWD}/scripts/session-mesh/list-findings.sh" ]; then
-  findings=$(bash "${CWD}/scripts/session-mesh/list-findings.sh" --since 24 2>/dev/null | head -10)
-fi
-
-ctx="F157 PostCompact: active=${feature}"
+ctx="PostCompact: active=${feature}"
 [ -n "$HANDOFF" ] && ctx="${ctx}; handoff=${HANDOFF}"
-[ -n "$findings" ] && ctx="${ctx}; mesh findings:\n${findings}"
+# Cross-session findings live in lodestar committed-knowledge (knowledge_get) + native memory.
 
 cat <<EOF
 {

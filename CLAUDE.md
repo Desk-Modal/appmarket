@@ -2,7 +2,7 @@
 
 **SessionStart hook `context-load.sh` surfaces active feature, branch, gate state, and current handoff. Read that before asking the user anything. See `.claude/rules/core.md` §13 (Autonomy protocol).**
 
-**Mesh resume contract (any new/cleared session, PRIMARY or SISTER): read `specs/SOTA-MASTER/SESSION-BOOTSTRAP.md` → `DELIVERY-LEDGER.md` (durable anti-scrap backlog; rows exit only as DONE-<sha>/resolved/retired) → `PROGRESS-TRACKER.md` BEFORE any dispatch. Every integration commit updates its ledger+tracker rows atomically; new scope-transfers add a ledger row in the creating commit.**
+**Resume reference (lodestar-first; SOTA-MASTER sprawl retired 2026-07-01): the cross-session reference is lodestar verified-knowledge (`knowledge_get` / `knowledge_claims` / `knowledge_coverage`) + native auto-memory + the active `.session-state/handoffs/<feature>.md`. Capability/architecture state (what's BUILT) is FACT-derived from code + lodestar — never a hand-maintained status doc. The SINGLE task backlog (open work / milestone / decisions / who-holds-what-repo) is `TRACKER.md` (root) — `DONE` rows cite the pushed SHA + lodestar claim so status stays fact-derived, not drift; facts live in lodestar, TRACKER holds only the work. Do NOT restore the retired `specs/SOTA-MASTER/*` sprawl (30-doc set removed 2026-07-01) — TRACKER.md is the ONE tracker. Parallel sessions coordinate disjoint-by-repo — see `.claude/rules/parallel-sessions.md`.**
 
 ## What's native vs augmentation
 
@@ -120,7 +120,7 @@ Platform-flat: one OS per dist, not multi-arch fat. Library extension picked at 
 
 ## Agents
 
-26 personas in `.claude/agents/*.md`. Each: frontmatter (`name`, `description`, `tools`, `model`) + ≤35-line body (Domain + Invariants + Exit criteria).
+24 personas in `.claude/agents/*.md`. Each: frontmatter (`name`, `description`, `tools`, `model`) + ≤35-line body (Domain + Invariants + Exit criteria).
 
 Model: **every persona runs on `claude-opus-4-8`** (policy 2026-05-14 — Sonnet/Haiku tiers retired; Opus 1M ctx dominates the cost trade-off for cross-stack DeskModal waves). See `.claude/rules/agents.md` §Model tiering.
 

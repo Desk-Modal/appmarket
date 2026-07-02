@@ -33,11 +33,6 @@ dirty=$(git status --porcelain 2>/dev/null | awk '
   }
 ' || true)
 
-# Heartbeat regardless (this is also a Stop hook side-effect)
-if [ -x "${CWD}/scripts/session-mesh/heartbeat.sh" ]; then
-  bash "${CWD}/scripts/session-mesh/heartbeat.sh" >/dev/null 2>&1 || true
-fi
-
 if [ -z "$dirty" ]; then
   # No canonical dirt — proceed
   exit 0

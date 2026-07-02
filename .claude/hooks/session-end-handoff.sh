@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# F157 Layer 4 SessionEnd hook: final handoff capture + release mesh claim.
+# F157 Layer 4 SessionEnd hook: final handoff capture.
 
 set -uo pipefail
 
@@ -20,16 +20,6 @@ SNAP="${CWD}/.session-state/handoffs/session-end-${ts_safe}.md"
   echo ""
   echo "## Final commits"
   git -C "$CWD" log --oneline -5 2>/dev/null
-  echo ""
-  echo "## Mesh state at exit"
-  if [ -x "${CWD}/scripts/session-mesh/check-concurrency.sh" ]; then
-    bash "${CWD}/scripts/session-mesh/check-concurrency.sh" 2>&1
-  fi
 } > "$SNAP" 2>/dev/null
-
-# Release mesh claim
-if [ -x "${CWD}/scripts/session-mesh/release-write-set.sh" ]; then
-  bash "${CWD}/scripts/session-mesh/release-write-set.sh" >/dev/null 2>&1 || true
-fi
 
 exit 0

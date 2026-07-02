@@ -2,7 +2,7 @@
 # PreToolUse hook: mechanically enforce the build-cadence + incremental-cache
 # policies so they stop being passive memory (the recurring drift root cause).
 # Wired into settings.json PreToolUse → fires for EVERY session + agent across
-# the mesh (settings.json is in the sync-specs canonical mirror).
+# all sessions (settings.json is in the sync-specs canonical mirror).
 #
 # Authority: architecture.md §29 (incremental-only / no-duplicate-builds) +
 # quality.md §18.7.1 (Tier cadence) + feedback_no_duplicate_builds_share_cache +
