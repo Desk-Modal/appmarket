@@ -1120,6 +1120,109 @@ def _make_multi_release(*, served_manifest=None):
     return src, release, fetch_map, manifest_sha
 
 
+def _make_multibundle_release(slugs: list[str], *, broken_shared_names: bool = False):
+    """Fake multi_plugin_release carrying N independently-signed plugin
+    bundles in ONE release — the real tradesurface AM-MULTIBUNDLE shape.
+
+    Each plugin gets its own `tradesurface-{slug}-{version}-{platform}.dmpkg`
+    package (asset_name_template matches sources.json's real tradesurface
+    entry) plus, when `broken_shared_names=False` (the fixed/current
+    convention), its own `{slug}-checksums.txt` / `{slug}-plugin.toml` /
+    `{slug}-SIGNATURE` — the per-slug convention `aggregate.py`'s default
+    `per_plugin_*_template`s assume.
+
+    `broken_shared_names=True` reproduces the PRE-FIX
+    `plugins/tradesurface/.github/workflows/release.yml` publish shape:
+    every plugin's matrix job uploaded its checksums + signature + manifest
+    under the SAME shared literal "checksums.txt" / "SIGNATURE" /
+    "plugin.toml" name to the one release tag; `gh release upload --clobber`
+    means only the LAST plugin's bytes survive under that shared name — so
+    the fixture emits exactly ONE such shared-named asset set (never N
+    same-named duplicates, which a real GitHub release could never hold
+    concurrently either). No plugin's per-slug lookup can ever resolve it —
+    the AM-MULTIBUNDLE regression this suite guards against.
+    """
+    version = "1.0.0"
+    assets: list = []
+    fetch_map: dict[str, bytes] = {}
+    manifest_shas: dict[str, str] = {}
+    plugins_cfg = []
+    tiers = ["required", "recommended", "optional"]
+
+    last_shared_checksums: Optional[bytes] = None
+    last_shared_sig: Optional[bytes] = None
+    last_shared_manifest: Optional[bytes] = None
+
+    for i, slug in enumerate(slugs):
+        tier = tiers[i % len(tiers)]
+        manifest_bytes = f'[bundle]\ntier = "{tier}"\n\n[license]\nspdx = "MIT"\n'.encode("utf-8")
+        manifest_sha = hashlib.sha256(manifest_bytes).hexdigest()
+        manifest_shas[slug] = manifest_sha
+
+        pkg_name = f"tradesurface-{slug}-{version}-darwin-arm64.dmpkg"
+        pkg_bytes = f"FAKE_DMPKG_{slug}".encode("utf-8")
+        pkg_sha = hashlib.sha256(pkg_bytes).hexdigest()
+        pkg_key = f"api://pkg-{slug}"
+        fetch_map[pkg_key] = pkg_bytes
+        assets.append(
+            ReleaseAsset(name=pkg_name, url=f"https://dl/{pkg_name}", api_url=pkg_key, size=len(pkg_bytes))
+        )
+
+        mf_name = f"{slug}-plugin.toml"
+        checksums_bytes = f"{pkg_sha}  ./{pkg_name}\n{manifest_sha}  ./{mf_name}\n".encode("utf-8")
+        sig_bytes = _sign_with_primary_key(checksums_bytes)
+
+        if broken_shared_names:
+            # Overwritten by every subsequent plugin's matrix job — only the
+            # last one ever lands under the shared literal name.
+            last_shared_checksums, last_shared_sig, last_shared_manifest = (
+                checksums_bytes, sig_bytes, manifest_bytes,
+            )
+        else:
+            mf_key, cs_key, sig_key = f"api://mf-{slug}", f"api://cs-{slug}", f"api://sig-{slug}"
+            fetch_map[mf_key] = manifest_bytes
+            fetch_map[cs_key] = checksums_bytes
+            fetch_map[sig_key] = sig_bytes
+            assets.append(
+                ReleaseAsset(name=mf_name, url=f"https://dl/{mf_name}", api_url=mf_key, size=len(manifest_bytes))
+            )
+            assets.append(
+                ReleaseAsset(
+                    name=f"{slug}-checksums.txt", url="https://dl/cs", api_url=cs_key, size=len(checksums_bytes)
+                )
+            )
+            assets.append(
+                ReleaseAsset(name=f"{slug}-SIGNATURE", url="https://dl/sig", api_url=sig_key, size=len(sig_bytes))
+            )
+
+        plugins_cfg.append({"slug": slug, "id": f"deskmodal.{slug}", "display_name": slug.title()})
+
+    if broken_shared_names and last_shared_checksums is not None:
+        fetch_map["api://shared-mf"] = last_shared_manifest
+        fetch_map["api://shared-cs"] = last_shared_checksums
+        fetch_map["api://shared-sig"] = last_shared_sig
+        assets.append(
+            ReleaseAsset(name="plugin.toml", url="https://dl/plugin.toml", api_url="api://shared-mf", size=len(last_shared_manifest))
+        )
+        assets.append(
+            ReleaseAsset(name="checksums.txt", url="https://dl/checksums.txt", api_url="api://shared-cs", size=len(last_shared_checksums))
+        )
+        assets.append(
+            ReleaseAsset(name="SIGNATURE", url="https://dl/SIGNATURE", api_url="api://shared-sig", size=len(last_shared_sig))
+        )
+
+    release = Release(
+        tag=f"v{version}", version=version, html_url="https://gh/tradesurface",
+        published_at="2026-07-01T00:00:00Z", assets=assets,
+    )
+    src = {
+        "owner": "Desk-Modal", "repo": "tradesurface", "content_type": "app",
+        "asset_name_template": "tradesurface-{slug}-{version}-{platform}.dmpkg",
+        "plugins": plugins_cfg,
+    }
+    return src, release, fetch_map, manifest_shas
+
+
 @unittest.skipUnless(SIGNATURE_TOOL_AVAILABLE, "cryptography backend not installed")
 class BuildEntryManifestBindingE2ETests(unittest.TestCase):
     """End-to-end: build_entry_single / build_entries_multi drop an entry whose
@@ -1172,6 +1275,54 @@ class BuildEntryManifestBindingE2ETests(unittest.TestCase):
         with mock.patch.object(aggregate, "fetch_binary", lambda url, token=None: fetch_map[url]):
             entries = build_entries_multi(src, release, token=None, publisher_keys=_PRIMARY_REGISTRY)
         self.assertEqual(entries, [])
+
+    def test_am_multibundle_all_n_plugins_found_not_dropped(self):
+        """AM-MULTIBUNDLE fix proof: given a REAL multi-bundle release layout
+        (12-plugin-shaped, per-slug checksums/manifest/signature — the
+        `plugins/tradesurface/.github/workflows/release.yml` shape after the
+        AM-MULTIBUNDLE fix), EVERY plugin is FOUND + verifies — none of them
+        drop because of a checksum-naming collision with a sibling plugin in
+        the same release."""
+        slugs = [
+            "feeds", "chart", "watchlist", "depth", "analytics", "screener",
+            "alerts", "order-ticket", "blotter", "positions", "news", "earnings",
+        ]
+        src, release, fetch_map, manifest_shas = _make_multibundle_release(slugs)
+        with mock.patch.object(aggregate, "fetch_binary", lambda url, token=None: fetch_map[url]):
+            entries = build_entries_multi(src, release, token=None, publisher_keys=_PRIMARY_REGISTRY)
+
+        self.assertEqual(
+            len(entries), len(slugs),
+            f"expected all {len(slugs)} tradesurface plugins to be found; "
+            f"got {len(entries)}: {sorted(e['id'] for e in entries)}",
+        )
+        entries_by_id = {e["id"]: e for e in entries}
+        for slug in slugs:
+            plugin_id = f"deskmodal.{slug}"
+            self.assertIn(plugin_id, entries_by_id, f"'{plugin_id}' dropped from the catalog")
+            entry = entries_by_id[plugin_id]
+            # Each plugin's darwin-arm64 platform resolved + is signature-bound
+            # to its OWN (not a sibling's) checksums entry.
+            self.assertTrue(entry["platforms"]["darwin-arm64"], f"'{plugin_id}' has no installable darwin-arm64 asset")
+            self.assertEqual(entry["manifest"]["sha256"], manifest_shas[slug])
+            self.assertTrue(entry["signature"]["verified"])
+
+    def test_am_multibundle_shared_checksums_name_collision_drops_every_plugin(self):
+        """Regression catcher — the ORIGINAL AM-MULTIBUNDLE bug: when every
+        plugin's release job uploads its checksums/signature/manifest under
+        the SAME shared literal name (pre-fix `release.yml`), NOT ONE of the
+        N plugins can be found — every per-slug lookup misses, so every
+        plugin drops. Proves per-slug naming is load-bearing, not cosmetic;
+        a future regression back to shared naming fails this test loudly."""
+        slugs = ["feeds", "chart", "watchlist", "alerts"]
+        src, release, fetch_map, _ = _make_multibundle_release(slugs, broken_shared_names=True)
+        with mock.patch.object(aggregate, "fetch_binary", lambda url, token=None: fetch_map[url]):
+            entries = build_entries_multi(src, release, token=None, publisher_keys=_PRIMARY_REGISTRY)
+        self.assertEqual(
+            entries, [],
+            "shared-name checksums.txt/SIGNATURE must drop every plugin in "
+            "the multi-bundle release (per-slug lookup can never resolve it)",
+        )
 
 
 if __name__ == "__main__":
