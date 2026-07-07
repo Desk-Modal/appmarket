@@ -71,7 +71,7 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **7 architecture invariants:** Universal Execution Host (`optiscript-runtime`); native FDC3 primitives (`fdc3.broadcast/raise/listen`); tab-based editable UX (`.opti` sources → sdk-storage); reference-script library (e.g., `scripts/reference/twap.opti`); ≤ 2× hand-Rust perf via AOT transpile; capability manifest header per script; F143-D audit chain logs `script_source_hash + binary_hash + grants_hash + invocation_context_hash`.
 
-**3 BLOCKING audit gates (queued):** quality:no-hardcoded-algo-logic / quality:script-manifest-grants / quality:script-audit-chain.
+**3 BLOCKING audit gates (LIVE in local-ci):** quality:no-hardcoded-algo-logic / quality:script-manifest-grants / quality:script-audit-chain.
 
 **Pairs with:** §16, §17, §5 (no V1/V2), F133 Pine v5 transpiler, F143-D, F141, F138, F134, F114.
 
@@ -227,7 +227,7 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **Extended MCP discovery matrix (§30.2):** type/coercion/borrow-check → rust-analyzer; symbol/calls/impact → lodestar; cross-cutting synthesis → wiki-mcp; library docs → context7; visual+a11y → playwright; Lighthouse/heap/perf → chrome-devtools-mcp; PR/CI → github; plain markdown/TOML/YAML → Grep/Read. <!-- audit:allow-naming: product-name-chrome-devtools-mcp -->
 
-**3-tier Rust prevention discipline (§30.3):** Tier 1 pre-write `rust_analyzer_hover` (OPT-IN); Tier 2 `rust_analyzer_workspace_diagnostics` (MANDATORY in Rust agent return); Tier 3 `cargo check -p <crate>` (MANDATORY). Combined budget 5-30s per agent; saves minutes of compile retry.
+**3-tier Rust prevention discipline (§30.3):** Tier 1 pre-write `rust_analyzer_hover` (OPT-IN); Tier 2 `rust_analyzer_diagnostics` (MANDATORY in Rust agent return); Tier 3 `cargo check -p <crate>` (MANDATORY). Combined budget 5-30s per agent; saves minutes of compile retry.
 
 **Per-persona MCP routing requirement (§30.6):** Rust agents MUST cite `rust_analyzer_diagnostics + cargo_check_per_crate` in return JSON; UI agents MUST cite playwright snapshot path + axe-core score.
 
@@ -235,7 +235,7 @@ To pull a playbook into context: `mcp__wiki-mcp__wiki_get_page playbooks/archite
 
 **3 BLOCKING audit gates queued:** rust-agent-return-contract / mcp-routing-discipline / ui-agent-visual-evidence.
 
-**Anti-patterns banned:** Grep on `.rs/.ts/.tsx/.py` before lodestar; Grep/Read on `wiki/**` before wiki-mcp; manual `cargo check` parse loop when `rust_analyzer_workspace_diagnostics` answers in ~500ms; manual screenshot when `browser_take_screenshot` is 2 tool calls.
+**Anti-patterns banned:** Grep on `.rs/.ts/.tsx/.py` before lodestar; Grep/Read on `wiki/**` before wiki-mcp; manual `cargo check` parse loop when `rust_analyzer_diagnostics` answers in ~500ms; manual screenshot when `browser_take_screenshot` is 2 tool calls.
 
 **lodestar visual-knowledge limitation (2026-06-29):** lodestar's deterministic visual gates (`design:token` / `a11y:contrast`) score ONLY inline `style={{}}` literals — DeskModal's CSS-class + OKLCH-live-theme styling makes most components DEFER (`not_applicable`), and `a11y:contrast` is NOT computable (OKLCH `var()` has no concrete color). Use `design:token` as an inline-literal DRIFT detector (off-token backlog = a unification list); rely on the brand-adherence gate (§25 / F152 `quality:design-tokens-complete`) for `.css` tokenization; `a11y:contrast` stays unused pending a concrete-color-resolution lodestar enhancement. lodestar `CROSS_*` edges model HTTP only — NOT FDC3 / Tauri-IPC seams.
 
