@@ -49,13 +49,13 @@ Each sub-directory is a **separate git repo**, not a submodule. Parallel session
 
 | MCP | Use for | Tool prefix |
 |---|---|---|
-| `lodestar` | Code symbol / call-chain / impact analysis | `mcp__lodestar__*` |
+| `codebase-memory-mcp` | Code symbol / call-chain / impact analysis | `mcp__codebase_memory_mcp__*` / `mcp__lodestar__*` |
 | `wiki-mcp` | Cross-cutting **synthesis** layer — governance, brand, naming, design-system, capabilities, playbooks, risks, operations, inventory, targets, entities | `mcp__wiki-mcp__*` |
 | `rust-analyzer` | Rust symbol refs, diagnostics, rename prep | `mcp__rust-analyzer__*` |
 | `playwright` | Headless browser for GUI / CDP / DOM verification | `mcp__playwright__browser_*` |
 | `github` | PR / issue / workflow queries | `mcp__github__*` |
 
-Discovery order per `core.md` §3: **lodestar** (code-structure facts) → **wiki-mcp** (cross-cutting synthesis facts) → rust-analyzer → playwright → github → Grep/Read. Never skip MCPs for code files; never use Grep/Read on `wiki/**` when wiki-mcp answers it. **For any SDK question** (`@deskmodal/sdk-*`, `deskmodal-service-sdk`, `dmpkg` CLI), the SDK's wiki entity page (`wiki/entities/sdk-*.md`) is the symbolic reference — query via `wiki_get_page entities/sdk-<name>` before reading source files. **For lifecycle questions** (install/update/uninstall/start/stop/drain/reload), `wiki_get_page entities/lifecycle-protocol` is the symbolic reference entry point (F125 SOTA).
+Discovery order per `core.md` §3: **codebase-memory-mcp** (code-structure facts) → **wiki-mcp** (cross-cutting synthesis facts) → rust-analyzer → playwright → github → Grep/Read. Never skip MCPs for code files; never use Grep/Read on `wiki/**` when wiki-mcp answers it. **For any SDK question** (`@deskmodal/sdk-*`, `deskmodal-service-sdk`, `dmpkg` CLI), the SDK's wiki entity page (`wiki/entities/sdk-*.md`) is the symbolic reference — query via `wiki_get_page entities/sdk-<name>` before reading source files. **For lifecycle questions** (install/update/uninstall/start/stop/drain/reload), `wiki_get_page entities/lifecycle-protocol` is the symbolic reference entry point (F125 SOTA).
 
 ## Wiki — synthesis layer over canonical sources
 

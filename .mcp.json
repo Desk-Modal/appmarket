@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "lodestar": {
+    "codebase-memory-mcp": {
       "type": "stdio",
-      "command": "${HOME}/.local/bin/lodestar"
+      "command": "${HOME}/.local/bin/codebase-memory-mcp"
     },
     "wiki-mcp": {
       "type": "stdio",

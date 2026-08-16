@@ -1,8 +1,8 @@
 <!-- MIRROR — DO NOT EDIT HERE -->
 <!-- Source-of-truth: root wiki/CLAUDE.md -->
 <!-- Mirror-script: scripts/wiki-mirror.sh -->
-<!-- Mirrored-at: 2026-05-18T02:41:36Z -->
-<!-- Mirror-source-sha: 461e0ca41c3297e13d1c628f6182fb61c0120d86 -->
+<!-- Mirrored-at: 2026-08-15T23:38:22Z -->
+<!-- Mirror-source-sha: d0a8cbb8667aa36c4fc7163302a271a3eca8c76f -->
 
 > **This file is a MIRROR.** The authoritative copy lives at root
 > `wiki/CLAUDE.md`. Sub-repo edits to this file are overwritten on
@@ -16,7 +16,7 @@
 
 > Persistent, evidence-gated, federated knowledge layer over the existing canonical
 > sources (`.claude/rules/`, `.claude/agents/`, `.specify/memory/constitution.md`,
-> `.codebase-memory/adr.md`, `specs/personas/`, CBM graph).
+> `docs/adr.md`, `specs/personas/`, lodestar graph).
 >
 > **Pattern source**: Karpathy, *LLM Wiki* — gist `442a6bf555914893e9891c11519de94f`,
 > 2026-04-04. Adapted to DeskModal's 8-repo federation, 26-persona dispatch, and
@@ -37,10 +37,10 @@ knowledge that has no other home.
 | Persona definitions | `.claude/agents/*.md` | `inventory/personas.md` (auto-gen) + `personas/<name>.md` (synthesis) |
 | Constitution | `.specify/memory/constitution.md` | `governance/constitution.md` — annotated mirror |
 | Hooks | `.claude/hooks/*.sh` | `governance/hooks-charter.md` — event → outcome map |
-| ADRs | `.codebase-memory/adr.md` (CBM) | `decisions/` (CBM-managed mirror) |
+| ADRs | `docs/adr.md` (lodestar) | `decisions/` (lodestar-managed mirror) |
 | Per-feature specs | `specs/feature-NNN/` (transient, archives on ship) | NOT mirrored — owner persona dispatches wiki updates on archive |
 | Compat ladder | `specs/compat-ladder.yml` | `governance/compat-ladder.md` (auto-gen table view) |
-| Code symbols | CBM graph | wiki references via `evidence_sources: [cbm:...]` |
+| Code symbols | lodestar graph | wiki references via `evidence_sources: [lodestar:...]` |
 | Visual evidence | `wiki-sources/cdp-captures/` | `visual/` references for synthesis |
 | Design mockups | `wiki-sources/design-mocks/` | `design-system/` and `brand/` synthesis |
 
@@ -168,14 +168,14 @@ Every claim in a wiki page must trace to one of these typed references.
 | Prefix | Form | Resolution |
 |---|---|---|
 | `file:` | `file:<path>:<lineN>-<lineM>` | file exists; line range non-empty |
-| `cbm:` | `cbm:<project-name>/<qualified-name>` | `mcp__lodestar__get_code_snippet` returns content |
+| `lodestar:` | `lodestar:<project-name>/<qualified-name>` | `mcp__lodestar__get_code_snippet` returns content |
 | `canonical:` | `canonical:<path>#<anchor?>` | shorthand for `references_canonical`; same resolution rules as §4.1 |
 | `log:` | `log:<path>` (under `wiki-sources/` or `.session-state/`) | file exists |
 | `bench:` | `bench:<path>` (under `wiki-sources/bench-runs/`) | file exists; criterion JSON parse OK |
 | `cdp:` | `cdp:<path>` (under `wiki-sources/cdp-captures/`) | file exists; sibling `manifest.json` valid |
 | `url:` | `url:https://...` | HEAD request returns 2xx (cron-driven, not per-commit, with cache) |
 
-Stale `cbm:` references (qualified name no longer exists in the graph) flip
+Stale `lodestar:` references (qualified name no longer exists in the graph) flip
 the page to `status: stale` and require owner-persona refresh.
 
 ## 6. Auto-generated pages (`auto_generated: true`)
@@ -225,7 +225,7 @@ patterns are forbidden for wiki writes (single-writer invariant).
 | `wiki/risks/**` | `qa-architect` | `security-engineer`, `integration-architect` |
 | `wiki/capabilities/**` | `documentation-engineer` | `qa-architect`, `integration-architect` |
 | `wiki/operations/**` | `build-deploy-engineer` | `qa-architect`, `security-engineer` |
-| `wiki/decisions/**` | CBM `manage_adr` (machine) | `documentation-engineer` |
+| `wiki/decisions/**` | lodestar `manage_adr` (machine) | `documentation-engineer` |
 | `wiki/visual/**` | `chart-qa-verifier` (chart-related) / `qa-architect` (other) | `ux-design-lead` |
 | `wiki/entities/fdc3-bridge.md` | `fdc3-protocol-engineer` | `integration-architect`, `security-engineer` |
 | `wiki/entities/plugin-lifecycle.md` | `integration-architect` | `rust-systems-architect`, `security-engineer` |
@@ -233,7 +233,7 @@ patterns are forbidden for wiki writes (single-writer invariant).
 | `wiki/entities/dist-topology.md` | `build-deploy-engineer` | `rust-systems-architect`, `integration-architect` |
 | `wiki/entities/mcp-topology.md` | `integration-architect` | `documentation-engineer` |
 | `wiki/entities/deskmodal-contract.md` | `documentation-engineer` | `integration-architect`, `fdc3-protocol-engineer`, `security-engineer` |
-| `wiki/entities/<other>.md` | inferred from CBM domain — fallback `documentation-engineer` | declared per page |
+| `wiki/entities/<other>.md` | inferred from lodestar domain — fallback `documentation-engineer` | declared per page |
 | `<sub-repo>/wiki/**` | per sub-repo persona (see sub-repo's `wiki/CLAUDE.md`) | declared per page |
 
 The `trading-sme` persona is **conditional**, mirroring `core.md §7`: it
@@ -312,8 +312,8 @@ Wired into `local-ci.sh --fast` Wave 2 onward.
 | Persona dossier | `.claude/agents/*.md` filenames | `wiki/inventory/personas.md` rows |
 | Rule index | `.claude/rules/*.md` filenames | `wiki/governance/rules-charter.md` index entries |
 | Plugin registry | `dist/plugins/*/plugin.toml` | `wiki/inventory/plugins.md` rows |
-| Tauri command | `#[tauri::command]` macros via CBM | `wiki/inventory/apis.md` rows |
-| FDC3 intent | `deskmodal.*` intent declarations via CBM | `wiki/inventory/apis.md` (intents section) |
+| Tauri command | `#[tauri::command]` macros via lodestar | `wiki/inventory/apis.md` rows |
+| FDC3 intent | `deskmodal.*` intent declarations via lodestar | `wiki/inventory/apis.md` (intents section) |
 | Design token | `--ts-*` / `--deskmodal-*` CSS custom properties | `wiki/inventory/tokens.md` rows |
 | Hook | `.claude/hooks/*.sh` filenames | `wiki/governance/hooks-charter.md` rows |
 | MCP server | `.mcp.json` entries | `wiki/inventory/mcps.md` rows |
@@ -353,7 +353,7 @@ Extends `.claude/rules/core.md §3` for sessions working at any scope:
 6. Grep / Read — fallback only.
 
 For non-code question shapes (governance, brand, inventory, naming, target,
-risk), wiki-mcp is the **first** stop. For code-symbol shapes, CBM remains
+risk), wiki-mcp is the **first** stop. For code-symbol shapes, lodestar remains
 first. Choose by question shape, not file extension.
 
 ## 13. Reading-order conventions

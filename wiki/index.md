@@ -2,7 +2,7 @@
 title: marketplace/appmarket/wiki — index (MIRROR)
 entity_type: governance
 owner_persona: documentation-engineer
-last_verified_against_sha: 461e0ca41c3297e13d1c628f6182fb61c0120d86
+last_verified_against_sha: d0a8cbb8667aa36c4fc7163302a271a3eca8c76f
 auto_generated: true
 evidence_sources:
   - canonical:wiki/CLAUDE.md
@@ -12,8 +12,8 @@ schema_version: 1
 
 <!-- auto-generated — do NOT hand-edit -->
 <!-- regenerate via: scripts/wiki-mirror.sh (from root) -->
-<!-- mirror-source-sha: 461e0ca41c3297e13d1c628f6182fb61c0120d86 -->
-<!-- generated-at: 2026-05-18T02:41:36Z -->
+<!-- mirror-source-sha: d0a8cbb8667aa36c4fc7163302a271a3eca8c76f -->
+<!-- generated-at: 2026-08-15T23:38:22Z -->
 
 # marketplace/appmarket/wiki — index
 
